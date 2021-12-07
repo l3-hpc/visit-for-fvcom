@@ -10,7 +10,7 @@ Then set the paths
 
 Also before creating a movie with the outputs, do:
 
-cp makemovie.csh.tempate makemovie.csh
+cp makemovie.csh.template makemovie.csh
 
 Then copy to the directory where the images are (sorry, will change later), set the FFMEG parameters, and do:
 
