@@ -10,7 +10,10 @@ MAX_TP_PERCENT_CHANGE = 10
 #Save 200 png, evenly distributed through simulation
 #Seems to grind to a halt at around 240 on my computer
 #mi_subset might not have 200!
-NUM_IMAGES = 200 
+NUM_IMAGES = 1 
+
+#Y intercept for slices:
+Y_INTERCEPT = 5e+06
 
 ###Do not modify from here####################
 # line 42: start time of simulation needs to be changed accordingly.
@@ -40,7 +43,7 @@ DefineScalarExpression("TP_Mark", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankt
 DefineScalarExpression("TP_diff", "TP_Mark - TP_EPA")
 DefineScalarExpression("TP_percent_change", "(TP_EPA - TP_Mark)/abs(TP_Mark)*100")
 
-#Add the plots
+##Add pseudocolor
 AddPlot("Pseudocolor", "TP_percent_change", 1, 1)
 DrawPlots()
 SetActivePlots(0)
@@ -51,6 +54,44 @@ PseudocolorAtts.maxFlag = 1
 PseudocolorAtts.max = MAX_TP_PERCENT_CHANGE 
 PseudocolorAtts.colorTableName = "caleblack"
 SetPlotOptions(PseudocolorAtts)
+
+##Add the transform
+AddOperator("Transform", 1)
+TransformAtts = TransformAttributes()
+TransformAtts.scaleZ = 1000
+TransformAtts.transformVectors = 1
+SetOperatorOptions(TransformAtts, 0, 1)
+DrawPlots()
+
+##Add the slicing operator
+AddOperator("Slice", 1)
+SliceAtts = SliceAttributes()
+###For slicing by percent:
+#SliceAtts.originType = SliceAtts.Percent  # Point, Intercept, Percent, Zone, Node
+#SliceAtts.originPoint = (0, 0, 0)
+#SliceAtts.originIntercept = 0
+#SliceAtts.originPercent = 23
+#SliceAtts.originZone = 0
+#SliceAtts.originNode = 0
+SliceAtts.originType = SliceAtts.Intercept  # Point, Intercept, Percent, Zone, Node
+SliceAtts.originPoint = (0, 0, 0)
+SliceAtts.originIntercept = Y_INTERCEPT #5e+06
+SliceAtts.originPercent = 23
+SliceAtts.originZone = 0
+SliceAtts.originNode = 0
+SliceAtts.normal = (0, -1, 0)
+SliceAtts.axisType = SliceAtts.YAxis  # XAxis, YAxis, ZAxis, Arbitrary, ThetaPhi
+SliceAtts.upAxis = (0, 0, 1)
+SliceAtts.project2d = 1
+SliceAtts.interactive = 1
+SliceAtts.flip = 0
+SliceAtts.originZoneDomain = 0
+SliceAtts.originNodeDomain = 0
+SliceAtts.meshName = "Bathymetry_Mesh"
+SliceAtts.theta = 180
+SliceAtts.phi = 0
+SetOperatorOptions(SliceAtts, 1, 1)
+DrawPlots()
 
 AnnotationAtts = AnnotationAttributes()
 AnnotationAtts.userInfoFlag = 0
@@ -80,4 +121,4 @@ for state in range((NUM_IMAGES+1)):
   img_state
 
 
-sys.exit()
+#sys.exit()

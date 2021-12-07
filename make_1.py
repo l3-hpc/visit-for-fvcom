@@ -10,7 +10,7 @@ MAX_TP_PERCENT_CHANGE = 10
 #Save 200 png, evenly distributed through simulation
 #Seems to grind to a halt at around 240 on my computer
 #mi_subset might not have 200!
-NUM_IMAGES = 200 
+NUM_IMAGES = 1 
 
 ###Do not modify from here####################
 # line 42: start time of simulation needs to be changed accordingly.
@@ -80,4 +80,4 @@ for state in range((NUM_IMAGES+1)):
   img_state
 
 
-sys.exit()
+#sys.exit()
