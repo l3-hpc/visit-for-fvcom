@@ -1,0 +1,6 @@
+name: fvcom 
+channels:
+  - conda-forge
+dependencies:
+ - matplotlib
+ - numpy

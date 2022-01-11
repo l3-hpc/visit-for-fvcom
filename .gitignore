@@ -9,3 +9,4 @@ submit.csh
 stdout*
 stderr*
 core.*
+multiplot.py

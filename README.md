@@ -43,3 +43,23 @@ Disabling caching is still grinding script to a halt.
 
 a = GetAnnotationAttributes()
 print(a)
+
+
+Conda environment for multiplots.py:
+name: fvcom
+channels:
+  - conda-forge
+dependencies:
+ - matplotlib
+ - numpy
+
+conda env create --prefix /[your_path]/env_fvcom -f fvcom.yml
+
+To use
+conda activate /[your_path]/env_fvcom
+
+Then run multiplot.py:
+
+python multiplot.py
+
+First change the IMGS_DIR.  

@@ -1,20 +1,30 @@
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
+#Does the exit command
 import sys
 
 #import custom paths
-#Source("setpaths.py")
+#The 'Source' didn't work in a regular python script, don't know if it is VisIt specific or Python 3 issue
+Source("setpaths.py")
 #Put full path for MAc:
-Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
+#Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
 
 #set min/max for colormap
+#For both TP_EPA and TP_Mark
 MIN_TP = 0.00
 MAX_TP = 0.02
+#Difference
 MIN_TP_diff = -0.002
 MAX_TP_diff = 0.002
+#Percent change
 MIN_TP_PERCENT_CHANGE = -30
 MAX_TP_PERCENT_CHANGE = 30
+#Titles
+TITLE_TP_EPA = "TP_EPA (mg/L)"
+TITLE_TP_Mark = "TP_Mark (mg/L)"
+TITLE_TP_diff = "Difference of TP (mg/L)"
+TITLE_TP_percent_change = "Change of TP (%)"
 
 
 ###Do not modify from here####################
@@ -31,6 +41,8 @@ slider.height = 0.05
 slider.width = 0.3
 slider.position = (0.6, 0.5)
 
+#Set location of Title
+#Title text will be redefined for each plot
 title = CreateAnnotationObject("Text2D")
 title.position = (0.07, 0.92)
 title.text = "UNDEFINED" 
@@ -40,12 +52,16 @@ SetPipelineCachingMode(0) # Disable caching
 
 #DO LOOP 
 #Python end range is not included:  this is loop from 1 to 13
+#TODO...set range...how to do this if outputs don't line up?
 for x in range(1,14):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"
     MARK_database = base_MARK_database + str(mi_ID).zfill(4) + ".nc"
+#TODO check if it works on Windows
     conn_string = base_conn_string  + str(mi_ID).zfill(4) + ".nc[0]id:TP>, <SigmaLayer_Mesh>)"
+    #The IMGS_NAME is set below
+    #Now it is set to overwrite existing files
     #IMGS_NAME = base_IMGS_NAME + str(mi_ID).zfill(4) + "."
 
 
@@ -72,7 +88,9 @@ for x in range(1,14):
     SaveWindowAtts = SaveWindowAttributes()
     SaveWindowAtts.outputToCurrentDirectory = 0
     SaveWindowAtts.outputDirectory = IMGS_DIR 
-    #SaveWindowAtts.fileName = IMGS_NAME 
+    #Sets the name below
+    ###SaveWindowAtts.fileName = IMGS_NAME
+    #Setting family to zero means it will overwrite existing files 
     SaveWindowAtts.family = 0
     SaveWindowAtts.format = SaveWindowAtts.PNG  # BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
     SetSaveWindowAttributes(SaveWindowAtts)
@@ -87,7 +105,7 @@ for x in range(1,14):
       timestamp = ts + " "
       slider.text =  timestamp
       slider.visible=0
-      title.text = "TP percent change"
+      title.text = TITLE_TP_percent_change 
       AddPlot("Pseudocolor", "TP_percent_change", 1, 1)
       DrawPlots()
       SetActivePlots(0)
@@ -104,7 +122,7 @@ for x in range(1,14):
 
       DeleteAllPlots()
       slider.visible=0
-      title.text = "TP diff"
+      title.text = TITLE_TP_diff
       AddPlot("Pseudocolor", "TP_diff", 1, 1)
       DrawPlots()
       SetActivePlots(0)
@@ -120,7 +138,7 @@ for x in range(1,14):
 
       DeleteAllPlots()
       slider.visible=1
-      title.text = "TP_EPA"
+      title.text = TITLE_TP_EPA
       AddPlot("Pseudocolor", "TP_EPA", 1, 1)
       DrawPlots()
       SetActivePlots(0)
@@ -136,7 +154,7 @@ for x in range(1,14):
 
       DeleteAllPlots()
       slider.visible=0
-      title.text = "TP_Mark"
+      title.text = TITLE_TP_Mark
       AddPlot("Pseudocolor", "TP_Mark", 1, 1)
       DrawPlots()
       SetActivePlots(0)
@@ -149,12 +167,14 @@ for x in range(1,14):
       SaveWindowAtts.fileName = "TP_Mark_" + FILE_TS
       SetSaveWindowAttributes(SaveWindowAtts)
       SaveWindow()
-
+#     Using this break command results in only creating a plot
+#      with the first timestep of each mi_000X file
       break
     
     DeleteAllPlots()
+    #If debugging, uncomment break
     #break
-    #clear database
+    #Clear the database, not to bog down memory
     ClearCacheForAllEngines()                                    
 
 #ENDDO loop

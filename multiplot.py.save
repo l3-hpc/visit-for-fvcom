@@ -8,7 +8,7 @@ import numpy as np
 #Put full path for Mac:
 #Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
 import setpaths
-#The above will define IMGS_DIR 
+#The above should define IMGS_DIR, but doesn't work yet... 
 IMGS_DIR = "/Users/lisalowe/All_Images/"
 
 
