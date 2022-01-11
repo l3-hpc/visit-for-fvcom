@@ -40,3 +40,6 @@ SetPipelineCachingMode
 SetPipelineCachingMode(0) # Disable caching
 
 Disabling caching is still grinding script to a halt.
+
+a = GetAnnotationAttributes()
+print(a)

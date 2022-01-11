@@ -2,3 +2,6 @@
 setpaths.py
 makemovie.csh
 visitlog.py
+visit*.session
+visit*.gui
+.DS_Store

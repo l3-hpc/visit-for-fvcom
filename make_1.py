@@ -1,7 +1,7 @@
 import sys
 
 #import custom
-Source("setpaths.py")
+Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
 
 #set min/max for colormap
 MIN_TP_PERCENT_CHANGE = -10
@@ -55,6 +55,9 @@ SetPlotOptions(PseudocolorAtts)
 AnnotationAtts = AnnotationAttributes()
 AnnotationAtts.userInfoFlag = 0
 AnnotationAtts.databaseInfoFlag = 0
+AnnotationAtts.axes3D.visible = 0
+AnnotationAtts.axes3D.triadFlag = 0
+AnnotationAtts.axes3D.bboxFlag = 0
 SetAnnotationAttributes(AnnotationAtts)
 
 SaveWindowAtts = SaveWindowAttributes()
@@ -69,7 +72,7 @@ m = GetMetaData(EPA_database)
 #for state in range(TimeSliderGetNStates()):
 img_state = 0
 #It starts bogging down at 200
-for state in range((NUM_IMAGES+1)):
+for state in range((NUM_IMAGES)):
   SetTimeSliderState(img_state)
   tcur = m.times[img_state]*86400.  + t_start
   ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%Y-%m-%d %H:%M:%S')
