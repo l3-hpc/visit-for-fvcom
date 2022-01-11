@@ -1,0 +1,35 @@
+##Copy this file to setpaths.py
+#cp setpaths.py.template setpaths.py
+#Then set the paths
+
+#Here are examples for each OS
+###Window on local machine
+#EPA_database = "localhost:C:\\Users\\name\\path-to\\EPAfiles\\mi_*.nc database"
+#MARK_database = "localhost:C:\\Users\\name\\path-to\\MARKfiles\\mi_*.nc database"
+#conn_string = r"conn_cmfe(<C\:\\Users\\name\\path-to\\EPAfiles\\mi_*.nc database[0]id:TP>, <SigmaLayer_Mesh>)"
+#IMGS_DIR = "C:\\Users\\name\\path-to\\Movie"
+#IMGS_NAME = "imagename"
+
+##macOS paths on local machine
+#EPA_database = "localhost:/Users/name/path-to/EPAfiles/mi_*.nc database"
+#MARK_database = "localhost:/Users/name/path-to/MARKfiles/mi_*.nc database"
+#conn_string = r"conn_cmfe(</Users/name/path-to/EPAfiles/mi_*.nc database[0]id:TP>, <SigmaLayer_Mesh>)"
+#IMGS_DIR = "/Users/name/Movie"
+#IMGS_NAME = "imagename"
+
+##Linux paths on remote host
+#EPA_database = "hostname.nesc.epa.gov:/work/GROUP/EPAfiles/mi_*.nc database"
+#MARK_database = "hostname.nesc.epa.gov:/work/GROUP/MARKFiles/mi_*.nc database"
+#conn_string = r"conn_cmfe(</work/GROUP/EPAfiles/mi_*.nc database[0]id:TP>, <SigmaLayer_Mesh>)"
+#IMGS_DIR = "/work/GROUP/Movie"
+#IMGS_NAME = "imagename"
+
+#
+#Now set the paths!:
+EPA_database = "/rsstu/users/l/lllowe/ord/WORK/fvcom/run/output.0/mi_*.nc database"
+MARK_database = "/rs1/researchers/l/lllowe/ORD/FVCOM/ftp/mi_gem_archive/041820163/mi_*.nc database" 
+#YES it would be nice to use variable PATH_EPA, but for Windows, it doesn't work
+#So please just put it in by hand
+conn_string = r"conn_cmfe(</rsstu/users/l/lllowe/ord/WORK/fvcom/run/output.0/mi_*.nc database[0]id:TP>, <SigmaLayer_Mesh>)"
+IMGS_DIR =  "/rsstu/users/l/lllowe/ord/WORK/IMGS"
+IMGS_NAME = "imagename"

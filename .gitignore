@@ -5,3 +5,7 @@ visitlog.py
 visit*.session
 visit*.gui
 .DS_Store
+submit.csh
+stdout*
+stderr*
+core.*

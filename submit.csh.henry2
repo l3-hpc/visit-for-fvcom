@@ -1,0 +1,9 @@
+#!/bin/tcsh
+#BSUB -n 2
+#BSUB -x
+#BSUB -W 120
+#BSUB -J visit 
+#BSUB -o stdout.%J
+#BSUB -e stderr.%J
+module load visit/3.1.4-mesa
+visit -cli -nowin -s make_all.py
