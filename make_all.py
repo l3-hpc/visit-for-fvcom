@@ -1,6 +1,8 @@
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
+#Note, this won't work for mi_subset yet
+
 #Does the exit command
 import sys
 
@@ -9,6 +11,10 @@ import sys
 Source("setpaths.py")
 #Put full path for MAc:
 #Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
+
+#How many mi files are available?
+#Change this to look at the path and calculate
+NUM_MI_FILES = 13
 
 #set min/max for colormap
 #For both TP_EPA and TP_Mark
@@ -21,11 +27,15 @@ MAX_TP_diff = 0.002
 MIN_TP_PERCENT_CHANGE = -30
 MAX_TP_PERCENT_CHANGE = 30
 #Titles
-TITLE_TP_EPA = "TP_EPA (mg/L)"
-TITLE_TP_Mark = "TP_Mark (mg/L)"
-TITLE_TP_diff = "Difference of TP (mg/L)"
-TITLE_TP_percent_change = "Change of TP (%)"
-
+TITLE_TP_EPA = "TP_EPA"
+TITLE_TP_Mark = "TP_Mark"
+TITLE_TP_diff = "TP_diff"
+TITLE_TP_percent_change = "TP_Change"
+#UNITS
+UNITS_TP_EPA = "(mg/L)"
+UNITS_TP_Mark = "(mg/L)"
+UNITS_TP_diff = "(mg/L)"
+UNITS_TP_percent_change = "(%)"
 
 ###Do not modify from here####################
 # line 42: start time of simulation needs to be changed accordingly.
@@ -44,8 +54,27 @@ slider.position = (0.6, 0.5)
 #Set location of Title
 #Title text will be redefined for each plot
 title = CreateAnnotationObject("Text2D")
-title.position = (0.07, 0.92)
+title.position = (0.04, 0.94)
+title.height = 0.018
 title.text = "UNDEFINED" 
+#Title text will be redefined for each plot
+text2D_units = CreateAnnotationObject("Text2D")
+text2D_units.position = (0.05, 0.90)
+text2D_units.height = 0.015
+text2D_units.text = "UNDEFINED"
+
+#Month, Day, Year part
+text2D_timestamp = CreateAnnotationObject("Text2D")
+text2D_timestamp.position = (0.45, 0.94)
+text2D_timestamp.height = 0.02
+text2D_timestamp.text = "UNDEFINED"
+
+#GMT part
+#text2D_GMT = CreateAnnotationObject("Text2D")
+#text2D_GMT.position = (0.04, 0.5)
+#text2D_GMT.height = 0.02
+#text2D_GMT.text = "UNDEFINED"
+
 
 ##Disable Pipeline Caching to decrease memory consumption
 SetPipelineCachingMode(0) # Disable caching
@@ -53,7 +82,7 @@ SetPipelineCachingMode(0) # Disable caching
 #DO LOOP 
 #Python end range is not included:  this is loop from 1 to 13
 #TODO...set range...how to do this if outputs don't line up?
-for x in range(1,14):
+for x in range(1,NUM_MI_FILES+1):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"
@@ -81,9 +110,17 @@ for x in range(1,14):
     DefineScalarExpression("TP_percent_change", "(TP_EPA - TP_Mark)/abs(TP_Mark)*100")
 
     AnnotationAtts = AnnotationAttributes()
+    #Don't print out username and name of database
     AnnotationAtts.userInfoFlag = 0
     AnnotationAtts.databaseInfoFlag = 0
+    #get rid of x-y-x axis thing in the bottom left
+    AnnotationAtts.axes3D.triadFlag = 0
     SetAnnotationAttributes(AnnotationAtts)
+
+#    Get rid of TP title and units from Legend
+    #GetAnnotationObjectNames
+    #legend = GetAnnotationObjectNames(a[4])
+    #legend.drawTitle=0
 
     SaveWindowAtts = SaveWindowAttributes()
     SaveWindowAtts.outputToCurrentDirectory = 0
@@ -92,6 +129,10 @@ for x in range(1,14):
     ###SaveWindowAtts.fileName = IMGS_NAME
     #Setting family to zero means it will overwrite existing files 
     SaveWindowAtts.family = 0
+    #Set aspect ratio
+    SaveWindowAtts.resConstraint = 1 #NoConstraint
+    SaveWindowAtts.width = 400
+    SaveWindowAtts.height = 300
     SaveWindowAtts.format = SaveWindowAtts.PNG  # BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
     SetSaveWindowAttributes(SaveWindowAtts)
     
@@ -105,8 +146,17 @@ for x in range(1,14):
       timestamp = ts + " "
       slider.text =  timestamp
       slider.visible=0
-      title.text = TITLE_TP_percent_change 
+      title.text = TITLE_TP_percent_change
+      text2D_units.text = UNITS_TP_percent_change
+      text2D_timestamp.text = timestamp 
       AddPlot("Pseudocolor", "TP_percent_change", 1, 1)
+      a = GetAnnotationObjectNames()
+      legend = GetAnnotationObject(a[4])
+      legend.drawTitle=0
+      legend.managePosition=0
+      legend.position = (0.055,0.85)
+      legend.yScale = 1.0
+
       DrawPlots()
       SetActivePlots(0)
       PseudocolorAtts = PseudocolorAttributes()
@@ -123,7 +173,16 @@ for x in range(1,14):
       DeleteAllPlots()
       slider.visible=0
       title.text = TITLE_TP_diff
+      text2D_units.text = UNITS_TP_diff
+      text2D_timestamp.text = timestamp 
       AddPlot("Pseudocolor", "TP_diff", 1, 1)
+      a = GetAnnotationObjectNames()
+      legend = GetAnnotationObject(a[4])
+      legend.drawTitle=0
+      legend.managePosition=0
+      legend.position = (0.055,0.85)
+      legend.yScale = 1.3
+
       DrawPlots()
       SetActivePlots(0)
       PseudocolorAtts = PseudocolorAttributes()
@@ -137,9 +196,18 @@ for x in range(1,14):
       SaveWindow()
 
       DeleteAllPlots()
-      slider.visible=1
+      slider.visible=0
       title.text = TITLE_TP_EPA
+      text2D_units.text = UNITS_TP_EPA
+      text2D_timestamp.text = timestamp
       AddPlot("Pseudocolor", "TP_EPA", 1, 1)
+      a = GetAnnotationObjectNames()
+      legend = GetAnnotationObject(a[4])
+      legend.drawTitle=0
+      legend.managePosition=0
+      legend.position = (0.055,0.85)
+      legend.yScale = 1.3
+
       DrawPlots()
       SetActivePlots(0)
       PseudocolorAtts = PseudocolorAttributes()
@@ -155,7 +223,16 @@ for x in range(1,14):
       DeleteAllPlots()
       slider.visible=0
       title.text = TITLE_TP_Mark
+      text2D_units.text = UNITS_TP_Mark
+      text2D_timestamp.text = timestamp 
       AddPlot("Pseudocolor", "TP_Mark", 1, 1)
+      a = GetAnnotationObjectNames()
+      legend = GetAnnotationObject(a[4])
+      legend.drawTitle=0
+      legend.managePosition=0
+      legend.position = (0.055,0.85)
+      legend.yScale = 1.3
+
       DrawPlots()
       SetActivePlots(0)
       PseudocolorAtts = PseudocolorAttributes()
@@ -171,15 +248,15 @@ for x in range(1,14):
 #      with the first timestep of each mi_000X file
       break
     
-    DeleteAllPlots()
+    #DeleteAllPlots()
     #If debugging, uncomment break
-    #break
+    break
     #Clear the database, not to bog down memory
-    ClearCacheForAllEngines()                                    
+    #ClearCacheForAllEngines()                                    
 
 #ENDDO loop
 
-sys.exit()
+#sys.exit()
 
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
