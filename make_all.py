@@ -6,6 +6,12 @@
 #Does the exit command
 import sys
 
+
+#save the session, make sure settings are same
+##SaveSession("savethe.session")
+RestoreSession("/rsstu/users/l/lllowe/ord/visit-for-fvcom/savethe.session",0)
+
+
 #import custom paths
 #The 'Source' didn't work in a regular python script, don't know if it is VisIt specific or Python 3 issue
 Source("setpaths.py")
