@@ -6,11 +6,35 @@
 #Does the exit command
 import sys
 
+def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
+    title.text = TITLE
+    text2D_units.text = UNITS
+    text2D_timestamp.text = timestamp
+    AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
+    a = GetAnnotationObjectNames()
+    legend = GetAnnotationObject(a[4])
+    legend.drawTitle=0
+    legend.managePosition=0
+    legend.position = (0.055,0.85)
+    legend.yScale = 1.0
+    DrawPlots()
+    SetActivePlots(0)
+    PseudocolorAtts = PseudocolorAttributes()
+    PseudocolorAtts.minFlag = 1
+    PseudocolorAtts.maxFlag = 1
+    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.min = MIN
+    PseudocolorAtts.max = MAX
+    SetPlotOptions(PseudocolorAtts)
+    SaveWindowAtts.fileName = PLOT_VAR + "_" + FILE_TS
+    SetSaveWindowAttributes(SaveWindowAtts)
+    SaveWindow()
+
 
 #save the session, make sure settings are same
 ##SaveSession("savethe.session")
-RestoreSession("/rsstu/users/l/lllowe/ord/visit-for-fvcom/savethe.session",0)
-
+#RestoreSession("/rsstu/users/l/lllowe/ord/visit-for-fvcom/savethe.session",0)
+#RestoreSession("/Users/lisalowe/visit-for-fvcom/savethe.session",0)
 
 #import custom paths
 #The 'Source' didn't work in a regular python script, don't know if it is VisIt specific or Python 3 issue
@@ -58,7 +82,7 @@ slider.position = (0.6, 0.5)
 #Set location of Title
 #Title text will be redefined for each plot
 title = CreateAnnotationObject("Text2D")
-title.position = (0.04, 0.96)
+title.position = (0.045, 0.94)
 title.height = 0.018
 title.text = "UNDEFINED" 
 #Title text will be redefined for each plot
@@ -67,17 +91,11 @@ text2D_units.position = (0.05, 0.90)
 text2D_units.height = 0.015
 text2D_units.text = "UNDEFINED"
 
-#Month, Day, Year part
+#Month-Day-Year Hour:Minute:Second 
 text2D_timestamp = CreateAnnotationObject("Text2D")
-text2D_timestamp.position = (0.45, 0.96)
-text2D_timestamp.height = 0.02
+text2D_timestamp.position = (0.45, 0.95)
+text2D_timestamp.height = 0.015
 text2D_timestamp.text = "UNDEFINED"
-
-#GMT part
-#text2D_GMT = CreateAnnotationObject("Text2D")
-#text2D_GMT.position = (0.04, 0.5)
-#text2D_GMT.height = 0.02
-#text2D_GMT.text = "UNDEFINED"
 
 
 ##Disable Pipeline Caching to decrease memory consumption
@@ -134,7 +152,7 @@ for x in range(1,NUM_MI_FILES+1):
     #Setting family to zero means it will overwrite existing files 
     SaveWindowAtts.family = 0
     #Set aspect ratio
-    SaveWindowAtts.resConstraint = 1 #NoConstraint
+    #SaveWindowAtts.resConstraint = 1 #NoConstraint
     #SaveWindowAtts.width = 700
     #SaveWindowAtts.height = 600
     SaveWindowAtts.format = SaveWindowAtts.PNG  # BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
@@ -150,104 +168,19 @@ for x in range(1,NUM_MI_FILES+1):
       timestamp = ts + " "
       slider.text =  timestamp
       slider.visible=0
-      title.text = TITLE_TP_percent_change
-      text2D_units.text = UNITS_TP_percent_change
-      text2D_timestamp.text = timestamp 
-      AddPlot("Pseudocolor", "TP_percent_change", 1, 1)
-      a = GetAnnotationObjectNames()
-      legend = GetAnnotationObject(a[4])
-      legend.drawTitle=0
-      legend.managePosition=0
-      legend.position = (0.055,0.85)
-      legend.yScale = 1.0
 
-      DrawPlots()
-      SetActivePlots(0)
-      PseudocolorAtts = PseudocolorAttributes()
-      PseudocolorAtts.minFlag = 1
-      PseudocolorAtts.maxFlag = 1
-      PseudocolorAtts.colorTableName = "caleblack"
-      PseudocolorAtts.min = MIN_TP_PERCENT_CHANGE
-      PseudocolorAtts.max = MAX_TP_PERCENT_CHANGE
-      SetPlotOptions(PseudocolorAtts)
-      SaveWindowAtts.fileName = "TP_percent_change_" + FILE_TS
-      SetSaveWindowAttributes(SaveWindowAtts)
-      SaveWindow()
+#def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
+      create_pseudocolor_plot(TITLE_TP_percent_change,UNITS_TP_percent_change,"TP_percent_change",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
 
       DeleteAllPlots()
-      slider.visible=0
-      title.text = TITLE_TP_diff
-      text2D_units.text = UNITS_TP_diff
-      text2D_timestamp.text = timestamp 
-      AddPlot("Pseudocolor", "TP_diff", 1, 1)
-      a = GetAnnotationObjectNames()
-      legend = GetAnnotationObject(a[4])
-      legend.drawTitle=0
-      legend.managePosition=0
-      legend.position = (0.055,0.85)
-      legend.yScale = 1
-
-      DrawPlots()
-      SetActivePlots(0)
-      PseudocolorAtts = PseudocolorAttributes()
-      PseudocolorAtts.minFlag = 1
-      PseudocolorAtts.maxFlag = 1
-      PseudocolorAtts.min = MIN_TP_diff
-      PseudocolorAtts.max = MAX_TP_diff
-      SetPlotOptions(PseudocolorAtts)
-      SaveWindowAtts.fileName = "TP_diff_" + FILE_TS
-      SetSaveWindowAttributes(SaveWindowAtts)
-      SaveWindow()
+      create_pseudocolor_plot(TITLE_TP_diff,UNITS_TP_diff,"TP_diff",MIN_TP_diff,MAX_TP_diff,FILE_TS)
 
       DeleteAllPlots()
-      slider.visible=0
-      title.text = TITLE_TP_EPA
-      text2D_units.text = UNITS_TP_EPA
-      text2D_timestamp.text = timestamp
-      AddPlot("Pseudocolor", "TP_EPA", 1, 1)
-      a = GetAnnotationObjectNames()
-      legend = GetAnnotationObject(a[4])
-      legend.drawTitle=0
-      legend.managePosition=0
-      legend.position = (0.055,0.85)
-      legend.yScale = 1
-
-      DrawPlots()
-      SetActivePlots(0)
-      PseudocolorAtts = PseudocolorAttributes()
-      PseudocolorAtts.minFlag = 1
-      PseudocolorAtts.maxFlag = 1
-      PseudocolorAtts.min = MIN_TP
-      PseudocolorAtts.max = MAX_TP
-      SetPlotOptions(PseudocolorAtts)
-      SaveWindowAtts.fileName = "TP_EPA_" + FILE_TS
-      SetSaveWindowAttributes(SaveWindowAtts)
-      SaveWindow()
+      create_pseudocolor_plot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
 
       DeleteAllPlots()
-      slider.visible=0
-      title.text = TITLE_TP_Mark
-      text2D_units.text = UNITS_TP_Mark
-      text2D_timestamp.text = timestamp 
-      AddPlot("Pseudocolor", "TP_Mark", 1, 1)
-      a = GetAnnotationObjectNames()
-      legend = GetAnnotationObject(a[4])
-      legend.drawTitle=0
-      legend.managePosition=0
-      legend.position = (0.055,0.85)
-      legend.yScale = 1
+      create_pseudocolor_plot(TITLE_TP_Mark,UNITS_TP_Mark,"TP_Mark",MIN_TP,MAX_TP,FILE_TS)
 
-      DrawPlots()
-      SetActivePlots(0)
-      PseudocolorAtts = PseudocolorAttributes()
-      PseudocolorAtts.minFlag = 1
-      PseudocolorAtts.maxFlag = 1
-      PseudocolorAtts.min = MIN_TP
-      PseudocolorAtts.max = MAX_TP
-      SetPlotOptions(PseudocolorAtts)
-      SaveWindowAtts.fileName = "TP_Mark_" + FILE_TS
-      SetSaveWindowAttributes(SaveWindowAtts)
-      SaveWindow()
 #     Using this break command results in only creating a plot
 #      with the first timestep of each mi_000X file
       break
@@ -260,7 +193,33 @@ for x in range(1,NUM_MI_FILES+1):
 
 #ENDDO loop
 
-#sys.exit()
+sys.exit()
 
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
+
+def my_create_plot(TITLE,UNITS,PLOT_TYPE,PLOT_VAR,MIN,MAX,FILE_TS):
+    #TP_percent_change
+    title.text = TITLE
+    text2D_units.text = UNITS
+    text2D_timestamp.text = timestamp
+    AddPlot(PLOT_TYPE, PLOT_VAR, 1, 1)
+    a = GetAnnotationObjectNames()
+    legend = GetAnnotationObject(a[4])
+    legend.drawTitle=0
+    legend.managePosition=0
+    legend.position = (0.055,0.85)
+    legend.yScale = 1.0
+    DrawPlots()
+    SetActivePlots(0)
+    PseudocolorAtts = PseudocolorAttributes()
+    PseudocolorAtts.minFlag = 1
+    PseudocolorAtts.maxFlag = 1
+    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.min = MIN
+    PseudocolorAtts.max = MAX
+    SetPlotOptions(PseudocolorAtts)
+    SaveWindowAtts.fileName = "TP_percent_change_" + FILE_TS
+    SetSaveWindowAttributes(SaveWindowAtts)
+    SaveWindow()
+
