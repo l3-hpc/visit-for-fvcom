@@ -9,8 +9,6 @@ import sys
 #import custom paths
 #The 'Source' didn't work in a regular python script, don't know if it is VisIt specific or Python 3 issue
 Source("setpaths.py")
-#Put full path for MAc:
-#Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
 
 #How many mi files are available?
 #Change this to look at the path and calculate
@@ -54,7 +52,7 @@ slider.position = (0.6, 0.5)
 #Set location of Title
 #Title text will be redefined for each plot
 title = CreateAnnotationObject("Text2D")
-title.position = (0.04, 0.94)
+title.position = (0.04, 0.96)
 title.height = 0.018
 title.text = "UNDEFINED" 
 #Title text will be redefined for each plot
@@ -65,7 +63,7 @@ text2D_units.text = "UNDEFINED"
 
 #Month, Day, Year part
 text2D_timestamp = CreateAnnotationObject("Text2D")
-text2D_timestamp.position = (0.45, 0.94)
+text2D_timestamp.position = (0.45, 0.96)
 text2D_timestamp.height = 0.02
 text2D_timestamp.text = "UNDEFINED"
 
@@ -131,8 +129,8 @@ for x in range(1,NUM_MI_FILES+1):
     SaveWindowAtts.family = 0
     #Set aspect ratio
     SaveWindowAtts.resConstraint = 1 #NoConstraint
-    SaveWindowAtts.width = 400
-    SaveWindowAtts.height = 300
+    #SaveWindowAtts.width = 700
+    #SaveWindowAtts.height = 600
     SaveWindowAtts.format = SaveWindowAtts.PNG  # BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
     SetSaveWindowAttributes(SaveWindowAtts)
     
@@ -181,7 +179,7 @@ for x in range(1,NUM_MI_FILES+1):
       legend.drawTitle=0
       legend.managePosition=0
       legend.position = (0.055,0.85)
-      legend.yScale = 1.3
+      legend.yScale = 1
 
       DrawPlots()
       SetActivePlots(0)
@@ -206,7 +204,7 @@ for x in range(1,NUM_MI_FILES+1):
       legend.drawTitle=0
       legend.managePosition=0
       legend.position = (0.055,0.85)
-      legend.yScale = 1.3
+      legend.yScale = 1
 
       DrawPlots()
       SetActivePlots(0)
@@ -231,7 +229,7 @@ for x in range(1,NUM_MI_FILES+1):
       legend.drawTitle=0
       legend.managePosition=0
       legend.position = (0.055,0.85)
-      legend.yScale = 1.3
+      legend.yScale = 1
 
       DrawPlots()
       SetActivePlots(0)
