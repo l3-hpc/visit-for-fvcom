@@ -171,15 +171,16 @@ for x in range(1,NUM_MI_FILES+1):
 
 #def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
       create_pseudocolor_plot(TITLE_TP_percent_change,UNITS_TP_percent_change,"TP_percent_change",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
-
       DeleteAllPlots()
+
       create_pseudocolor_plot(TITLE_TP_diff,UNITS_TP_diff,"TP_diff",MIN_TP_diff,MAX_TP_diff,FILE_TS)
-
       DeleteAllPlots()
+
       create_pseudocolor_plot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
-
       DeleteAllPlots()
+
       create_pseudocolor_plot(TITLE_TP_Mark,UNITS_TP_Mark,"TP_Mark",MIN_TP,MAX_TP,FILE_TS)
+      DeleteAllPlots()
 
 #     Using this break command results in only creating a plot
 #      with the first timestep of each mi_000X file
@@ -187,7 +188,7 @@ for x in range(1,NUM_MI_FILES+1):
     
     #DeleteAllPlots()
     #If debugging, uncomment break
-    break
+    #break
     #Clear the database, not to bog down memory
     #ClearCacheForAllEngines()                                    
 
