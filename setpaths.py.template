@@ -26,10 +26,9 @@
 
 #
 #Now set the paths!:
-base_EPA_database = "localhost:PATH_EPAandFilestring" 
-base_MARK_database = "localhost:PATH_MARKandFilestring"
+base_EPA_database = "PATH_EPAandFilestring" 
+base_MARK_database = "PATH_MARKandFilestring"
 #YES it would be nice to use variable PATH_EPA, but for Windows, it doesn't work
 #So please just put it in by hand
 base_conn_string = r"conn_cmfe(<PATH_EPAandFilestring"
 IMGS_DIR =  "/PATH/Movie/"
-IMGS_NAME = "imagename"

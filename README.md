@@ -79,3 +79,7 @@ Then run multiplot.py:
 python multiplot.py
 
 First change the IMGS_DIR.  
+
+VisIt CLI Manual
+
+https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/cli_manual/index.html

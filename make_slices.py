@@ -4,13 +4,22 @@
 #Note, this won't work for mi_subset yet
 
 import sys  #does exit command
-#Not working yet...from setpaths import set_paths
 
 def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     title.text = TITLE
     text2D_units.text = UNITS
     text2D_timestamp.text = timestamp
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
+    AddOperator("Transform",1)
+    TransformAtts = TransformAttributes()
+    TransformAtts.scaleZ = 1000
+    SetOperatorOptions(TransformAtts, 0, 1)
+    AddOperator("Slice", 1)
+    SliceAtts = SliceAttributes()
+    SliceAtts.originType = SliceAtts.Percent
+    SliceAtts.originPercent = 35
+    SliceAtts.project2d = 1
+    SetOperatorOptions(SliceAtts, 1, 1)
     a = GetAnnotationObjectNames()
     legend = GetAnnotationObject(a[4])
     legend.drawTitle=0
@@ -26,14 +35,12 @@ def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
-    SaveWindowAtts.fileName = PLOT_VAR + "_" + FILE_TS
+    SaveWindowAtts.fileName = PLOT_VAR + "_" + "slice" + "_" + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
 
 
 #save the session, make sure settings are same
-##SaveSession("savethe.session")
-#RestoreSession("/rsstu/users/l/lllowe/ord/visit-for-fvcom/savethe.session",0)
 #RestoreSession("/Users/lisalowe/visit-for-fvcom/savethe.session",0)
 
 #import custom paths
@@ -52,8 +59,8 @@ NUM_MI_FILES = 13
 
 #set min/max for colormap
 #For both TP_EPA and TP_Mark
-MIN_TP = 0.00
-MAX_TP = 0.02
+MIN_TP = 0.002
+MAX_TP = 0.004
 #Difference
 MIN_TP_diff = -0.002
 MAX_TP_diff = 0.002
@@ -143,6 +150,10 @@ for x in range(1,NUM_MI_FILES+1):
     AnnotationAtts.databaseInfoFlag = 0
     #get rid of x-y-x axis thing in the bottom left
     AnnotationAtts.axes3D.triadFlag = 0
+
+    ##DIFFERENT in the slicing script...turn off the axes altogether
+    AnnotationAtts.axes2D.visible = 0
+
     SetAnnotationAttributes(AnnotationAtts)
 
 #    Get rid of TP title and units from Legend
@@ -194,7 +205,7 @@ for x in range(1,NUM_MI_FILES+1):
 #      with the first timestep of each mi_000X file
       break
     
-    #DeleteAllPlots()
+    DeleteAllPlots()
     #If debugging, uncomment break
     #break
     #Clear the database, not to bog down memory
