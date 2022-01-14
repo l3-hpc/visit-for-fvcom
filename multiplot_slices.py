@@ -5,15 +5,10 @@
 import sys  #For the Source command"
 import matplotlib.image
 import numpy as np
+import setpaths
 
-#Source("setpaths.py")
-#Put full path for Mac:
-#Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
-#import setpaths
-#The above will define IMGS_DIR 
-
-#CHANGE THIS, need to change to read from setpaths.py
-IMGS_DIR = "/Users/lisalowe/All_Images/"
+#read from setpaths.py
+IMGS_DIR = setpaths.set_image_path()
 
 
 image_suffix = [ 

@@ -10,6 +10,8 @@ submit.csh
 stdout*
 stderr*
 core.*
+*_error
+*_out
 multiplot.py
 setpaths_tryfunction.py 
 __pycache__*

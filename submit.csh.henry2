@@ -7,3 +7,4 @@
 #BSUB -e stderr.%J
 module load visit/3.1.4-mesa
 visit -cli -nowin -s make_all.py
+visit -cli -nowin -s make_slices.py

@@ -1,16 +1,13 @@
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
+import os
 import sys  #For the Source command"
 import matplotlib.image
 import numpy as np
+import setpaths
 
-#Source("setpaths.py")
-#Put full path for Mac:
-#Source("/Users/lisalowe/visit-for-fvcom/setpaths.py")
-#import setpaths
-#The above will define IMGS_DIR 
-IMGS_DIR = "/Users/lisalowe/All_Images/"
-
+#Defines where the images are located
+IMGS_DIR = setpaths.set_image_path()
 
 image_suffix = [ 
 "_01-01-2010_00-00-00.png",

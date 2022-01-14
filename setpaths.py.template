@@ -32,3 +32,8 @@ base_MARK_database = "PATH_MARKandFilestring"
 #So please just put it in by hand
 base_conn_string = r"conn_cmfe(<PATH_EPAandFilestring"
 IMGS_DIR =  "/PATH/Movie/"
+
+
+def set_image_path():
+    return IMGS_DIR
+
