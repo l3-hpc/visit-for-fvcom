@@ -8,7 +8,7 @@ git clone https://github.com/l3-hpc/visit-for-fvcom
 cd visit-for-fvcom
 ```
 
-In that directory, there is a file **.gitignore**.  Files listed there will be ignored by git.  I have added files that are likely to change between users, like setpaths.py, and also files that may be created in the directory but should not be saved, such as core files and SLURM/LSF output.
+In that directory, there is a file **.gitignore**.  Files listed there will be ignored by git.  It includes files that are likely to change between users, like setpaths.py, and also files that may be created in the directory but should not be saved, such as core files and SLURM/LSF output.
 
 # Modify the paths
 The file **setpaths.py** will be different for each user, and for each user will be different from PC to HPC.  Once you create a local setpaths file, it will not be accidentally modified when updating (git pull/merge) the code.
@@ -24,7 +24,7 @@ If **IMG_DIR** does not already exist, the code should exit with a decent error 
 
 ## Some notes 
 
-Even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  I assume the same will happen on atmos.  So I need to fix that.
+Even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  (I assume the same will happen on atmos.  So I need to fix that.)
 
 # Updating your git repo to the newest version (pull)
 
@@ -59,7 +59,7 @@ visit -cli -nowin -s make_slices.py
 
 As is, those scripts assume you have all 13 mi files, and they loop through and make a plot of the first timestep in each mi plot.  If you uncomment the 'break' statement, they will do every timestep.
 
-After you run those scripts, set the environment for Python 3 by whichever module.  I make a YAML file for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
+After you run those scripts, set the environment for Python 3 by whichever module.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
 After loading the module or activating the Conda environment, do:
 ```
@@ -106,15 +106,10 @@ Disabling caching is still grinding script to a halt on the Mac while on Linux i
 YAML file to create a Conda environment for multiplots.py:
 ```
 name: fvcom
-
 channels:
-
   - conda-forge
-
 dependencies:
-
  - matplotlib
-
  - numpy
 ```
 
@@ -132,6 +127,10 @@ Then run multiplot.py:
 python multiplot.py
 ```
 
-[VisIt - Home](https://visit-dav.github.io/visit-website/index.html)
-[VisIt GUI Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/gui_manual/index.html)
-[VisIt Python (CLI) Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/cli_manual/index.html)
+-[VisIt - Home](https://visit-dav.github.io/visit-website/index.html)
+-[VisIt GUI Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/gui_manual/index.html)
+-[VisIt Python (CLI) Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/cli_manual/index.html)
+
+Other links:
+-[GitHub markdown syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+- [Vim and Python syntax](https://wiki.python.org/moin/Vim)
