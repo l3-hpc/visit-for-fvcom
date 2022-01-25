@@ -2,7 +2,7 @@
 VisIt scripts for plotting data from FVCOM output files
 
 # Getting the code
-Instructions are on the website, or in the README.md after cloning the repo.  To clone the repo, from Linux/Mac terminal or Windows git bash, do
+Instructions are on the [GitHub README](https://github.com/l3-hpc/visit-for-fvcom#readme), or in the README.md after cloning the repo.  To clone the repo, from Linux/Mac terminal or Windows git bash, do
 ```
 git clone https://github.com/l3-hpc/visit-for-fvcom
 cd visit-for-fvcom
@@ -11,7 +11,7 @@ cd visit-for-fvcom
 In that directory, there is a file **.gitignore**.  Files listed there will be ignored by git.  I have added files that are likely to change between users, like setpaths.py, and also files that may be created in the directory but should not be saved, such as core files and SLURM/LSF output.
 
 # Modify the paths
-The files setpaths.py will be different for each user, and for each user will be different from PC to HPC.  Once you create the personal setpaths file, it will not be accidentally modified when updating (git pull/merge) the code.
+The file **setpaths.py** will be different for each user, and for each user will be different from PC to HPC.  Once you create a local setpaths file, it will not be accidentally modified when updating (git pull/merge) the code.
 ```
 cp setpaths.py.template setpaths.py
 ```
@@ -19,12 +19,12 @@ Then open setpaths.py with a text editor and set the proper paths for the input 
 ```
 mkdir /path/to/IMG_DIR
 ```   
-If **IMG_DIR** does not already exist, the code will run without any error messages, and it will appear to be making plots, but they are being written in the ether.
+If **IMG_DIR** does not already exist, the code should exit with a decent error message.
 
 
-## BEWARE!!!  There is no error checking! (yet)
+## Some notes 
 
-ALSO even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  I assume the same will happen on atmos.  So I need to fix that.
+Even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  I assume the same will happen on atmos.  So I need to fix that.
 
 #General stuff about using github...
 
