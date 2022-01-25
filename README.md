@@ -26,11 +26,16 @@ If **IMG_DIR** does not already exist, the code should exit with a decent error 
 
 Even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  I assume the same will happen on atmos.  So I need to fix that.
 
-# Additional instructions for using git 
+# Updating your git repo to the newest version (pull)
 
 If you are just using the code, to get new changes, do:
 ```
 git pull
+```
+
+Note, since setpaths.py is in the gitignore, it will not notice this necessary addition!  But if setpaths.py.template has changed, you may need to modify your setpaths.py.  Best practice is to do this after doing a new 'git pull'
+```
+diff setpaths.py setpaths.py.template
 ```
 
 If you created files in that directory, it will give an error.  If you need those files, but don't need those files in that directory, you can move them.  If they are junk files that you don't need at all, you can use 'git stash', and it will remove anything that changed since you last did 'clone' or 'pull'.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the .gitignore.
@@ -44,15 +49,7 @@ git diff
 To develop the code, we need to...
 [Add Instructions for Fetch and Merge here!]
 
-
-# Instructions assuming you already have the code, already set the paths, created the image directory, and just want to use the latest stuff...
-
-Do 'git pull', and see above if you have errors.  
-
-Note, since setpaths.py is in the gitignore, it will not notice this necessary addition!  (Although it is added in setpaths.py.template.)  Best practice is to do this when doing a new 'git pull'
-```
-diff setpaths.py setpaths.py.template
-```
+# Running the codes
 
 The codes that call VisIt are **make_all.py** and **make_slices.py**.  The sample batch scripts are included for Henry2 and atmos, and they contain:
 ```
