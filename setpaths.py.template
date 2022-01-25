@@ -3,37 +3,63 @@
 #Then set the paths
 
 #Here are examples for each OS
-###Window on local machine
-#base_EPA_database = "C:\\Users\\name\\path-to\\EPAfiles\\mi_"
-#base_MARK_database = "C:\\Users\\name\\path-to\\MARKfiles\\mi_"
-#base_conn_string = r"conn_cmfe(<C\:\\Users\\name\\path-to\\EPAfiles\\mi_"
-#IMGS_DIR = "C:\\Users\\name\\path-to\\Movie\\"
-#IMGS_NAME = "imagename"
-
-##macOS paths on local machine
-#base_EPA_database = "/Users/name/path-to/EPAfiles/mi_"
-#base_MARK_database = "/Users/name/path-to/MARKfiles/mi_"
-#base_conn_string = r"conn_cmfe(</Users/name/path-to/EPAfiles/mi_"
-#IMGS_DIR = "/Users/name/Movie/"
-#IMGS_NAME = "imagename"
-
-##Linux paths on remote host
-#base_EPA_database = "/work/GROUP/EPAfiles/mi_"
-#base_MARK_database = "/work/GROUP/MARKFiles/mi_"
-#base_conn_string = r"conn_cmfe(</work/GROUP/EPAfiles/mi_"
-#IMGS_DIR = "/work/GROUP/Movie/"
-#IMGS_NAME = "imagename"
-
 #
-#Now set the paths!:
-base_EPA_database = "PATH_EPAandFilestring" 
-base_MARK_database = "PATH_MARKandFilestring"
-#YES it would be nice to use variable PATH_EPA, but for Windows, it doesn't work
-#So please just put it in by hand
-base_conn_string = r"conn_cmfe(<PATH_EPAandFilestring"
-IMGS_DIR =  "/PATH/Movie/"
+##Window on local machine - *** not tested yet ***
+#EPA_database = "C:\\Users\\name\\path-to\\EPAfiles\\"
+#MARK_database = "C:\\Users\\name\\path-to\\MARKfiles\\"
+#IMGS_DIR = "C:\\Users\\name\\path-to\\Movie\\"
+#
+##For Linux or macOS
+#base_EPA_database = "/Users/name/path-to/EPAfiles/"
+#base_MARK_database = "/Users/name/path-to/MARKfiles/"
+#IMGS_DIR = "/Users/name/Movie/"
 
+#Now set the paths!:
+#This is probably 'mi_', but can be anything where the FVCOM output is for example
+## [file_prefix_epa][4 integers padded by zeros].nc
+file_prefix_epa = "mi_"
+file_prefix_mark = "mi_"
+#The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
+EPA_directory = "/path/to/EPAfiles/"
+MARK_directory = "/path/to/MARKfiles/"
+#The directory to write images to.  The slash at the end of the directory name is required.
+IMGS_DIR =  "/path/to/IMGS/"
+
+#----- Do not modify unless developing code --------
+#These are based on previous definitions, do not modify
+base_EPA_database = EPA_directory + file_prefix_epa
+base_MARK_database = MARK_directory + file_prefix_mark
+base_conn_string = r"conn_cmfe(<" + EPA_directory + file_prefix_epa
+
+#from pathlib import Path, for Python 3
+#Path(IMGS_DIR).mkdir(parents=True, exist_ok=True)
+
+#But now VisIt is using Python2
+import os
+import sys
+
+#Check that all the directories exist
+if not os.path.exists(EPA_directory):
+    sys.exit("The directory " + EPA_directory + " does not exist.  Check definition of EPA_directory in setpaths.py. Exiting.")
+    if not os.path.exists(MARK_directory):
+        sys.exit("The directory " + MARK_directory + " does not exist.  Check definition of MARK_directory in setpaths.py. Exiting.")
+
+#Create a directory for images if one doesn't exist.
+#Note, existing files will be overwritten
+if not os.path.exists(IMGS_DIR):
+    os.makedirs(IMGS_DIR)
+
+def set_EPA_path():
+    return base_EPA_database
+
+def set_MARK_path():
+    return base_MARK_database
+
+def set_conn_string():
+    return base_conn_string
 
 def set_image_path():
     return IMGS_DIR
 
+#To edit with Vim, use this
+#:set tabstop=8 expandtab shiftwidth=4 softtabstop=4

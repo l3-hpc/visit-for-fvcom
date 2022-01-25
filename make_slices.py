@@ -1,9 +1,18 @@
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
-#Note, this won't work for mi_subset yet
+#For the exit command
+import sys 
 
-import sys  #does exit command
+#This is user defined setpaths.py in the current working directory
+import setpaths
+
+#Calls setpaths.py to define where the files are located
+base_EPA_database = setpaths.set_EPA_path()
+base_MARK_database = setpaths.set_MARK_path()
+base_conn_string = setpaths.set_conn_string()
+#Calls setpaths.py to define where the images are located
+IMGS_DIR = setpaths.set_image_path()
 
 def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     title.text = TITLE
@@ -207,12 +216,13 @@ for x in range(1,NUM_MI_FILES+1):
     
     DeleteAllPlots()
     #If debugging, uncomment break
-    #break
+    break
     #Clear the database, not to bog down memory
-    #ClearCacheForAllEngines()                                    
+    ClearCacheForAllEngines()                                    
 
 #ENDDO loop
 
+#Comment this out to leave VisIT CLI open after script is complete
 sys.exit()
 
 #To edit with Vim, use this

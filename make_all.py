@@ -4,7 +4,26 @@
 #Note, this won't work for mi_subset yet
 
 import sys  #does exit command
-#Not working yet...from setpaths import set_paths
+
+#This is user defined setpaths.py in the current working directory
+import setpaths
+
+#Calls setpaths.py to define where the files are located
+base_EPA_database = setpaths.set_EPA_path()
+base_MARK_database = setpaths.set_MARK_path()
+base_conn_string = setpaths.set_conn_string()
+#Calls setpaths.py to define where the images are located
+IMGS_DIR = setpaths.set_image_path()
+
+#Print for debugging
+#print("IMGS_DIR")
+#print(IMGS_DIR)
+#print("EPA, MARK, conn")
+#print(base_EPA_database)
+#print(base_MARK_database)
+#print(base_conn_string)
+#sys.exit()
+
 
 def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     title.text = TITLE
@@ -35,16 +54,6 @@ def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
 ##SaveSession("savethe.session")
 #RestoreSession("/rsstu/users/l/lllowe/ord/visit-for-fvcom/savethe.session",0)
 #RestoreSession("/Users/lisalowe/visit-for-fvcom/savethe.session",0)
-
-#import custom paths
-#The 'Source' didn't work in a regular python script, don't know if it is VisIt specific or Python 3 issue
-Source("setpaths.py")
-
-#trying to get that to work later
-#base_EPA_database = set_paths("EPA")
-#base_Mark_database = set_paths("Mark")
-#base_conn_string = set_paths("conn")
-#IMGS_DIR = set_paths("imagedir")
 
 #How many mi files are available?
 #Change this to look at the path and calculate
@@ -194,14 +203,15 @@ for x in range(1,NUM_MI_FILES+1):
 #      with the first timestep of each mi_000X file
       break
     
-    #DeleteAllPlots()
+    DeleteAllPlots()
     #If debugging, uncomment break
-    #break
+    break
     #Clear the database, not to bog down memory
-    #ClearCacheForAllEngines()                                    
+    ClearCacheForAllEngines()                                    
 
 #ENDDO loop
 
+#Comment this out to leave VisIT CLI open after script is complete
 sys.exit()
 
 #To edit with Vim, use this

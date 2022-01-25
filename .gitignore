@@ -15,3 +15,4 @@ core.*
 multiplot.py
 setpaths_tryfunction.py 
 __pycache__*
+*.pyc

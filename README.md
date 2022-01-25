@@ -22,6 +22,22 @@ Sample submission scripts were created for Henry2 and atmos.  Before modifying, 
 ```
 cp submit.csh.atmos submit.csh
 ```
+or
+```
+cp submit.csh.henry2 submit.csh
+```
+
+After copying, modify submit.csh to change the wall clock time and, for atmos, the run directory, which is the directory from where you submit the job.  To submit the job, on atmos, use 
+```
+sbatch submit.sh
+```
+and for Henry2, use
+```
+bsub < submit.sh
+```
+
+
+
 ## Some notes 
 
 Even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  (I assume the same will happen on atmos.  So I need to fix that.)
