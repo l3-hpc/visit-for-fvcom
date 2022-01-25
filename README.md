@@ -127,10 +127,10 @@ Then run multiplot.py:
 python multiplot.py
 ```
 
--[VisIt - Home](https://visit-dav.github.io/visit-website/index.html)
--[VisIt GUI Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/gui_manual/index.html)
--[VisIt Python (CLI) Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/cli_manual/index.html)
+- [VisIt - Home](https://visit-dav.github.io/visit-website/index.html)
+- [VisIt GUI Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/gui_manual/index.html)
+- [VisIt Python (CLI) Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/cli_manual/index.html)
 
 Other links:
--[GitHub markdown syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+- [GitHub markdown syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 - [Vim and Python syntax](https://wiki.python.org/moin/Vim)
