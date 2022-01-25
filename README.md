@@ -1,9 +1,28 @@
 # visit-for-fvcom
 VisIt scripts for plotting data from FVCOM output files
 
-# BEWARE!!!  There is no error checking! (yet)
+# Getting the code
+Instructions are on the website, or in the README.md after cloning the repo.  To clone the repo, from Linux/Mac terminal or Windows git bash, do
+```
+git clone https://github.com/l3-hpc/visit-for-fvcom
+cd visit-for-fvcom
+```
 
-The first major thing is to make sure the directory IMG_DIR already exists.  If it does not, the code will run without any error messages, and it will appear to be making plots, but they are being written in the ether.
+In that directory, there is a file **.gitignore**.  Files listed there will be ignored by git.  I have added files that are likely to change between users, like setpaths.py, and also files that may be created in the directory but should not be saved, such as core files and SLURM/LSF output.
+
+# Modify the paths
+The files setpaths.py will be different for each user, and for each user will be different from PC to HPC.  Once you create the personal setpaths file, it will not be accidentally modified when updating (git pull/merge) the code.
+```
+cp setpaths.py.template setpaths.py
+```
+Then open setpaths.py with a text editor and set the proper paths for the input (mi files) and output (images).  If a directory **IMG_DIR** does not exist, create one:
+```
+mkdir /path/to/IMG_DIR
+```   
+If **IMG_DIR** does not already exist, the code will run without any error messages, and it will appear to be making plots, but they are being written in the ether.
+
+
+## BEWARE!!!  There is no error checking! (yet)
 
 ALSO even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  I assume the same will happen on atmos.  So I need to fix that.
 
@@ -16,13 +35,12 @@ git pull
 If you created files in that directory, it will give an error.  If you need those files, but don't need those files in that directory, you can move them.  If they are junk files that you don't need at all, you can use 'git stash', and it will remove anything that changed since you last did 'clone' or 'pull'.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the .gitignore.
 
 To check if the changes you have are actually important, you can check what exactly was changed by doing
-
+```
 git status
-
 git diff
+```
 
 To develop the code, we need to...
-
 [Add Instructions for Fetch and Merge here!]
 
 
@@ -58,13 +76,6 @@ Those will take the separate image files and contatenate them.  multiplot.py put
 
 On a Mac from command line, I can look at images with 'open'.  On Henry2, with 'display'.  On atmos...(let me know and I'll put it in the documenation).
 
-If you've never run before...
-
-Before running, do: 
-
-cp setpaths.py.template setpaths.py
-
-Then set the paths
 
 
 To open GUI from command line:
