@@ -15,11 +15,7 @@ The file **setpaths.py** will be different for each user, and for each user will
 ```
 cp setpaths.py.template setpaths.py
 ```
-Open setpaths.py with a text editor and set the proper paths for the input (mi files) and output (images).  If a directory **IMG_DIR** does not exist, create one:
-```
-mkdir /path/to/IMG_DIR
-```   
-If **IMG_DIR** does not already exist, the code should exit with a decent error message.
+Note, **IMGS_DIR** does not already exist, it will be created.  Also, any existing files will be overwritten.
 
 
 ## Some notes 
