@@ -15,9 +15,13 @@ The file **setpaths.py** will be different for each user, and for each user will
 ```
 cp setpaths.py.template setpaths.py
 ```
-Note, **IMGS_DIR** does not already exist, it will be created.  Also, any existing files will be overwritten.
+Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any existing files will be overwritten.
 
-
+# Run the code
+Sample submission scripts were created for Henry2 and atmos.  Before modifying, make a local copy.  For example,
+```
+cp submit.csh.atmos submit.csh
+```
 ## Some notes 
 
 Even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  (I assume the same will happen on atmos.  So I need to fix that.)
