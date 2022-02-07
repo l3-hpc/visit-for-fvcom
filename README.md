@@ -17,13 +17,13 @@ The file **setpaths.py** will be different for each user, and for each user will
 ```
 cp setpaths.py.template setpaths.py
 ```
-Modify the following in **setpaths.py**:
+Modify the following in **setpaths.py** to point to the appropriate directory paths:
 ```
 EPA_directory
 MARK_directory
 IMGS_DIR
 ```
-If the netCDF files do not begin with "mi_", then change that as well:
+If your netCDF files do not begin with **mi_**, then change these as well:
 ```
 file_prefix_epa
 file_prefix_mark
@@ -159,3 +159,9 @@ python multiplot.py
 ### Other links
 - [GitHub markdown syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 - [Vim and Python syntax](https://wiki.python.org/moin/Vim)
+
+
+### Additional Notes and ToDos: 
+
+Even though these made nice plots on my Mac, the ones on Henry2 were huge.  I think that has to do with the save window settings.  (I assume the same will happen on atmos.  So I need to fix that.)
+
