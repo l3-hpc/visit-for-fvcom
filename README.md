@@ -28,7 +28,9 @@ If the netCDF files do not begin with "mi_", then change that as well:
 file_prefix_epa
 file_prefix_mark
 ```
-Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any existing files will be overwritten.  Do not modify any lines below the file declarations.
+Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any existing files in the **IMGS_DIR** will be overwritten.  
+
+Do not modify any lines below the file declarations.
 
 # Run the code
 Sample submission scripts were created for Henry2 and atmos.  Before modifying, make a local copy.  For example,
