@@ -13,7 +13,7 @@ In that directory, there is a file **.gitignore**.  Files listed there will be i
 # Modify the paths
 The paths to the input files and output directories are defined in the file **setpaths.py**.
 
-The file **setpaths.py** will be different for each user, and for each user will be different from PC to HPC.  So that git does not track your changes to the file, a template **setpaths.py.template** is included in this git repo.  Copy the template.
+The file **setpaths.py** will be different for each user, and for each user will be different from PC to HPC.  To avoid having git track changes to all of our filepaths, a template **setpaths.py.template** is included in this git repo.  Copy the template and modify **setpaths.py**. The file **setpaths.py** is listed in the **.gitignore** and it will not be tracked or overwritten with new pulls.
 ```
 cp setpaths.py.template setpaths.py
 ```
