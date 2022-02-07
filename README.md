@@ -52,11 +52,6 @@ bsub < submit.csh
 ```
 
 
-
-## Some notes 
-
-Even though these made nice plots on my Mac, the ones on Henry2 were huge.  I think that has to do with the save window settings.  (I assume the same will happen on atmos.  So I need to fix that.)
-
 # Updating your git repo to the newest version (pull)
 
 If you are just using and not modifying the code, to get new changes, do:
@@ -64,7 +59,7 @@ If you are just using and not modifying the code, to get new changes, do:
 git pull
 ```
 
-Note, since setpaths.py is in the gitignore, it will not notice this necessary addition!  But if setpaths.py.template has changed, you may need to modify your setpaths.py.  Best practice is to do this after doing a new 'git pull'
+Note, since setpaths.py is in the gitignore, it will not notice if there were changes made.  If setpaths.py.template has changed, you may need to modify your setpaths.py.  Best practice is to do this after doing a new 'git pull'
 ```
 diff setpaths.py setpaths.py.template
 ```
