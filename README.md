@@ -69,16 +69,16 @@ Note, since setpaths.py is in the gitignore, it will not notice this necessary a
 diff setpaths.py setpaths.py.template
 ```
 
-If you created files in that directory, it will give an error.  If you need those files, but don't need those files in that directory, you can move them.  If they are junk files that you don't need at all, you can use 'git stash', and it will remove anything that changed since you last did 'clone' or 'pull'.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the .gitignore.
+If you changed or created files in that directory since you last got the code, it will give an error message on trying to 'git pull'.  
+ - If you added files to the directory, and need those files but don't need them specifically in that directory, you should move them.
+ - If they are junk files, you can remove them or do 'git stash', which will remove anything that changed since you last did 'clone' or 'pull'.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the .gitignore.
+ - If you made changes and what to keep them, then you need to do fetch and merge.  Instructions for Fetch and Merge will be added later. 
 
 To check if the changes you have are actually important, you can check what exactly was changed by doing
 ```
 git status
 git diff
 ```
-
-To develop the code, we need to...
-[Add Instructions for Fetch and Merge here!]
 
 # Running the codes
 
