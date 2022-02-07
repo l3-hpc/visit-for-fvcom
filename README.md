@@ -32,7 +32,7 @@ Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any exi
 
 Do not modify any lines below the file declarations.
 
-# Run the code
+# Run the scripts in a batch job on HPC  
 Sample submission scripts were created for Henry2 and atmos.  Before modifying, make a local copy.  For example,
 ```
 cp submit.csh.atmos submit.csh
@@ -55,11 +55,11 @@ bsub < submit.csh
 
 ## Some notes 
 
-Even though these made nice plots on my Mac, the ones on Henry2 were huge.  That has to do with the save window settings.  (I assume the same will happen on atmos.  So I need to fix that.)
+Even though these made nice plots on my Mac, the ones on Henry2 were huge.  I think that has to do with the save window settings.  (I assume the same will happen on atmos.  So I need to fix that.)
 
 # Updating your git repo to the newest version (pull)
 
-If you are just using the code, to get new changes, do:
+If you are just using and not modifying the code, to get new changes, do:
 ```
 git pull
 ```
