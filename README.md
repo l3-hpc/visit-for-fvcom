@@ -59,14 +59,14 @@ If you are just using and not modifying the code, to get new changes, do:
 git pull
 ```
 
-Note, since setpaths.py is in the gitignore, it will not notice if there were changes made.  If setpaths.py.template has changed, you may need to modify your setpaths.py.  Best practice is to do this after doing a new **git pull**.
+Note, since setpaths.py is in the gitignore, it will not notice if there were changes made.  If setpaths.py.template has changed, you may need to modify your setpaths.py.  Best practice is to do this after doing a new `git pull`.
 ```
 diff setpaths.py setpaths.py.template
 ```
 
-If you changed or created files in that directory since you last got the code, it will give an error message on trying to **git pull**.  
+If you changed or created files in that directory since you last got the code, it will give an error message on trying to `git pull`.  
  - If you added files to the directory, and need those files but don't need them specifically in that directory, you should move them.
- - If they are junk files, you can remove them or do **git stash**, which will remove anything that changed since you last did **clone** or **pull**.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the **.gitignore**.
+ - If they are junk files, you can remove them or do `git stash`, which will remove anything that changed since you last did `git clone` or `git pull`.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the **.gitignore**.
  - If you made changes and what to keep them, then you need to do fetch and merge.  Instructions for Fetch and Merge will be added later. 
 
 To check if the changes you have are actually important, you can check what exactly was changed by doing
