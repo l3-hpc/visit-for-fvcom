@@ -80,44 +80,36 @@ git status
 git diff
 ```
 
-# Running the codes
+# Running the codes interactively from a GUI
 
-The codes that call VisIt are **make_all.py** and **make_slices.py**.  The sample batch scripts are included for Henry2 and atmos, and they contain:
+## On HPC
+
+### Run the VisIt scripts
+The codes that call VisIt are **make_all.py** and **make_slices.py**.  To run interactively, start an interactive session, load the visit module, and type the commands which are listed in the submit scripts but remove the 'nowin' argument:
 ```
-visit -cli -nowin -s make_all.py
-visit -cli -nowin -s make_slices.py
+[start interactive session]
+module load [visit module, different for HPCs] 
+visit -cli -s make_all.py
 ```
+X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
 
 As is, those scripts assume you have all 13 mi files, and they loop through and make a plot of the first timestep in each mi plot.  If you uncomment the 'break' statement, they will do every timestep.
 
-After you run those scripts, set the environment for Python 3 by whichever module.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
+### Run the post-processing Python scripts
+After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
-After loading the module or activating the Conda environment, do:
+After loading the module or activating the Conda environment, run the Python scripts by typing:
 ```
 python multiplot.py
 python multiplot_slices.py
 ```
 
-Those will take the separate image files and contatenate them.  The script **multiplot.py** puts 4 PNGs in a 2x2 layout,  and **multiplot_slices.py** puts 4 images in a single row.
+Those scripts simply take multiple image files and contatenate them into a single image.  The script **multiplot.py** puts 4 PNGs in a 2x2 layout,  and **multiplot_slices.py** puts 4 images in a single row.
 
 On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos...(let me know and I'll put it in the documenation).
 
 
-
-To open GUI from command line:
-```
-visit -cli -s scriptname.py
-```
-To run without window:
-```
-visit -cli -nowin -s scriptname.py
-```
-Or open visit or python and (Capital S is correct):
-```
-Source("scriptname.py")
-```
-
-Useful commands in the VisIt command shell:
+# Useful commands in the VisIt command shell:
 ```
 dir()
 help()
@@ -134,6 +126,7 @@ SetPipelineCachingMode(0) # Disable caching
 
 Disabling caching is still grinding script to a halt on the Mac while on Linux it is fine.  I suspect a memory leak.
 
+# Create your own Conda environment
 YAML file to create a Conda environment for multiplots.py:
 ```
 name: fvcom
