@@ -11,11 +11,24 @@ cd visit-for-fvcom
 In that directory, there is a file **.gitignore**.  Files listed there will be ignored by git.  It includes files that are likely to change between users, like setpaths.py, and also files that may be created in the directory but should not be saved, such as core files and SLURM/LSF output.
 
 # Modify the paths
-The file **setpaths.py** will be different for each user, and for each user will be different from PC to HPC.  Once you create a local setpaths file, it will not be accidentally modified when updating (git pull/merge) the code.
+The paths to the input files and output directories are defined in the file **setpaths.py**.
+
+The file **setpaths.py** will be different for each user, and for each user will be different from PC to HPC.  So that git does not track your changes to the file, a template **setpaths.py.template** is included in this git repo.  Copy the template.
 ```
 cp setpaths.py.template setpaths.py
 ```
-Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any existing files will be overwritten.
+Modify the following in **setpaths.py**:
+```
+EPA_directory
+MARK_directory
+IMGS_DIR
+```
+If the netCDF files do not begin with "mi_", then change that as well:
+```
+file_prefix_epa
+file_prefix_mark
+```
+Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any existing files will be overwritten.  Do not modify any lines below.
 
 # Run the code
 Sample submission scripts were created for Henry2 and atmos.  Before modifying, make a local copy.  For example,
