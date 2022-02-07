@@ -44,11 +44,11 @@ cp submit.csh.henry2 submit.csh
 
 After copying, modify submit.csh to change the wall clock time and, for atmos, the run directory, which is the directory from where you submit the job.  To submit the job, on atmos, use 
 ```
-sbatch submit.sh
+sbatch submit.csh
 ```
 and for Henry2, use
 ```
-bsub < submit.sh
+bsub < submit.csh
 ```
 
 
