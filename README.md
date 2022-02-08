@@ -95,7 +95,7 @@ git diff
 The codes that call VisIt are **make_all.py** and **make_slices.py**.  To run interactively, start an interactive session, load the visit module, and type the commands which are listed in the submit scripts but remove the 'nowin' argument:
 ```
 [On HPC, start interactive session]
-[On HPC, module load the visit module.  For MacOS and Windows, make sure path to VisIt and current working directory for scripts are in the path.] 
+[On HPC, module load the visit module.]
 visit -cli -s plot_any.py
 ```
 For HPC, X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
