@@ -106,6 +106,7 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     legend.yScale = 1.0
     DrawPlots()
     SetActivePlots(0)
+    SetViewExtentsType("actual")
     PseudocolorAtts = PseudocolorAttributes()
     PseudocolorAtts.minFlag = 1
     PseudocolorAtts.maxFlag = 1
@@ -176,6 +177,7 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,FROM_X,FR
     legend.position = (0.055,0.85)
     legend.yScale = 1.0
     DrawPlots()
+    SetViewExtentsType("actual")
     SetActivePlots(0)
     PseudocolorAtts = PseudocolorAttributes()
     PseudocolorAtts.minFlag = 1
