@@ -1,5 +1,7 @@
 #Public repo - do not add paths
 lisasMac_setpaths.py
+jamesHPC_setpaths.py
+lisaHPC_setpaths.py
 
 run_make_all.csh
 setpaths.py
