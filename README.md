@@ -38,6 +38,12 @@ Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any exi
 
 Do not modify any lines below the file declarations.
 
+# Set plot parameters
+Set the parameters for various plots.  The commenting is decent, but there is no error checking.
+
+Currently, the images are named after the type of plot and the time/date stamp.  That means if you rerun the script for a different transect or colormap, etc., the old plots will be overwritten.  Before this is modified, be sure to save the directory of plots elsewhere, or preferably change the name of **IMGS_DIR** before a new run. 
+
+
 # Run the scripts in a batch job on HPC  
 Sample submission scripts were created for Henry2 and atmos.  Before modifying, make a local copy.  For example,
 ```
@@ -88,13 +94,12 @@ git diff
 ### Run the VisIt scripts
 The codes that call VisIt are **make_all.py** and **make_slices.py**.  To run interactively, start an interactive session, load the visit module, and type the commands which are listed in the submit scripts but remove the 'nowin' argument:
 ```
-[start interactive session]
-module load [visit module, different for HPCs] 
-visit -cli -nowin -s plot_any.py
+[On HPC, start interactive session]
+[On HPC, module load the visit module.  For MacOS and Windows, make sure path to VisIt and current working directory for scripts are in the path.] 
+visit -cli -s plot_any.py
 ```
-X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
+For HPC, X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
 
-As is, those scripts assume you have all 13 mi files, and they loop through and make a plot of the first timestep in each mi plot. 
 
 ### Run the post-processing Python scripts
 After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
@@ -107,6 +112,8 @@ python multiplot_transects.py
 ```
 
 Those scripts simply take multiple image files and contatenate them into a single image.  The script **multiplot.py** puts 4 PNGs in a 2x2 layout,  and **multiplot_slices.py** puts 4 images in a single row.
+
+Currently those multiplot scripts expect certain image names.  Look at the scripts for details.  As is, they work if you have the output from the first timestep in each of the 13 mi_*.nc files.
 
 On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos...(let me know and I'll put it in the documenation).
 
