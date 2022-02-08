@@ -90,11 +90,11 @@ The codes that call VisIt are **make_all.py** and **make_slices.py**.  To run in
 ```
 [start interactive session]
 module load [visit module, different for HPCs] 
-visit -cli -s make_all.py
+visit -cli -nowin -s plot_any.py
 ```
 X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
 
-As is, those scripts assume you have all 13 mi files, and they loop through and make a plot of the first timestep in each mi plot.  If you uncomment the 'break' statement, they will do every timestep.
+As is, those scripts assume you have all 13 mi files, and they loop through and make a plot of the first timestep in each mi plot. 
 
 ### Run the post-processing Python scripts
 After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
@@ -103,6 +103,7 @@ After loading the module or activating the Conda environment, run the Python scr
 ```
 python multiplot.py
 python multiplot_slices.py
+python multiplot_transects.py
 ```
 
 Those scripts simply take multiple image files and contatenate them into a single image.  The script **multiplot.py** puts 4 PNGs in a 2x2 layout,  and **multiplot_slices.py** puts 4 images in a single row.
