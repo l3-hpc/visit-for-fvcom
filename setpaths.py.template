@@ -10,8 +10,8 @@
 #IMGS_DIR = "C:\\Users\\name\\path-to\\Movie\\"
 #
 ##For Linux or macOS
-#base_EPA_database = "/Users/name/path-to/EPAfiles/"
-#base_MARK_database = "/Users/name/path-to/MARKfiles/"
+#EPA_database = "/Users/name/path-to/EPAfiles/"
+#MARK_database = "/Users/name/path-to/MARKfiles/"
 #IMGS_DIR = "/Users/name/Movie/"
 
 #Now set the paths!:

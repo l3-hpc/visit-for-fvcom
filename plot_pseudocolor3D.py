@@ -2,11 +2,12 @@
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
 #Note, this won't work for mi_subset yet
-
 import sys  #does exit command
 
 #This is user defined setpaths.py in the current working directory
 import setpaths
+#This defines the plot parameters
+import setparams
 
 #Calls setpaths.py to define where the files are located
 base_EPA_database = setpaths.set_EPA_path()
@@ -14,15 +15,6 @@ base_MARK_database = setpaths.set_MARK_path()
 base_conn_string = setpaths.set_conn_string()
 #Calls setpaths.py to define where the images are located
 IMGS_DIR = setpaths.set_image_path()
-
-#Print for debugging
-#print("IMGS_DIR")
-#print(IMGS_DIR)
-#print("EPA, MARK, conn")
-#print(base_EPA_database)
-#print(base_MARK_database)
-#print(base_conn_string)
-#sys.exit()
 
 
 def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
@@ -57,30 +49,29 @@ def create_pseudocolor_plot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
 
 #How many mi files are available?
 #Change this to look at the path and calculate
-NUM_MI_FILES = 13
+NUM_MI_FILES = setparams.set_NUM_MI_FILES() 
 
 #set min/max for colormap
 #For both TP_EPA and TP_Mark
-MIN_TP = 0.00
-MAX_TP = 0.02
+MIN_TP = setparams.set_MIN_TP() 
+MAX_TP = setparams.set_MAX_TP()
 #Difference
-MIN_TP_diff = -0.002
-MAX_TP_diff = 0.002
+MIN_TP_diff = setparams.set_MIN_TP_diff()
+MAX_TP_diff = setparams.set_MAX_TP_diff()
 #Percent change
-MIN_TP_PERCENT_CHANGE = -30
-MAX_TP_PERCENT_CHANGE = 30
+MIN_TP_PERCENT_CHANGE = setparams.set_MIN_TP_PERCENT_CHANGE()
+MAX_TP_PERCENT_CHANGE = setparams.set_MIN_TP_PERCENT_CHANGE()
 #Titles
-TITLE_TP_EPA = "TP_EPA"
-TITLE_TP_Mark = "TP_Mark"
-TITLE_TP_diff = "TP_diff"
-TITLE_TP_percent_change = "TP_Change"
+TITLE_TP_EPA = setparams.set_TITLE_TP_EPA()
+TITLE_TP_Mark = setparams.set_TITLE_TP_Mark()
+TITLE_TP_diff = setparams.set_TITLE_TP_diff()
+TITLE_TP_percent_change = setparams.set_TITLE_TP_percent_change()
 #UNITS
-UNITS_TP_EPA = "(mg/L)"
-UNITS_TP_Mark = "(mg/L)"
-UNITS_TP_diff = "(mg/L)"
-UNITS_TP_percent_change = "(%)"
+UNITS_TP_EPA = setparams.set_UNITS_TP_EPA()
+UNITS_TP_Mark = setparams.set_UNITS_TP_Mark()
+UNITS_TP_diff = setparams.set_UNITS_TP_diff()
+UNITS_TP_percent_change = setparams.set_UNITS_TP_percent_change()
 
-###Do not modify from here####################
 # line 42: start time of simulation needs to be changed accordingly.
 import datetime
 import calendar
@@ -212,7 +203,7 @@ for x in range(1,NUM_MI_FILES+1):
 #ENDDO loop
 
 #Comment this out to leave VisIT CLI open after script is complete
-#sys.exit()
+sys.exit()
 
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
