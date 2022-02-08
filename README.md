@@ -101,7 +101,7 @@ visit -cli -s plot_any.py
 For HPC, X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
 
 
-### Run the post-processing Python scripts
+# Run the post-processing Python scripts
 After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
 After loading the module or activating the Conda environment, run the Python scripts by typing:
@@ -110,6 +110,7 @@ python multiplot.py
 python multiplot_slices.py
 python multiplot_transects.py
 ```
+Ideally, if you are on an HPC, do those commands in a batch script or interactive session.
 
 Those scripts simply take multiple image files and contatenate them into a single image.  The script **multiplot.py** puts 4 PNGs in a 2x2 layout,  and **multiplot_slices.py** puts 4 images in a single row.
 
