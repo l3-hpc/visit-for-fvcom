@@ -104,17 +104,15 @@ For HPC, X11 forwarding is enabled with MobaXterm by default.  If using a Mac, y
 # Run the post-processing Python scripts
 After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
-After loading the module or activating the Conda environment, run the Python scripts by typing:
+After loading the module or activating the Conda environment, run the Python script by typing:
 ```
 python multiplot.py
-python multiplot_slices.py
-python multiplot_transects.py
 ```
-Ideally, if you are on an HPC, do those commands in a batch script or interactive session.
+Ideally, if you are on an HPC, do the command in a batch script or interactive session.
 
-Those scripts simply take multiple image files and contatenate them into a single image.  The script **multiplot.py** puts 4 PNGs in a 2x2 layout,  and **multiplot_slices.py** puts 4 images in a single row.
+The script simply take multiple image files and contatenate them into a single image, i.e. 4 PNGs in a 2x2 layout.
 
-Currently those multiplot scripts expect certain image names.  Look at the scripts for details.  As is, they work if you have the output from the first timestep in each of the 13 mi_*.nc files.
+The script takes the info from **setpaths.py** and **setparams.py** to create the image names.  As is, they work if you are doing a comparison run and have the output from the first timestep in each of the 13 mi_*.nc files.
 
 On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos...(let me know and I'll put it in the documenation).
 
