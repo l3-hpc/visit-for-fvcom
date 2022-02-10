@@ -2,6 +2,7 @@
 lisasMac_setpaths.py
 jamesHPC_setpaths.py
 lisaHPC_setpaths.py
+setpaths.py.mdr
 
 run_make_all.csh
 setpaths.py
