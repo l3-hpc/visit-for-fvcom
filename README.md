@@ -26,22 +26,22 @@ cp setpaths.py.template setpaths.py
 Modify the following in **setpaths.py** to point to the appropriate directory paths:
 ```
 EPA_directory
-MARK_directory
+COMPARE_directory
 IMGS_DIR
 ```
 If your netCDF files do not begin with **mi_**, then change these as well:
 ```
 file_prefix_epa
-file_prefix_mark
+file_prefix_compare
 ```
 Note, if **IMGS_DIR** does not already exist, it will be created.  Also, any existing files in the **IMGS_DIR** will be overwritten.  
 
 Do not modify any lines below the file declarations.
 
 # Set plot parameters
-Set the parameters for various plots.  The commenting is decent, but there is no error checking.
+Set the parameters for various plots in file **setparams.py**.  The commenting is decent, but there is no error checking.
 
-Currently, the images are named after the type of plot and the time/date stamp.  That means if you rerun the script for a different transect or colormap, etc., the old plots will be overwritten.  Before this is modified, be sure to save the directory of plots elsewhere, or preferably change the name of **IMGS_DIR** before a new run. 
+The images are named after the type of plot and the time/date stamp and **RUN_NAME**, defined in **setpaths.py**, is appended.  If you rerun the script for a different transect or colormap, etc., the old plots will be overwritten if you do not choose a different **RUN_NAME**.  You may alternatively or additionally change the name of **IMGS_DIR** before a new run. 
 
 
 # Run the scripts in a batch job on HPC  
