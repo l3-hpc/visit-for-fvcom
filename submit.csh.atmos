@@ -8,6 +8,4 @@
 #SBATCH -o stdout.%j
 cd [/path/to/visit-for-fvcom]
 module load visit/3.1.4
-#visit -cli -nowin -s make_all.py
-#visit -cli -nowin -s make_slices.py
 visit -cli -nowin -s plot_any.py

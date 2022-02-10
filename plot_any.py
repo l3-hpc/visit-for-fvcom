@@ -12,10 +12,21 @@ import setpaths
 #This defines the plot parameters
 import setparams
 
-#Calls setpaths.py to define where the files are located
+# Set the run name to label the images
+RUN_NAME = setparams.set_RUN_NAME()
+
+# Calls setpaths.py to define where the files are located
 base_EPA_database = setpaths.set_EPA_path()
-base_MARK_database = setpaths.set_MARK_path()
-base_conn_string = setpaths.set_conn_string()
+
+# If you will compare 2 data sets
+do_compare = setparams.set_do_compare
+if(do_compare):
+    base_COMPARE_database = setpaths.set_COMPARE_path()
+    base_conn_string = setpaths.set_conn_string()
+    #Will you compare against Mark's data, with NDZP?
+    do_MDR = setparams.set_do_MDR()
+
+
 #Calls setpaths.py to define where the images are located
 IMGS_DIR = setpaths.set_image_path()
 
@@ -32,31 +43,36 @@ do_3Dplot = setparams.set_do3Dplot()
 do_2Dslice = setparams.set_do2Dslice()
 do_2Dtransect = setparams.set_do2Dtransect()
 #set min/max for colormap
-#For both TP_EPA and TP_Mark
+#For both TP_EPA and TP_COMPARE
 MIN_TP = setparams.set_MIN_TP()
 MAX_TP = setparams.set_MAX_TP()
-#Difference
-MIN_TP_diff = setparams.set_MIN_TP_diff()
-MAX_TP_diff = setparams.set_MAX_TP_diff()
-#Percent change
-MIN_TP_PERCENT_CHANGE = setparams.set_MIN_TP_PERCENT_CHANGE()
-MAX_TP_PERCENT_CHANGE = setparams.set_MAX_TP_PERCENT_CHANGE()
-#Titles
+#Title
 TITLE_TP_EPA = setparams.set_TITLE_TP_EPA()
-TITLE_TP_Mark = setparams.set_TITLE_TP_Mark()
-TITLE_TP_diff = setparams.set_TITLE_TP_diff()
-TITLE_TP_percent_change = setparams.set_TITLE_TP_percent_change()
 #UNITS
 UNITS_TP_EPA = setparams.set_UNITS_TP_EPA()
-UNITS_TP_Mark = setparams.set_UNITS_TP_Mark()
-UNITS_TP_diff = setparams.set_UNITS_TP_diff()
-UNITS_TP_percent_change = setparams.set_UNITS_TP_percent_change()
+
+if(do_compare):
+    MIN_TP_DIFF = setparams.set_MIN_TP_DIFF()
+    MAX_TP_DIFF = setparams.set_MAX_TP_DIFF()
+    #Percent change
+    MIN_TP_PERCENT_CHANGE = setparams.set_MIN_TP_PERCENT_CHANGE()
+    MAX_TP_PERCENT_CHANGE = setparams.set_MAX_TP_PERCENT_CHANGE()
+    #Titles
+    TITLE_TP_COMPARE = setparams.set_TITLE_TP_COMPARE()
+    TITLE_TP_DIFF = setparams.set_TITLE_TP_DIFF()
+    TITLE_TP_PERCENT_CHANGE = setparams.set_TITLE_TP_PERCENT_CHANGE()
+    #UNITS
+    UNITS_TP_COMPARE = setparams.set_UNITS_TP_COMPARE()
+    UNITS_TP_DIFF = setparams.set_UNITS_TP_DIFF()
+    UNITS_TP_PERCENT_CHANGE = setparams.set_UNITS_TP_PERCENT_CHANGE()
+
 
 #For transects
-FROM_X = setparams.set_FROM_X() 
-FROM_Y = setparams.set_FROM_Y()
-TO_X = setparams.set_TO_X()
-TO_Y = setparams.set_TO_Y()
+if (do_2Dtransect):
+   FROM_X = setparams.set_FROM_X() 
+   FROM_Y = setparams.set_FROM_Y()
+   TO_X = setparams.set_TO_X()
+   TO_Y = setparams.set_TO_Y()
 
 
 def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
@@ -79,7 +95,7 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
-    SaveWindowAtts.fileName = PLOT_VAR + "_" + FILE_TS
+    SaveWindowAtts.fileName = PLOT_VAR + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
 
@@ -114,7 +130,7 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
-    SaveWindowAtts.fileName = PLOT_VAR + "_" + "slice" + "_" + FILE_TS
+    SaveWindowAtts.fileName = PLOT_VAR + "_" + "slice" + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
 
@@ -186,7 +202,7 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,FROM_X,FR
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
-    SaveWindowAtts.fileName = PLOT_VAR + "_" + "transect" + "_" + FILE_TS
+    SaveWindowAtts.fileName = PLOT_VAR + "_" + "transect" + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
 
@@ -239,7 +255,7 @@ for x in range(1,NUM_MI_FILES+1):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"
-    MARK_database = base_MARK_database + str(mi_ID).zfill(4) + ".nc"
+    COMPARE_database = base_COMPARE_database + str(mi_ID).zfill(4) + ".nc"
 #TODO check if it works on Windows
     conn_string = base_conn_string  + str(mi_ID).zfill(4) + ".nc[0]id:TP>, <SigmaLayer_Mesh>)"
     #The IMGS_NAME is set below
@@ -249,18 +265,22 @@ for x in range(1,NUM_MI_FILES+1):
 
     #Open Databases - the second argument is optional with a default of zero (initial time)
     OpenDatabase(EPA_database,0)
-    OpenDatabase(MARK_database,0)
+    OpenDatabase(COMPARE_database,0)
 
     #CreateDatabaseCorrelation("name",(db1,db2),X), here X=2 is a time correlation
-    CreateDatabaseCorrelation("Correlation01",(EPA_database,MARK_database),2)
+    CreateDatabaseCorrelation("Correlation01",(EPA_database,COMPARE_database),2)
 
     #Use conn_cmfe function to put EPA's TP variable onto Mark's grid and call it "TP_EPA"
     DefineScalarExpression("TP_EPA",conn_string)
 
-    #Define additional variables
-    DefineScalarExpression("TP_Mark", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
-    DefineScalarExpression("TP_diff", "TP_Mark - TP_EPA")
-    DefineScalarExpression("TP_percent_change", "(TP_EPA - TP_Mark)/abs(TP_Mark)*100")
+    #Define the variables for comparing.  For Mark's model, TP consists of NDPZ.
+    if (do_MDR):
+        DefineScalarExpression("TP_COMPARE", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
+    else:
+        DefineScalarExpression("TP_COMPARE", "TP")
+    #Define difference and percent change
+    DefineScalarExpression("TP_DIFF", "TP_COMPARE - TP_EPA")
+    DefineScalarExpression("TP_PERCENT_CHANGE", "(TP_EPA - TP_COMPARE)/abs(TP_COMPARE)*100")
 
     AnnotationAtts = AnnotationAttributes()
     #Don't print out username and name of database
@@ -301,7 +321,7 @@ for x in range(1,NUM_MI_FILES+1):
       SetTimeSliderState(state)
       tcur = m.times[state]*86400.  + t_start
       ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y %H:%M:%S')
-      FILE_TS = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y_%H-%M-%S')
+      FILE_TS = "_" + RUN_NAME + "." + datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y_%H-%M-%S')
 #      timestamp = "Time: " + ts + " GMT"
       timestamp = ts + " "
       slider.text =  timestamp
@@ -310,36 +330,39 @@ for x in range(1,NUM_MI_FILES+1):
 
       if(do_3Dplot): 
 #def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-          create_pseudocolor_3Dplot(TITLE_TP_percent_change,UNITS_TP_percent_change,"TP_percent_change",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
-          DeleteAllPlots()
-          create_pseudocolor_3Dplot(TITLE_TP_diff,UNITS_TP_diff,"TP_diff",MIN_TP_diff,MAX_TP_diff,FILE_TS)
-          DeleteAllPlots()
           create_pseudocolor_3Dplot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
           DeleteAllPlots()
-          create_pseudocolor_3Dplot(TITLE_TP_Mark,UNITS_TP_Mark,"TP_Mark",MIN_TP,MAX_TP,FILE_TS)
-          DeleteAllPlots()
+          if(do_compare):
+              create_pseudocolor_3Dplot(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE",MIN_TP,MAX_TP,FILE_TS)
+              DeleteAllPlots() 
+              create_pseudocolor_3Dplot(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
+              DeleteAllPlots()
+              create_pseudocolor_3Dplot(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS)
+              DeleteAllPlots()
 
       if(do_2Dslice):
 #def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-          create_pseudocolor_2Dslice(TITLE_TP_percent_change,UNITS_TP_percent_change,"TP_percent_change",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
-          DeleteAllPlots()
-          create_pseudocolor_2Dslice(TITLE_TP_diff,UNITS_TP_diff,"TP_diff",MIN_TP_diff,MAX_TP_diff,FILE_TS)
-          DeleteAllPlots()
           create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
           DeleteAllPlots()
-          create_pseudocolor_2Dslice(TITLE_TP_Mark,UNITS_TP_Mark,"TP_Mark",MIN_TP,MAX_TP,FILE_TS)
-          DeleteAllPlots()
+          if(do_compare):
+              create_pseudocolor_2Dslice(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE",MIN_TP,MAX_TP,FILE_TS)
+              DeleteAllPlots()
+              create_pseudocolor_2Dslice(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
+              DeleteAllPlots()
+              create_pseudocolor_2Dslice(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS)
+              DeleteAllPlots()
 
       if(do_2Dtransect):
 #def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-          create_pseudocolor_2Dtransect(TITLE_TP_percent_change,UNITS_TP_percent_change,"TP_percent_change",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
-          DeleteAllPlots()
-          create_pseudocolor_2Dtransect(TITLE_TP_diff,UNITS_TP_diff,"TP_diff",MIN_TP_diff,MAX_TP_diff,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
-          DeleteAllPlots()
           create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
           DeleteAllPlots()
-          create_pseudocolor_2Dtransect(TITLE_TP_Mark,UNITS_TP_Mark,"TP_Mark",MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
-          DeleteAllPlots()
+          if(do_compare):
+              create_pseudocolor_2Dtransect(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE",MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+              DeleteAllPlots()
+              create_pseudocolor_2Dtransect(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+              DeleteAllPlots()
+              create_pseudocolor_2Dtransect(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+              DeleteAllPlots()
 
 
 #Comment this out when debugging if you want VisIt to leave the Window open
