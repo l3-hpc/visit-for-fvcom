@@ -22,7 +22,7 @@ do_compare = 1
 
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
-do_MDR = 0
+do_MDR = 1
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
