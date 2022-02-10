@@ -7,7 +7,7 @@ import sys
 # Choose a string - no spaces! - to identify the run.  
 # It will be added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
-RUN_NAME = "sinking"
+RUN_NAME = "EPAvsMDR"
 
 # How many mi files are available?
 # Change this to look at the path and calculate
@@ -58,7 +58,7 @@ MAX_TP_DIFF = 0.002
 MIN_TP_PERCENT_CHANGE = -30
 MAX_TP_PERCENT_CHANGE = 30
 ##-- Titles
-TITLE_TP_COMPARE = "TP_COMPARE"
+TITLE_TP_COMPARE = "TP_MARK"
 TITLE_TP_DIFF = "TP_diff"
 TITLE_TP_PERCENT_CHANGE = "TP_Change"
 ##-- UNITS
