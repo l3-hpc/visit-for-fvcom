@@ -9,7 +9,6 @@ import sys
 # You can leave it empty by using two double quotes with no space.
 RUN_NAME = "sinking"
 
-
 # How many mi files are available?
 # Change this to look at the path and calculate
 NUM_MI_FILES = 13
@@ -24,7 +23,6 @@ do_compare = 1
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
 do_MDR = 0
-
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
