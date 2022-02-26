@@ -38,3 +38,11 @@ create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP)
 ```
 create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FROM_X,FROM_Y,TO_X,TO_Y)
 ```
+
+To layer a mesh over the plot, do
+```
+AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+DrawPlots()
+```
+
+
