@@ -7,11 +7,15 @@ import sys
 # Choose a string - no spaces! - to identify the run.  
 # It will be added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
-RUN_NAME = "EPAvsMDR"
+RUN_NAME = "output1vs2"
 
 # How many mi files are available?
 # Change this to look at the path and calculate
 NUM_MI_FILES = 13
+
+# For setting up an interactive session, which MI file to look at.
+# This will be ignored in a regular batch run
+MI_ID_INIT = 12
 
 # Just plot the first timestep of every mi file?
 # If not, it will do every single timestep of every file
@@ -22,7 +26,7 @@ do_compare = 1
 
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
-do_MDR = 1
+do_MDR = 0
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
@@ -86,6 +90,11 @@ def set_RUN_NAME():
 ## todo:  set according to what is in the directory
 def set_NUM_MI_FILES():
     return NUM_MI_FILES
+
+## number of mi_ files
+## todo:  set according to what is in the directory
+def set_MI_ID_INIT():
+    return MI_ID_INIT
 
 # Just plot the first timestep of every mi file?
 # If not, it will do every single timestep of every file

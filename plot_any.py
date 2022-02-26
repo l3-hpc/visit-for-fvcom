@@ -42,6 +42,11 @@ do_first_in_file = setparams.set_do_first_in_file()
 do_3Dplot = setparams.set_do3Dplot()
 do_2Dslice = setparams.set_do2Dslice()
 do_2Dtransect = setparams.set_do2Dtransect()
+
+
+#Add mesh?
+add_mesh = False  #True
+
 #set min/max for colormap
 #For both TP_EPA and TP_COMPARE
 MIN_TP = setparams.set_MIN_TP()
@@ -86,6 +91,12 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     legend.managePosition=0
     legend.position = (0.055,0.85)
     legend.yScale = 1.0
+
+    #Axes are on
+    AnnotationAtts = AnnotationAttributes()
+    AnnotationAtts.axes2D.visible = 1
+    AnnotationAtts.axes2D.xAxis.title.visible = 1
+    SetAnnotationAttributes(AnnotationAtts)
     DrawPlots()
     SetActivePlots(0)
     PseudocolorAtts = PseudocolorAttributes()
@@ -94,6 +105,9 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     PseudocolorAtts.colorTableName = "caleblack"
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
+    if(add_mesh):
+        AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+    DrawPlots()
     SetPlotOptions(PseudocolorAtts)
     SaveWindowAtts.fileName = PLOT_VAR + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
@@ -120,6 +134,22 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     legend.managePosition=0
     legend.position = (0.055,0.85)
     legend.yScale = 1.0
+
+    ##Just for 2D
+    #Axes are on
+    AnnotationAtts = AnnotationAttributes()
+    AnnotationAtts.axes2D.visible = 1
+    ##Turn off x-axis because it doesn't mean anything for transects
+    AnnotationAtts.axes2D.xAxis.title.visible = 0
+    AnnotationAtts.axes2D.xAxis.label.visible = 0
+    #For y-axis, we want depth, but VisIt relabels it
+    #Use 'user defined' title
+    AnnotationAtts.axes2D.yAxis.title.visible = 0
+    AnnotationAtts.axes2D.yAxis.title.userTitle = 1
+    AnnotationAtts.axes2D.yAxis.title.userUnits = 0
+    AnnotationAtts.axes2D.yAxis.title.title = "Water Surface Elevation"
+    SetAnnotationAttributes(AnnotationAtts)
+
     DrawPlots()
     SetActivePlots(0)
     SetViewExtentsType("actual")
@@ -130,6 +160,11 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
+
+    if(add_mesh):
+        AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+        DrawPlots()
+
     SaveWindowAtts.fileName = PLOT_VAR + "_" + "slice" + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
@@ -192,6 +227,19 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,FROM_X,FR
     legend.managePosition=0
     legend.position = (0.055,0.85)
     legend.yScale = 1.0
+
+    ##Just for 2D
+    #Axes are on
+    AnnotationAtts = AnnotationAttributes()
+    AnnotationAtts.axes2D.visible = 1
+    ##Turn of x-axis because it doesn't mean anything for transects
+    AnnotationAtts.axes2D.xAxis.title.visible = 0
+    SetAnnotationAttributes(AnnotationAtts)
+
+    if(add_mesh):
+        AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+        DrawPlots()
+
     DrawPlots()
     SetViewExtentsType("actual")
     SetActivePlots(0)
@@ -288,14 +336,7 @@ for x in range(1,NUM_MI_FILES+1):
     AnnotationAtts.databaseInfoFlag = 0
     #get rid of x-y-x axis thing in the bottom left
     AnnotationAtts.axes3D.triadFlag = 0
-
-    ##DIFFERENT in the slicing script...turn off the axes altogether
-    AnnotationAtts.axes2D.visible = 0
     SetAnnotationAttributes(AnnotationAtts)
-
-    #3D plot...show the axes
-    ## Actually, they are not being shown anyway, right?
-
 
 #    Get rid of TP title and units from Legend
     #GetAnnotationObjectNames

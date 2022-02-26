@@ -10,6 +10,8 @@ import setparams
 
 # Set the run name to label the images
 RUN_NAME = setparams.set_RUN_NAME()
+#print(RUN_NAME)
+
 #Defines where the images are located
 IMGS_DIR = setpaths.set_image_path()
 do_3Dplot = setparams.set_do3Dplot()
@@ -42,8 +44,9 @@ image_suffix = [
 ]
 
 for img in image_suffix:
-
+    #print(img)
     for pname in plotnames:
+        #print(pname)
         img1 = matplotlib.image.imread(IMGS_DIR + 'TP_EPA'+ pname + RUN_NAME + img)
         img2 = matplotlib.image.imread(IMGS_DIR + 'TP_COMPARE'+ pname + RUN_NAME + img)
         img3 = matplotlib.image.imread(IMGS_DIR + 'TP_diff'+ pname + RUN_NAME + img)
@@ -53,6 +56,6 @@ for img in image_suffix:
         row2 = np.concatenate((img3, img4), axis=1)
         new_image = np.concatenate((row1, row2))
 
-        matplotlib.image.imsave(IMGS_DIR + 'new' + pname +img, new_image)
+        matplotlib.image.imsave(IMGS_DIR + 'new' + pname + RUN_NAME + img, new_image)
 
 
