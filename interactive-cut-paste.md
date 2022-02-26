@@ -1,0 +1,36 @@
+Here you can cut/paste in the cli or command window.
+
+Open the cli from VisIt:  Controls:Launch CLI
+
+At least on my Mac, I need to define the python path so it can see 'setpaths'.  Probably I can do this before I'm in VisIt.  Anyway:
+```
+import sys
+sys.path.append("/Users/lisalowe/visit-for-fvcom")
+```
+
+Now run the 'setup_interactive.py' script.  Do not use 'cli' option, and put it in the background with `&`.
+```
+visit -s setup_interactive.py &
+```
+
+Everything is loaded.  You can use the GUI as usual, or cut/paste different plots.  To start from scratch, delete the existing plots:
+```
+DeleteAllPlots()
+```
+
+Options for plots:
+
+Pseudocolor 3D Plot:
+```
+create_pseudocolor_3Dplot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
+```
+
+2D slice as percent of the y axis:
+```
+create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
+```
+
+2D transect, starts with the points defined in setparams:
+```
+create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+```
