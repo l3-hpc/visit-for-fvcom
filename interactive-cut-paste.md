@@ -45,4 +45,9 @@ AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
 DrawPlots()
 ```
 
+The script locks the time in view in the first plot, so each new cloned window will inherit the 'locked' propery.  To clone the window, do
+```
+CloneWindow()
+DrawPlots()
+```
 
