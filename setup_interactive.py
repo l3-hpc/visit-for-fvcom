@@ -311,8 +311,18 @@ def transect_against_3D(TITLE,UNITS,PLOT_VAR,MIN,MAX,FROM_X,FROM_Y,TO_X,TO_Y):
     #Scale Z by 1000 so depth is visible
     AddOperator("Transform",1)
     TransformAtts = TransformAttributes()
+    TransformAtts.doRotate = 0
+    TransformAtts.rotateOrigin = (0, 0, 0)
+    TransformAtts.rotateAxis = (0, 0, 1)
+    TransformAtts.rotateAmount = 0
+    TransformAtts.rotateType = TransformAtts.Deg  # Deg, Rad
+    TransformAtts.doScale = 1
+    TransformAtts.scaleOrigin = (0, 0, 0)
+    TransformAtts.scaleX = 1
+    TransformAtts.scaleY = 1
     TransformAtts.scaleZ = 1000
     SetOperatorOptions(TransformAtts, 0, 1)
+    DrawPlots()
 
     #Add Mesh Plot with the same attributes
     AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
