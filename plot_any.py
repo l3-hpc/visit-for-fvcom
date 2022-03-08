@@ -82,18 +82,25 @@ if (do_2Dtransect):
 
 
 def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
+    #Title and annotations
     title.text = TITLE
     text2D_units.text = UNITS
     text2D_timestamp.text = timestamp
+    #Add pseudocolor plot and set attributes
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
-    #a = GetAnnotationObjectNames()
-    #legend = GetAnnotationObject(a[4])
-    #legend.drawTitle=0
-    #legend.managePosition=0
-    #legend.position = (0.055,0.85)
-    #legend.yScale = 1.0
-
-    #Axes are on
+    SetActivePlots(0)
+    PseudocolorAtts = PseudocolorAttributes()
+    PseudocolorAtts.minFlag = 1
+    PseudocolorAtts.maxFlag = 1
+    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.min = MIN
+    PseudocolorAtts.max = MAX
+    SetPlotOptions(PseudocolorAtts)
+    #Comment out since showing triangles overwhelms the plot
+    # if(add_mesh):
+    #     AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+    DrawPlots()
+    #Annotations:  Axes are on
     AnnotationAtts = AnnotationAttributes()
     #Don't print out username and name of database
     AnnotationAtts.userInfoFlag = 0
@@ -103,19 +110,11 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     AnnotationAtts.axes2D.visible = 1
     AnnotationAtts.axes2D.xAxis.title.visible = 1
     SetAnnotationAttributes(AnnotationAtts)
-    DrawPlots()
-    SetActivePlots(0)
-    PseudocolorAtts = PseudocolorAttributes()
-    PseudocolorAtts.minFlag = 1
-    PseudocolorAtts.maxFlag = 1
-    PseudocolorAtts.colorTableName = "caleblack"
-    PseudocolorAtts.min = MIN
-    PseudocolorAtts.max = MAX
 #Comment out since showing triangles overwhelms the plot
 #    if(add_mesh):
 #        AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
     DrawPlots()
-    SetPlotOptions(PseudocolorAtts)
+    #Save the image
     SaveWindowAtts.fileName = PLOT_VAR + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
@@ -124,24 +123,27 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     title.text = TITLE
     text2D_units.text = UNITS
     text2D_timestamp.text = timestamp
+    #Add pseudocolor plot and set attributes
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
+    PseudocolorAtts = PseudocolorAttributes()
+    PseudocolorAtts.minFlag = 1
+    PseudocolorAtts.maxFlag = 1
+    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.min = MIN
+    PseudocolorAtts.max = MAX
+    SetPlotOptions(PseudocolorAtts)
+    #Scale Z by 1000
     AddOperator("Transform",1)
     TransformAtts = TransformAttributes()
     TransformAtts.scaleZ = 1000
     SetOperatorOptions(TransformAtts, 0, 1)
+    #Add 2d slice, now hardcoded for 35percent of grid 
     AddOperator("Slice", 1)
     SliceAtts = SliceAttributes()
     SliceAtts.originType = SliceAtts.Percent
     SliceAtts.originPercent = 35
     SliceAtts.project2d = 1
     SetOperatorOptions(SliceAtts, 1, 1)
-    #a = GetAnnotationObjectNames()
-    #legend = GetAnnotationObject(a[4])
-    #legend.drawTitle=0
-    #legend.managePosition=0
-    #legend.position = (0.055,0.85)
-    #legend.yScale = 1.0
-
     ##Just for 2D
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
@@ -158,22 +160,14 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     #For y-axis, we want depth, but VisIt relabels it
     AnnotationAtts.axes2D.yAxis.title.visible = 0
     SetAnnotationAttributes(AnnotationAtts)
-
     DrawPlots()
     SetActivePlots(0)
     SetViewExtentsType("actual")
-    PseudocolorAtts = PseudocolorAttributes()
-    PseudocolorAtts.minFlag = 1
-    PseudocolorAtts.maxFlag = 1
-    PseudocolorAtts.colorTableName = "caleblack"
-    PseudocolorAtts.min = MIN
-    PseudocolorAtts.max = MAX
-    SetPlotOptions(PseudocolorAtts)
-
+    #Add mesh, which is sigma layers
     if(add_mesh):
         AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
         DrawPlots()
-
+    #Save the image
     SaveWindowAtts.fileName = PLOT_VAR + "_" + "slice" + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
@@ -188,11 +182,20 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
     Y = np.array([p3[0]-p1[0],p3[1]-p1[1],p3[2]-p1[2]])
     myvec = np.cross(X,Y)
     norm_myvec = myvec/np.linalg.norm(myvec)
-    #set up plot
+    #Title and annotations
     title.text = TITLE
     text2D_units.text = UNITS
     text2D_timestamp.text = timestamp
+    #Add pseudocolor plot and set attributes
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
+    PseudocolorAtts = PseudocolorAttributes()
+    PseudocolorAtts.minFlag = 1
+    PseudocolorAtts.maxFlag = 1
+    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.min = MIN
+    PseudocolorAtts.max = MAX
+    SetPlotOptions(PseudocolorAtts)
+    #Scale Z by 1000
     AddOperator("Transform",1)
     TransformAtts = TransformAttributes()
     TransformAtts.scaleZ = 1000
@@ -232,14 +235,6 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
     SliceAtts.theta = 0
     SliceAtts.phi = 0
     SetOperatorOptions(SliceAtts, 1, 1)
-    #Annotations
-    #a = GetAnnotationObjectNames()
-    #legend = GetAnnotationObject(a[4])
-    #legend.drawTitle=0
-    #legend.managePosition=0
-    #legend.position = (0.055,0.85)
-    #legend.yScale = 1.0
-
     ##Just for 2D
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
@@ -257,26 +252,17 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
     AnnotationAtts.axes2D.yAxis.title.visible = 0
     AnnotationAtts.axes2D.yAxis.title.units = "meters"
     SetAnnotationAttributes(AnnotationAtts)
-
+    #Overlay mesh, shows sigma layers
     if(add_mesh):
         AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
         DrawPlots()
-
-    DrawPlots()
+    #Zoom in to extent
     SetViewExtentsType("actual")
     SetActivePlots(0)
-    PseudocolorAtts = PseudocolorAttributes()
-    PseudocolorAtts.minFlag = 1
-    PseudocolorAtts.maxFlag = 1
-    PseudocolorAtts.colorTableName = "caleblack"
-    PseudocolorAtts.min = MIN
-    PseudocolorAtts.max = MAX
-    SetPlotOptions(PseudocolorAtts)
+    DrawPlots()
     SaveWindowAtts.fileName = PLOT_VAR + "_" + "transect" + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
-
-
 
 #save the session, make sure settings are same
 ##SaveSession("savethe.session")
@@ -354,19 +340,6 @@ for x in range(1,NUM_MI_FILES+1):
     #Define difference and percent change
     DefineScalarExpression("TP_DIFF", "TP_COMPARE - TP_EPA")
     DefineScalarExpression("TP_PERCENT_CHANGE", "(TP_EPA - TP_COMPARE)/abs(TP_COMPARE)*100")
-
-    AnnotationAtts = AnnotationAttributes()
-    #Don't print out username and name of database
-    AnnotationAtts.userInfoFlag = 0
-    AnnotationAtts.databaseInfoFlag = 0
-    #get rid of x-y-x axis thing in the bottom left
-    AnnotationAtts.axes3D.triadFlag = 0
-    SetAnnotationAttributes(AnnotationAtts)
-
-#    Get rid of TP title and units from Legend
-    #GetAnnotationObjectNames
-    #legend = GetAnnotationObjectNames(a[4])
-    #legend.drawTitle=0
 
     SaveWindowAtts = SaveWindowAttributes()
     SaveWindowAtts.outputToCurrentDirectory = 0

@@ -34,11 +34,11 @@ do_MDR = True
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
-do_3Dplot = False  
+do_3Dplot = True  
 ## 2D pseudocolor slice
-do_2Dslice = False
+do_2Dslice = False 
 ## 2D transect
-do_2Dtransect = True 
+do_2Dtransect = False 
 
 ## --- End True/False statements
 

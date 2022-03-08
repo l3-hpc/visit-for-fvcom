@@ -59,25 +59,14 @@ CloneWindow()
 DrawPlots()
 ```
 
-To clone a window with the 3D mesh plus transect, and show it next to the 2D, do:
+After cloning a window with the 3D mesh plus transect, to add the 2D next to it, first use the GUI to delete the two plots in the second window - Pseduocolor and Mesh.  Then, use the 2D transect function at the command line:
 ```
-#The Mesh is the second plot
-#(Python starts at zero)
-SetActivePlots(1)
-#Delete the mesh
-DeleteActivePlots()
-DrawPlots()
-#Reset active plot
-SetActivePlots(0)
-#Slice attributes
-SliceAtts = SliceAttributes()
-#Project to 2D
-SliceAtts.project2d = 1
-SetOperatorOptions(SliceAtts, 2, 1)
-#Zoom in on full extent
-SetViewExtentsType(1)
+create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FROM_X,FROM_Y,TO_X,TO_Y)
 ```
-
+To change to a dark backgroud (if it is not already dark), do:
+```
+InvertBackgroundColor()
+```
 
 To start from scratch, delete the existing plots:
 ```
