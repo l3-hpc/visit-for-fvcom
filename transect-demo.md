@@ -137,3 +137,8 @@ Then repeat for Window 6.
 ## I know I have to fix the time slider...
 
 You can see that the plots are obviously showing the same timestep, but the label for the slider is off.  I will fix this, but the explanation is that we are defining a 'Callback' function in VisIt to update the time slider every time I click the 'step forward' button.  In the batch script, it just redefines the labels for every image and there is no problem.  It is not as straightforward when using time stepping within the GUI.
+
+# Plot in case my screen freezes...
+
+This is what should happen.
+![This is what should happen.](img/transect-demo.png)
