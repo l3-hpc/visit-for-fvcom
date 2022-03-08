@@ -4,6 +4,9 @@ jamesHPC_setpaths.py
 lisaHPC_setpaths.py
 setpaths.py.mdr
 
+#james' current settings
+setparams_james.py
+
 run_make_all.csh
 setpaths.py
 makemovie.csh

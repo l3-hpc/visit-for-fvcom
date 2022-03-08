@@ -123,12 +123,12 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX):
     title.text = TITLE
     text2D_units.text = UNITS
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
-    a = GetAnnotationObjectNames()
-    legend = GetAnnotationObject(a[4])
-    legend.drawTitle=0
-    legend.managePosition=0
-    legend.position = (0.055,0.85)
-    legend.yScale = 1.0
+    #a = GetAnnotationObjectNames()
+    #legend = GetAnnotationObject(a[4])
+    #legend.drawTitle=0
+    #legend.managePosition=0
+    #legend.position = (0.055,0.85)
+    #legend.yScale = 1.0
 
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
@@ -161,19 +161,28 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX):
     SliceAtts.originPercent = 35
     SliceAtts.project2d = 1
     SetOperatorOptions(SliceAtts, 1, 1)
-    a = GetAnnotationObjectNames()
-    legend = GetAnnotationObject(a[4])
-    legend.drawTitle=0
-    legend.managePosition=0
-    legend.position = (0.055,0.85)
-    legend.yScale = 1.0
+    #a = GetAnnotationObjectNames()
+    #legend = GetAnnotationObject(a[4])
+    #legend.drawTitle=0
+    #legend.managePosition=0
+    #legend.position = (0.055,0.85)
+    #legend.yScale = 1.0
 
     ##Just for 2D
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
+    #Don't print out username and name of database
+    AnnotationAtts.userInfoFlag = 0
     AnnotationAtts.databaseInfoFlag = 0
+    #get rid of x-y-x axis thing in the bottom left
+    AnnotationAtts.axes3D.triadFlag = 0
+    #Turn on 2D axes
     AnnotationAtts.axes2D.visible = 1
+    ##x-axis labeling is fine for slices 
     AnnotationAtts.axes2D.xAxis.title.visible = 1
+    AnnotationAtts.axes2D.xAxis.label.visible = 1
+    #For y-axis, we want depth, but VisIt relabels it
+    AnnotationAtts.axes2D.yAxis.title.visible = 0
     SetAnnotationAttributes(AnnotationAtts)
 
     DrawPlots()
@@ -238,25 +247,28 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FROM_X,FROM_Y,TO_
     SliceAtts.phi = 0
     SetOperatorOptions(SliceAtts, 1, 1)
     #Annotations
-    a = GetAnnotationObjectNames()
-    legend = GetAnnotationObject(a[4])
-    legend.drawTitle=0
-    legend.managePosition=0
-    legend.position = (0.055,0.85)
-    legend.yScale = 1.0
+    #a = GetAnnotationObjectNames()
+    #legend = GetAnnotationObject(a[4])
+    #legend.drawTitle=0
+    #legend.managePosition=0
+    #legend.position = (0.055,0.85)
+    #legend.yScale = 1.0
 
     ##Just for 2D
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
+    #Don't print out username and name of database
+    AnnotationAtts.userInfoFlag = 0
     AnnotationAtts.databaseInfoFlag = 0
+    #get rid of x-y-x axis thing in the bottom left
+    AnnotationAtts.axes3D.triadFlag = 0
+    #Turn on 2D axes
     AnnotationAtts.axes2D.visible = 1
-    ##Turn of x-axis because it doesn't mean anything for transects
-    AnnotationAtts.axes2D.xAxis.title.visible = 0
-    AnnotationAtts.axes2D.xAxis.label.visible = 0
+    ##x-axis labeling is fine for slices 
+    AnnotationAtts.axes2D.xAxis.title.visible = 1
+    AnnotationAtts.axes2D.xAxis.label.visible = 1
+    #For y-axis, we want depth, but VisIt relabels it
     AnnotationAtts.axes2D.yAxis.title.visible = 0
-    AnnotationAtts.axes2D.yAxis.title.userTitle = 1
-    AnnotationAtts.axes2D.yAxis.title.userUnits = 0
-    AnnotationAtts.axes2D.yAxis.title.title = "Water Surface Elevation"
     SetAnnotationAttributes(AnnotationAtts)
 
     DrawPlots()
@@ -269,6 +281,106 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FROM_X,FROM_Y,TO_
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
+
+def transect_against_3D(TITLE,UNITS,PLOT_VAR,MIN,MAX,FROM_X,FROM_Y,TO_X,TO_Y):
+    #Calculate arbitrary normal vector from plane
+    p1 = np.array([FROM_X,FROM_Y,0])
+    p2 = np.array([TO_X, TO_Y, 0])
+    p3 = np.array([TO_X, TO_Y, -1000])
+    X = np.array([p2[0]-p1[0],p2[1]-p1[1],p2[2]-p1[2]])
+    Y = np.array([p3[0]-p1[0],p3[1]-p1[1],p3[2]-p1[2]])
+    myvec = np.cross(X,Y)
+    norm_myvec = myvec/np.linalg.norm(myvec)
+
+    #set up plot titles
+    title.text = TITLE
+    text2D_units.text = UNITS
+
+    #Add plot, set min/max and colormap
+    AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
+    DrawPlots()
+    SetActivePlots(0)
+    PseudocolorAtts = PseudocolorAttributes()
+    PseudocolorAtts.minFlag = 1
+    PseudocolorAtts.maxFlag = 1
+    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.min = MIN
+    PseudocolorAtts.max = MAX
+    SetPlotOptions(PseudocolorAtts)
+
+    #Scale Z by 1000 so depth is visible
+    AddOperator("Transform",1)
+    TransformAtts = TransformAttributes()
+    TransformAtts.scaleZ = 1000
+    SetOperatorOptions(TransformAtts, 0, 1)
+
+    #Add Mesh Plot with the same attributes
+    AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+    DrawPlots()
+
+    #This makes the background black
+    InvertBackgroundColor()
+
+    #Change the color and opacity of mesh
+    SetActivePlots(1)
+    MeshAtts = MeshAttributes()
+    MeshAtts.legendFlag = 1
+    MeshAtts.lineWidth = 0
+    MeshAtts.meshColor = (128, 128, 128, 255)
+    MeshAtts.meshColorSource = MeshAtts.MeshCustom  # Foreground, MeshCustom, MeshRandom
+    MeshAtts.opaqueColorSource = MeshAtts.Background  # Background, OpaqueCustom, OpaqueRandom
+    MeshAtts.opaqueMode = MeshAtts.Auto  # Auto, On, Off
+    MeshAtts.pointSize = 0.05
+    MeshAtts.opaqueColor = (255, 255, 255, 255)
+    MeshAtts.smoothingLevel = MeshAtts.NONE  # NONE, Fast, High
+    MeshAtts.pointSizeVarEnabled = 0
+    MeshAtts.pointSizeVar = "default"
+    MeshAtts.pointType = MeshAtts.Point  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+    MeshAtts.showInternal = 0
+    MeshAtts.pointSizePixels = 2
+    MeshAtts.opacity = 0.333333
+    SetPlotOptions(MeshAtts)
+
+    #Select Box, hopefully to just the Active Plots
+    SetActivePlots((0, 1))
+    SetActivePlots(0)
+    AddOperator("Box", 0)
+    BoxAtts = BoxAttributes()
+    BoxAtts.amount = BoxAtts.Some  # Some, All
+    BoxAtts.minx = min(p1[0],p2[0])
+    BoxAtts.maxx = max(p1[0],p2[0])
+    BoxAtts.miny = min(p1[1],p2[1])
+    BoxAtts.maxy = max(p1[1],p2[1])
+    BoxAtts.minz = -250000
+    BoxAtts.maxz = 0
+    BoxAtts.inverse = 0
+    SetOperatorOptions(BoxAtts, 1, 0)
+    DrawPlots()
+
+    #Add slicing, do NOT project to 2D
+    AddOperator("Slice", 0)
+    SliceAtts = SliceAttributes()
+    SliceAtts.originType = SliceAtts.Point  # Point, Intercept, Percent, Zone, Node
+    SliceAtts.originPoint = (p1[0], p1[1], p1[2])
+    SliceAtts.originIntercept = 0
+    SliceAtts.originPercent = 0
+    SliceAtts.originZone = 0
+    SliceAtts.originNode = 0
+    SliceAtts.normal = (norm_myvec[0], norm_myvec[1], norm_myvec[2])
+    SliceAtts.axisType = SliceAtts.Arbitrary  # XAxis, YAxis, ZAxis, Arbitrary, ThetaPhi
+    SliceAtts.upAxis = (0, 0, 1)
+    #do not project to 2d
+    SliceAtts.project2d = 0
+    SliceAtts.interactive = 1
+    SliceAtts.flip = 0
+    SliceAtts.originZoneDomain = 0
+    SliceAtts.originNodeDomain = 0
+    SliceAtts.meshName = "Bathymetry_Mesh"
+    SliceAtts.theta = 0
+    SliceAtts.phi = 0
+    #I need to look up what that means
+    SetOperatorOptions(SliceAtts, 2, 0)
+    DrawPlots()
 
 
 #Time slider
@@ -340,7 +452,6 @@ SetAnnotationAttributes(AnnotationAtts)
 
 ToggleLockTime()
 ToggleLockViewMode()
-
 
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4

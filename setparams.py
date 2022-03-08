@@ -1,3 +1,6 @@
+#Python style, PEP 8
+#https://www.python.org/dev/peps/pep-0008/
+
 #File setparams.py
 #Set the plot paramters
 import sys
@@ -7,7 +10,7 @@ import sys
 # Choose a string - no spaces! - to identify the run.  
 # It will be added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
-RUN_NAME = "output1vs2"
+RUN_NAME = "TPvsGEM"
 
 # How many mi files are available?
 # Change this to look at the path and calculate
@@ -15,33 +18,37 @@ NUM_MI_FILES = 13
 
 # For setting up an interactive session, which MI file to look at.
 # This will be ignored in a regular batch run
-MI_ID_INIT = 12
+MI_ID_INIT = 6
 
-# Just plot the first timestep of every mi file?
+##These are all 'True or False'
+# Just plot the first timestep of every mi file? 
 # If not, it will do every single timestep of every file
-do_first_in_file = 1
+do_first_in_file = True 
 
 # Are you comparing two runs? 
-do_compare = 1
+do_compare =  True
 
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
-do_MDR = 0
+do_MDR = True 
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
-do_3Dplot = 1
+do_3Dplot = False  
 ## 2D pseudocolor slice
-do_2Dslice = 1
+do_2Dslice = False
 ## 2D transect
-do_2Dtransect = 1
+do_2Dtransect = True 
+
+## --- End True/False statements
+
 
 #--- Pick points for transect
 ## If you won't do a transect, just ignore - it won't try to use the values
-FROM_X = 561848.5
-FROM_Y = 4756940.5
-TO_X = 548466.63
-TO_Y = 4793653.0
+FROM_X = 561061.44
+FROM_Y = 4762227.5
+TO_X = 550078.88
+TO_Y = 4790313.5
 
 #--- Plot parameters
 ##---  If only doing 1 plot:

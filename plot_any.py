@@ -1,3 +1,4 @@
+#PEP-8 style guide says each line should be 79 characters or less.............|
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
@@ -45,7 +46,7 @@ do_2Dtransect = setparams.set_do2Dtransect()
 
 
 #Add mesh?
-add_mesh = False  #True
+add_mesh = True
 
 #set min/max for colormap
 #For both TP_EPA and TP_COMPARE
@@ -74,10 +75,10 @@ if(do_compare):
 
 #For transects
 if (do_2Dtransect):
-   FROM_X = setparams.set_FROM_X() 
-   FROM_Y = setparams.set_FROM_Y()
-   TO_X = setparams.set_TO_X()
-   TO_Y = setparams.set_TO_Y()
+    FROM_X = setparams.set_FROM_X() 
+    FROM_Y = setparams.set_FROM_Y()
+    TO_X = setparams.set_TO_X()
+    TO_Y = setparams.set_TO_Y()
 
 
 def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
@@ -85,15 +86,20 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     text2D_units.text = UNITS
     text2D_timestamp.text = timestamp
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
-    a = GetAnnotationObjectNames()
-    legend = GetAnnotationObject(a[4])
-    legend.drawTitle=0
-    legend.managePosition=0
-    legend.position = (0.055,0.85)
-    legend.yScale = 1.0
+    #a = GetAnnotationObjectNames()
+    #legend = GetAnnotationObject(a[4])
+    #legend.drawTitle=0
+    #legend.managePosition=0
+    #legend.position = (0.055,0.85)
+    #legend.yScale = 1.0
 
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
+    #Don't print out username and name of database
+    AnnotationAtts.userInfoFlag = 0
+    AnnotationAtts.databaseInfoFlag = 0
+    #get rid of x-y-x axis thing in the bottom left
+    AnnotationAtts.axes3D.triadFlag = 0
     AnnotationAtts.axes2D.visible = 1
     AnnotationAtts.axes2D.xAxis.title.visible = 1
     SetAnnotationAttributes(AnnotationAtts)
@@ -105,8 +111,9 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     PseudocolorAtts.colorTableName = "caleblack"
     PseudocolorAtts.min = MIN
     PseudocolorAtts.max = MAX
-    if(add_mesh):
-        AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+#Comment out since showing triangles overwhelms the plot
+#    if(add_mesh):
+#        AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
     DrawPlots()
     SetPlotOptions(PseudocolorAtts)
     SaveWindowAtts.fileName = PLOT_VAR + FILE_TS
@@ -128,26 +135,28 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     SliceAtts.originPercent = 35
     SliceAtts.project2d = 1
     SetOperatorOptions(SliceAtts, 1, 1)
-    a = GetAnnotationObjectNames()
-    legend = GetAnnotationObject(a[4])
-    legend.drawTitle=0
-    legend.managePosition=0
-    legend.position = (0.055,0.85)
-    legend.yScale = 1.0
+    #a = GetAnnotationObjectNames()
+    #legend = GetAnnotationObject(a[4])
+    #legend.drawTitle=0
+    #legend.managePosition=0
+    #legend.position = (0.055,0.85)
+    #legend.yScale = 1.0
 
     ##Just for 2D
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
+    #Don't print out username and name of database
+    AnnotationAtts.userInfoFlag = 0
+    AnnotationAtts.databaseInfoFlag = 0
+    #get rid of x-y-x axis thing in the bottom left
+    AnnotationAtts.axes3D.triadFlag = 0
+    #Turn on 2D axes
     AnnotationAtts.axes2D.visible = 1
-    ##Turn off x-axis because it doesn't mean anything for transects
-    AnnotationAtts.axes2D.xAxis.title.visible = 0
-    AnnotationAtts.axes2D.xAxis.label.visible = 0
+    ##x-axis labeling is fine for slices 
+    AnnotationAtts.axes2D.xAxis.title.visible = 1
+    AnnotationAtts.axes2D.xAxis.label.visible = 1
     #For y-axis, we want depth, but VisIt relabels it
-    #Use 'user defined' title
     AnnotationAtts.axes2D.yAxis.title.visible = 0
-    AnnotationAtts.axes2D.yAxis.title.userTitle = 1
-    AnnotationAtts.axes2D.yAxis.title.userUnits = 0
-    AnnotationAtts.axes2D.yAxis.title.title = "Water Surface Elevation"
     SetAnnotationAttributes(AnnotationAtts)
 
     DrawPlots()
@@ -169,7 +178,8 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
 
-def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y):
+def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
+                                  FROM_X,FROM_Y,TO_X,TO_Y):
     #Calculate arbitrary normal vector from plane
     p1 = np.array([FROM_X,FROM_Y,0])
     p2 = np.array([TO_X, TO_Y, 0])
@@ -202,14 +212,16 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,FROM_X,FR
     #Slice
     AddOperator("Slice", 1)
     SliceAtts = SliceAttributes()
-    SliceAtts.originType = SliceAtts.Point  # Point, Intercept, Percent, Zone, Node
+    #SliceAtts.(Point, Intercept, Percent, Zone, or Node)
+    SliceAtts.originType = SliceAtts.Point
     SliceAtts.originPoint = (p1[0], p1[1], p1[2])
     SliceAtts.originIntercept = 0
     SliceAtts.originPercent = 0
     SliceAtts.originZone = 0
     SliceAtts.originNode = 0
     SliceAtts.normal = (norm_myvec[0], norm_myvec[1], norm_myvec[2])
-    SliceAtts.axisType = SliceAtts.Arbitrary  # XAxis, YAxis, ZAxis, Arbitrary, ThetaPhi
+    #SliceAtts.(XAxis, YAxis, ZAxis, Arbitrary, or ThetaPhi)
+    SliceAtts.axisType = SliceAtts.Arbitrary 
     SliceAtts.upAxis = (0, 0, 1)
     SliceAtts.project2d = 1
     SliceAtts.interactive = 1
@@ -221,19 +233,29 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,FROM_X,FR
     SliceAtts.phi = 0
     SetOperatorOptions(SliceAtts, 1, 1)
     #Annotations
-    a = GetAnnotationObjectNames()
-    legend = GetAnnotationObject(a[4])
-    legend.drawTitle=0
-    legend.managePosition=0
-    legend.position = (0.055,0.85)
-    legend.yScale = 1.0
+    #a = GetAnnotationObjectNames()
+    #legend = GetAnnotationObject(a[4])
+    #legend.drawTitle=0
+    #legend.managePosition=0
+    #legend.position = (0.055,0.85)
+    #legend.yScale = 1.0
 
     ##Just for 2D
     #Axes are on
     AnnotationAtts = AnnotationAttributes()
+    #Don't print out username and name of database
+    AnnotationAtts.userInfoFlag = 0
+    AnnotationAtts.databaseInfoFlag = 0
+    #get rid of x-y-x axis thing in the bottom left
+    AnnotationAtts.axes3D.triadFlag = 0
+    #Turn on 2D axes
     AnnotationAtts.axes2D.visible = 1
-    ##Turn of x-axis because it doesn't mean anything for transects
+    ##Turn off x-axis because it doesn't mean anything for transects
     AnnotationAtts.axes2D.xAxis.title.visible = 0
+    AnnotationAtts.axes2D.xAxis.label.visible = 0
+    #For y-axis, we want depth, but VisIt relabels it
+    AnnotationAtts.axes2D.yAxis.title.visible = 0
+    AnnotationAtts.axes2D.yAxis.title.units = "meters"
     SetAnnotationAttributes(AnnotationAtts)
 
     if(add_mesh):
@@ -305,20 +327,23 @@ for x in range(1,NUM_MI_FILES+1):
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"
     COMPARE_database = base_COMPARE_database + str(mi_ID).zfill(4) + ".nc"
 #TODO check if it works on Windows
-    conn_string = base_conn_string  + str(mi_ID).zfill(4) + ".nc[0]id:TP>, <SigmaLayer_Mesh>)"
+    conn_string = (base_conn_string  + str(mi_ID).zfill(4) 
+                   + ".nc[0]id:TP>, <SigmaLayer_Mesh>)")
     #The IMGS_NAME is set below
     #Now it is set to overwrite existing files
-    #IMGS_NAME = base_IMGS_NAME + str(mi_ID).zfill(4) + "."
 
 
-    #Open Databases - the second argument is optional with a default of zero (initial time)
+    #Open Databases - the second argument is optional with a default of zero 
+    #Where zero = initial time
     OpenDatabase(EPA_database,0)
     OpenDatabase(COMPARE_database,0)
 
-    #CreateDatabaseCorrelation("name",(db1,db2),X), here X=2 is a time correlation
+    #CreateDatabaseCorrelation("name",(db1,db2),X) 
+    # Here, X=2 is a time correlation
     CreateDatabaseCorrelation("Correlation01",(EPA_database,COMPARE_database),2)
 
-    #Use conn_cmfe function to put EPA's TP variable onto Mark's grid and call it "TP_EPA"
+    #Use conn_cmfe function to put EPA's TP variable onto Mark's grid 
+    # and call it "TP_EPA"
     DefineScalarExpression("TP_EPA",conn_string)
 
     #Define the variables for comparing.  For Mark's model, TP consists of NDPZ.
@@ -354,56 +379,59 @@ for x in range(1,NUM_MI_FILES+1):
     #SaveWindowAtts.resConstraint = 1 #NoConstraint
     #SaveWindowAtts.width = 700
     #SaveWindowAtts.height = 600
-    SaveWindowAtts.format = SaveWindowAtts.PNG  # BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
+    ##Options are: BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, 
+    ##  POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
+    SaveWindowAtts.format = SaveWindowAtts.PNG
     SetSaveWindowAttributes(SaveWindowAtts)
     
     m = GetMetaData(EPA_database)
     for state in range(TimeSliderGetNStates()):
-      SetTimeSliderState(state)
-      tcur = m.times[state]*86400.  + t_start
-      ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y %H:%M:%S')
-      FILE_TS = "_" + RUN_NAME + "." + datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y_%H-%M-%S')
+        SetTimeSliderState(state)
+        tcur = m.times[state]*86400.  + t_start
+        ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y %H:%M:%S')
+        FILE_TS = "_" + RUN_NAME + "." + datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y_%H-%M-%S')
 #      timestamp = "Time: " + ts + " GMT"
-      timestamp = ts + " "
-      slider.text =  timestamp
-      slider.visible=0
+        timestamp = ts + " "
+        slider.text =  timestamp
+        slider.visible=0
 
 
-      if(do_3Dplot): 
-#def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-          create_pseudocolor_3Dplot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
-          DeleteAllPlots()
-          if(do_compare):
-              create_pseudocolor_3Dplot(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE",MIN_TP,MAX_TP,FILE_TS)
-              DeleteAllPlots() 
-              create_pseudocolor_3Dplot(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
-              DeleteAllPlots()
-              create_pseudocolor_3Dplot(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS)
-              DeleteAllPlots()
+        if(do_3Dplot): 
+            #def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
+            create_pseudocolor_3Dplot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", 
+                    MIN_TP,MAX_TP,FILE_TS)
+            DeleteAllPlots()
+            if(do_compare):
+                create_pseudocolor_3Dplot(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS)
+                DeleteAllPlots() 
+                create_pseudocolor_3Dplot(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
+                DeleteAllPlots()
+                create_pseudocolor_3Dplot(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS)
+                DeleteAllPlots()
 
-      if(do_2Dslice):
-#def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-          create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
-          DeleteAllPlots()
-          if(do_compare):
-              create_pseudocolor_2Dslice(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE",MIN_TP,MAX_TP,FILE_TS)
-              DeleteAllPlots()
-              create_pseudocolor_2Dslice(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
-              DeleteAllPlots()
-              create_pseudocolor_2Dslice(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS)
-              DeleteAllPlots()
+        if(do_2Dslice):
+            #def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
+            create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
+            DeleteAllPlots()
+            if(do_compare):
+                create_pseudocolor_2Dslice(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS)
+                DeleteAllPlots()
+                create_pseudocolor_2Dslice(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
+                DeleteAllPlots()
+                create_pseudocolor_2Dslice(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS)
+                DeleteAllPlots()
 
-      if(do_2Dtransect):
-#def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-          create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
-          DeleteAllPlots()
-          if(do_compare):
-              create_pseudocolor_2Dtransect(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE",MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
-              DeleteAllPlots()
-              create_pseudocolor_2Dtransect(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE",MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
-              DeleteAllPlots()
-              create_pseudocolor_2Dtransect(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
-              DeleteAllPlots()
+        if(do_2Dtransect):
+            #def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
+            create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+            DeleteAllPlots()
+            if(do_compare):
+                create_pseudocolor_2Dtransect(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+                DeleteAllPlots()
+                create_pseudocolor_2Dtransect(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+                DeleteAllPlots()
+                create_pseudocolor_2Dtransect(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF, FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+                DeleteAllPlots()
 
 
 #Comment this out when debugging if you want VisIt to leave the Window open
@@ -411,8 +439,8 @@ for x in range(1,NUM_MI_FILES+1):
 
 #     Using this break command results in only creating a plot
 #      with the first timestep of each mi_000X file
-      if(do_first_in_file):
-          break
+        if(do_first_in_file):
+            break
     
     DeleteAllPlots()
     #If debugging, uncomment break

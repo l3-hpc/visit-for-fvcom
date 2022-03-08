@@ -48,6 +48,11 @@ AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
 DrawPlots()
 ```
 
+To make the 3D plot of the whole grid that shows the transect, do:
+```
+transect_against_3D(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FROM_X,FROM_Y,TO_X,TO_Y)
+```
+
 The script locks the time in view in the first plot, so each new cloned window will inherit the 'locked' propery.  To clone the window, do
 ```
 CloneWindow()
