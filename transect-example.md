@@ -1,6 +1,6 @@
-# Interactive visualization of transects
+# Interactive visualization of transects - demo
 
-The new script that sets up VisIt for an interactive session is `setup_interactive.py`.  Before running, you need to comment out or modify the following.  
+The new script that sets up VisIt for an interactive session is `setup_interactive.py`.  Before running, you need to comment out or modify the following unless you are Lisa.  
 ```
 import sys
 sys.path.append("/Users/lisalowe/visit-for-fvcom")
@@ -81,6 +81,8 @@ To change to a dark backgroud (if it is not already dark), do:
 InvertBackgroundColor()
 ```
 
+# Is it going the 'wrong' way?
+
 Now if you do that, you'll see the transect is going the 'wrong' way!  For the transect to look 'as expected' (or how I expect it), the 'from' point has to have the smaller Y coordinate.
 
 Let's do a 5th and 6th plot:
@@ -107,6 +109,8 @@ To change to a dark backgroud (if it is not already dark), do:
 InvertBackgroundColor()
 ```
 
+The definition of the plane in 3D is the same no matter which point you start at.  It just affects how the 2D slice is projected to 2D.
+
 The script locks the time in view in the first plot, so each new cloned window will inherit the 'locked' propery.  To clone the window, do
 ```
 CloneWindow()
@@ -122,3 +126,12 @@ To change to a dark backgroud (if it is not already dark), do:
 InvertBackgroundColor()
 ```
 
+If you decide you want to go back and add a mesh to the slices, click on the active window, in this case 2 already has the mesh, so choose Active Window 4, then paste
+```
+AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
+DrawPlots()
+```
+
+Then repeat for Window 6.
+
+## I know I have to fix the time slider...
