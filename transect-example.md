@@ -61,6 +61,52 @@ To make the 3D plot of the whole grid that shows the transect, do:
 transect_against_3D(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FROM_X,FROM_Y,TO_X,TO_Y)
 ```
 
+To change to a dark backgroud (if it is not already dark), do:
+```
+InvertBackgroundColor()
+```
+
+The script locks the time in view in the first plot, so each new cloned window will inherit the 'locked' propery.  To clone the window, do
+```
+CloneWindow()
+DrawPlots()
+```
+
+After cloning a window with the 3D mesh plus transect, to add the 2D next to it, first use the GUI to delete the two plots in the second window - Pseduocolor and Mesh.  Then, use the 2D transect function at the command line:
+```
+create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FROM_X,FROM_Y,TO_X,TO_Y)
+```
+To change to a dark backgroud (if it is not already dark), do:
+```
+InvertBackgroundColor()
+```
+
+Now if you do that, you'll see the transect is going the 'wrong' way!  For the transect to look 'as expected' (or how I expect it), the 'from' point has to have the smaller Y coordinate.
+
+Let's do a 5th and 6th plot:
+```
+CloneWindow()
+DrawPlots()
+```
+
+Delete the existing plots.  Redefine the points, swap TO and FROM:
+```
+TO_X = 535724.94
+TO_Y = 4782202.0
+FROM_X = 553283.13
+FROM_Y = 4781751.5
+```
+
+To make the 3D plot of the whole grid that shows the transect, do:
+```
+transect_against_3D(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FROM_X,FROM_Y,TO_X,TO_Y)
+```
+
+To change to a dark backgroud (if it is not already dark), do:
+```
+InvertBackgroundColor()
+```
+
 The script locks the time in view in the first plot, so each new cloned window will inherit the 'locked' propery.  To clone the window, do
 ```
 CloneWindow()
