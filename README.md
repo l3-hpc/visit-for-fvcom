@@ -2,7 +2,7 @@
 VisIt scripts for plotting data from FVCOM output files
 
 # Getting the code
-Instructions are on the [GitHub README](https://github.com/l3-hpc/visit-for-fvcom#readme), or in the README.md after cloning the repo.  To clone the repo, from Linux/Mac terminal or Windows git bash, do
+Instructions are on the [GitHub README](https://github.com/l3-hpc/visit-for-fvcom#readme), or in the README.md after cloning the repo.  To clone the repo, from Linux/Mac terminal or Windows git bash (and set your HOME directory to the new cloned repo) do:
 ```
 git clone https://github.com/l3-hpc/visit-for-fvcom
 cd visit-for-fvcom
@@ -98,7 +98,7 @@ git diff
 The codes that call VisIt are **make_all.py** and **make_slices.py**.  To run interactively, start an interactive session, load the visit module, and type the commands which are listed in the submit scripts but remove the 'nowin' argument:
 ```
 [On HPC, start interactive session]
-[On HPC, module load the visit module.]
+[On HPC, module load the visit module via 'module load visit']
 visit -cli -s plot_any.py
 ```
 For HPC, X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
