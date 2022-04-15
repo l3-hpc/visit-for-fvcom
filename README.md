@@ -121,7 +121,7 @@ The script simply take multiple image files and contatenate them into a single i
 
 The script takes the info from **setpaths.py** and **setparams.py** to create the image names.  As is, they work if you are doing a comparison run and have the output from the first timestep in each of the 13 mi_*.nc files.
 
-On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos...(let me know and I'll put it in the documenation).
+On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos use 'display' to open Image Magick and navigate to the file you want to open(you may need to click on the window that opens to have the menu window pop up). Or navigate to the directory with the images on atmos and open from there.
 
 
 # Useful commands in the VisIt command shell:
