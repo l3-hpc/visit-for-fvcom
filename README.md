@@ -62,7 +62,10 @@ and for Henry2, use
 ```
 bsub < submit.csh
 ```
-
+You can check the status of the batch job by
+```
+squeue -u <username> 
+```
 
 # Updating your git repo to the newest version (pull)
 
@@ -102,7 +105,11 @@ For HPC, X11 forwarding is enabled with MobaXterm by default.  If using a Mac, y
 
 
 # Run the post-processing Python scripts
-After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
+After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment. For example:
+```
+module load intelpython3
+```
+A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
 After loading the module or activating the Conda environment, run the Python script by typing:
 ```
