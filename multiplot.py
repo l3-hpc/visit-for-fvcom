@@ -22,7 +22,7 @@ if(do_3Dplot):
     plotnames.append("_")
 if(do_2Dslice):
     plotnames.append("_slice_")
-if(do_2Dslice):
+if(do_2Dtransect):
     plotnames.append("_transect_")
 
 
@@ -49,8 +49,8 @@ for img in image_suffix:
         #print(pname)
         img1 = matplotlib.image.imread(IMGS_DIR + 'TP_EPA'+ pname + RUN_NAME + img)
         img2 = matplotlib.image.imread(IMGS_DIR + 'TP_COMPARE'+ pname + RUN_NAME + img)
-        img3 = matplotlib.image.imread(IMGS_DIR + 'TP_diff'+ pname + RUN_NAME + img)
-        img4 = matplotlib.image.imread(IMGS_DIR + 'TP_percent_change'+ pname + RUN_NAME + img)
+        img3 = matplotlib.image.imread(IMGS_DIR + 'TP_DIFF'+ pname + RUN_NAME + img)
+        img4 = matplotlib.image.imread(IMGS_DIR + 'TP_PERCENT_CHANGE'+ pname + RUN_NAME + img)
 
         row1 = np.concatenate((img1, img2), axis=1)
         row2 = np.concatenate((img3, img4), axis=1)

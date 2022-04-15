@@ -2,7 +2,7 @@
 VisIt scripts for plotting data from FVCOM output files
 
 # Getting the code
-Instructions are on the [GitHub README](https://github.com/l3-hpc/visit-for-fvcom#readme), or in the README.md after cloning the repo.  To clone the repo, from Linux/Mac terminal or Windows git bash, do
+Instructions are on the [GitHub README](https://github.com/l3-hpc/visit-for-fvcom#readme), or in the README.md after cloning the repo.  To clone the repo, from Linux/Mac terminal or Windows git bash (and set your HOME directory to the new cloned repo) do:
 ```
 git clone https://github.com/l3-hpc/visit-for-fvcom
 cd visit-for-fvcom
@@ -62,7 +62,10 @@ and for Henry2, use
 ```
 bsub < submit.csh
 ```
-
+You can check the status of the batch job by
+```
+squeue -u <username> 
+```
 
 # Updating your git repo to the newest version (pull)
 
@@ -95,14 +98,18 @@ git diff
 The codes that call VisIt are **make_all.py** and **make_slices.py**.  To run interactively, start an interactive session, load the visit module, and type the commands which are listed in the submit scripts but remove the 'nowin' argument:
 ```
 [On HPC, start interactive session]
-[On HPC, module load the visit module.]
+[On HPC, module load the visit module via 'module load visit']
 visit -cli -s plot_any.py
 ```
 For HPC, X11 forwarding is enabled with MobaXterm by default.  If using a Mac, you may need to use 'ssh -X' and XQuartz.  On Henry2, use the HPC-VCL.  
 
 
 # Run the post-processing Python scripts
-After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment.  A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
+After the images were created by VisIt, run the Python scripts.  First, set the environment for Python 3 by loading an appropriate module or activating a Conda environment. For example:
+```
+module load intelpython3
+```
+A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
 After loading the module or activating the Conda environment, run the Python script by typing:
 ```
@@ -114,7 +121,7 @@ The script simply take multiple image files and contatenate them into a single i
 
 The script takes the info from **setpaths.py** and **setparams.py** to create the image names.  As is, they work if you are doing a comparison run and have the output from the first timestep in each of the 13 mi_*.nc files.
 
-On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos...(let me know and I'll put it in the documenation).
+On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos use 'display' to open Image Magick and navigate to the file you want to open(you may need to click on the window that opens to have the menu window pop up). Or navigate to the directory with the images on atmos and open from there.
 
 
 # Useful commands in the VisIt command shell:
