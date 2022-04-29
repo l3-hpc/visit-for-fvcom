@@ -23,22 +23,29 @@ MI_ID_INIT = 6
 ##These are all 'True or False'
 # Just plot the first timestep of every mi file? 
 # If not, it will do every single timestep of every file
-do_first_in_file = True 
+do_first_in_file = False 
 
 # Are you comparing two runs? 
-do_compare =  True
+do_compare =  False 
 
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
-do_MDR = True 
+do_MDR = False 
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
-do_3Dplot = False  
+do_3Dplot = True  
 ## 2D pseudocolor slice
 do_2Dslice = False 
 ## 2D transect
-do_2Dtransect = True 
+do_2Dtransect = False 
+
+# Remove annotation?
+remove_annotation = False 
+
+## Which Layers: Goes from 1 to 19
+#TODO: put in error checking
+which_layers = [1]
 
 ## --- End True/False statements
 
@@ -54,8 +61,12 @@ TO_Y = 4790313.5
 ##---  If only doing 1 plot:
 # Set min/max for colormap
 # This will be used in comparison plots as well
-MIN_TP = 0.00
-MAX_TP = 0.02
+MIN_TP = 0.002
+MAX_TP = 0.01
+#For skew
+#MIN_TP = 0.001
+#MAX_TP = 0.1
+
 ##--  Titles
 TITLE_TP_EPA = "TP_EPA"
 UNITS_TP_EPA = "(mg/L)"
@@ -175,3 +186,10 @@ def set_UNITS_TP_DIFF():
 def set_UNITS_TP_PERCENT_CHANGE():
     return UNITS_TP_PERCENT_CHANGE
 
+
+## set layers
+def set_which_layers():
+    return which_layers
+## Annotation
+def set_remove_annotation():
+    return remove_annotation 

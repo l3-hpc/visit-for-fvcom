@@ -20,7 +20,7 @@ RUN_NAME = setparams.set_RUN_NAME()
 base_EPA_database = setpaths.set_EPA_path()
 
 # If you will compare 2 data sets
-do_compare = setparams.set_do_compare
+do_compare = setparams.set_do_compare()
 if(do_compare):
     base_COMPARE_database = setpaths.set_COMPARE_path()
     base_conn_string = setpaths.set_conn_string()
@@ -311,9 +311,10 @@ for x in range(1,NUM_MI_FILES+1):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"
-    COMPARE_database = base_COMPARE_database + str(mi_ID).zfill(4) + ".nc"
-#TODO check if it works on Windows
-    conn_string = (base_conn_string  + str(mi_ID).zfill(4) 
+    if(do_compare):
+        COMPARE_database = base_COMPARE_database + str(mi_ID).zfill(4) + ".nc"
+        #TODO check if it works on Windows
+        conn_string = (base_conn_string  + str(mi_ID).zfill(4) 
                    + ".nc[0]id:TP>, <SigmaLayer_Mesh>)")
     #The IMGS_NAME is set below
     #Now it is set to overwrite existing files
@@ -322,24 +323,26 @@ for x in range(1,NUM_MI_FILES+1):
     #Open Databases - the second argument is optional with a default of zero 
     #Where zero = initial time
     OpenDatabase(EPA_database,0)
-    OpenDatabase(COMPARE_database,0)
 
-    #CreateDatabaseCorrelation("name",(db1,db2),X) 
-    # Here, X=2 is a time correlation
-    CreateDatabaseCorrelation("Correlation01",(EPA_database,COMPARE_database),2)
+    if(do_compare):
+        OpenDatabase(COMPARE_database,0)
 
-    #Use conn_cmfe function to put EPA's TP variable onto Mark's grid 
-    # and call it "TP_EPA"
-    DefineScalarExpression("TP_EPA",conn_string)
-
-    #Define the variables for comparing.  For Mark's model, TP consists of NDPZ.
-    if (do_MDR):
-        DefineScalarExpression("TP_COMPARE", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
+        #CreateDatabaseCorrelation("name",(db1,db2),X) 
+        # Here, X=2 is a time correlation
+        CreateDatabaseCorrelation("Correlation01",(EPA_database,COMPARE_database),2)
+        #Use conn_cmfe function to put EPA's TP variable onto Mark's grid 
+        # and call it "TP_EPA"
+        DefineScalarExpression("TP_EPA",conn_string)
+        #Define the variables for comparing.  For Mark's model, TP consists of NDPZ.
+        if (do_MDR):
+            DefineScalarExpression("TP_COMPARE", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
+        else:
+            DefineScalarExpression("TP_COMPARE", "TP")
+        #Define difference and percent change
+        DefineScalarExpression("TP_DIFF", "TP_COMPARE - TP_EPA")
+        DefineScalarExpression("TP_PERCENT_CHANGE", "(TP_EPA - TP_COMPARE)/abs(TP_COMPARE)*100")
     else:
-        DefineScalarExpression("TP_COMPARE", "TP")
-    #Define difference and percent change
-    DefineScalarExpression("TP_DIFF", "TP_COMPARE - TP_EPA")
-    DefineScalarExpression("TP_PERCENT_CHANGE", "(TP_EPA - TP_COMPARE)/abs(TP_COMPARE)*100")
+        DefineScalarExpression("TP_EPA", "TP")
 
     SaveWindowAtts = SaveWindowAttributes()
     SaveWindowAtts.outputToCurrentDirectory = 0

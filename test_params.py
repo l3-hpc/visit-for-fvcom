@@ -18,6 +18,9 @@ def test_param(name_of_param,the_param):
     output_test = name_of_param + " is " + str(the_param) + " and type is " + str(type(the_param))
     return output_test 
 
+layers = setparams.set_which_layers()
+
+
 # Set the run name to label the images
 RUN_NAME = setparams.set_RUN_NAME()
 
@@ -117,7 +120,7 @@ print(test_param("UNITS_TP_DIFF",UNITS_TP_DIFF))
 print(test_param("UNITS_TP_PERCENT_CHANGE",UNITS_TP_PERCENT_CHANGE))
 print(test_param("base_COMPARE_database",base_COMPARE_database))
 print(test_param("base_conn_string",base_conn_string))
-#print(setparams.test_param("",))
+print(test_param("layers",layers))
 #print(setparams.test_param("",))
 #print(setparams.test_param("",))
 #print(setparams.test_param("",))

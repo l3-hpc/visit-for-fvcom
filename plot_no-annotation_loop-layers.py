@@ -13,6 +13,9 @@ import setpaths
 #This defines the plot parameters
 import setparams
 
+#Set SKEW manually for 3D
+SKEW = True
+
 # Set the run name to label the images
 RUN_NAME = setparams.set_RUN_NAME()
 
@@ -21,13 +24,14 @@ base_EPA_database = setpaths.set_EPA_path()
 
 # If you will compare 2 data sets
 do_compare = setparams.set_do_compare()
-print(do_compare)
 if(do_compare):
     base_COMPARE_database = setpaths.set_COMPARE_path()
     base_conn_string = setpaths.set_conn_string()
     #Will you compare against Mark's data, with NDZP?
     do_MDR = setparams.set_do_MDR()
 
+#Annotations
+remove_annotation = setparams.set_remove_annotation()
 
 #Calls setpaths.py to define where the images are located
 IMGS_DIR = setpaths.set_image_path()
@@ -45,6 +49,7 @@ do_3Dplot = setparams.set_do3Dplot()
 do_2Dslice = setparams.set_do2Dslice()
 do_2Dtransect = setparams.set_do2Dtransect()
 
+#Which layers to plot
 layers = setparams.set_which_layers()
 
 #Add mesh?
@@ -83,11 +88,21 @@ if (do_2Dtransect):
     TO_Y = setparams.set_TO_Y()
 
 
-def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER):
+
+def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
     #Title and annotations
     title.text = TITLE
     text2D_units.text = UNITS
     text2D_timestamp.text = timestamp
+    if(remove_annotation):
+        title.text = ""
+        text2D_units.text =  ""
+        text2D_timestamp.text =  ""
+    else:
+        title.text = TITLE + " Layer =" +str(LAYER)
+        text2D_units.text = UNITS
+        text2D_timestamp.text = timestamp
+
     #Add pseudocolor plot and set attributes
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
     SetActivePlots(0)
@@ -95,8 +110,15 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER):
     PseudocolorAtts.minFlag = 1
     PseudocolorAtts.maxFlag = 1
     PseudocolorAtts.colorTableName = "caleblack"
-    PseudocolorAtts.min = MIN
-    PseudocolorAtts.max = MAX
+    if(SKEW):
+        PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
+        PseudocolorAtts.skewFactor = 1e-05
+        PseudocolorAtts.min = 0.001      
+        PseudocolorAtts.max = 0.1
+    else:
+        PseudocolorAtts.scaling = PseudocolorAtts.Linear
+        PseudocolorAtts.min = MIN
+        PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
     #Comment out since showing triangles overwhelms the plot
     # if(add_mesh):
@@ -111,33 +133,54 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER):
     AnnotationAtts.axes3D.triadFlag = 0
     AnnotationAtts.axes2D.visible = 1
     AnnotationAtts.axes2D.xAxis.title.visible = 1
+    if(remove_annotation):
+       AnnotationAtts.legendInfoFlag = 0
+       AnnotationAtts.timeInfoFlag = 0
+       AnnotationAtts.axes2D.visible = 0
+       AnnotationAtts.axes2D.xAxis.title.visible = 0
+       AnnotationAtts.axes2D.yAxis.title.visible = 0
+       AnnotationAtts.axes2D.xAxis.label.visible = 0
+       AnnotationAtts.axes2D.yAxis.label.visible = 0
+       AnnotationAtts.axes3D.visible = 0
+
     SetAnnotationAttributes(AnnotationAtts)
 #Comment out since showing triangles overwhelms the plot
 #    if(add_mesh):
 #        AddPlot("Mesh", "SigmaLayer_Mesh", 1, 1)
-##NEW - Layer
-#    TurnMaterialsOff()
-#    layer_string = "Layer " + str(LAYER)
-#    TurnMaterialsOn(layer_string)
+    TurnMaterialsOff()
+    layer_string = "Layer " + str(LAYER)
+    TurnMaterialsOn(layer_string)
     DrawPlots()
     #Save the image
-    SaveWindowAtts.fileName = PLOT_VAR + "_LAYER=" + str(LAYER) + FILE_TS
+    SaveWindowAtts.fileName = PLOT_VAR + "_LAYER=" + str(LAYER+1) + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
-#    TurnMaterialsOn()
+    TurnMaterialsOn()
 
-def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-    title.text = TITLE
-    text2D_units.text = UNITS
-    text2D_timestamp.text = timestamp
+def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,SKEW):
+    if(remove_annotation):
+        title.text = ""
+        text2D_units.text =  ""
+        text2D_timestamp.text =  ""
+    else:
+        title.text = TITLE
+        text2D_units.text = UNITS
+        text2D_timestamp.text = timestamp
     #Add pseudocolor plot and set attributes
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
     PseudocolorAtts = PseudocolorAttributes()
     PseudocolorAtts.minFlag = 1
     PseudocolorAtts.maxFlag = 1
     PseudocolorAtts.colorTableName = "caleblack"
-    PseudocolorAtts.min = MIN
-    PseudocolorAtts.max = MAX
+    if(SKEW):
+        PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
+        PseudocolorAtts.skewFactor = 1e-05
+        PseudocolorAtts.min = 0.001
+        PseudocolorAtts.max = 0.1
+    else:
+        PseudocolorAtts.scaling = PseudocolorAtts.Linear
+        PseudocolorAtts.min = MIN
+        PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
     #Scale Z by 1000
     AddOperator("Transform",1)
@@ -166,6 +209,14 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     AnnotationAtts.axes2D.xAxis.label.visible = 1
     #For y-axis, we want depth, but VisIt relabels it
     AnnotationAtts.axes2D.yAxis.title.visible = 0
+    if(remove_annotation):
+       AnnotationAtts.legendInfoFlag = 0
+       AnnotationAtts.timeInfoFlag = 0
+       AnnotationAtts.axes2D.visible = 0
+       AnnotationAtts.axes2D.xAxis.title.visible = 0
+       AnnotationAtts.axes2D.yAxis.title.visible = 0
+       AnnotationAtts.axes2D.xAxis.label.visible = 0
+       AnnotationAtts.axes2D.yAxis.label.visible = 0
     SetAnnotationAttributes(AnnotationAtts)
     DrawPlots()
     SetActivePlots(0)
@@ -180,7 +231,7 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
     SaveWindow()
 
 def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
-                                  FROM_X,FROM_Y,TO_X,TO_Y):
+                                  FROM_X,FROM_Y,TO_X,TO_Y,SKEW):
     #Calculate arbitrary normal vector from plane
     p1 = np.array([FROM_X,FROM_Y,0])
     p2 = np.array([TO_X, TO_Y, 0])
@@ -190,13 +241,14 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
     myvec = np.cross(X,Y)
     norm_myvec = myvec/np.linalg.norm(myvec)
     #Title and annotations
-    title.text = TITLE
-    text2D_units.text = UNITS
-    text2D_timestamp.text = timestamp
-##TODO: make this an option
-    title.text = "" 
-    text2D_units.text =  ""
-    text2D_timestamp.text =  ""
+    if(remove_annotation):
+        title.text = ""
+        text2D_units.text =  ""
+        text2D_timestamp.text =  ""
+    else:
+        title.text = TITLE
+        text2D_units.text = UNITS
+        text2D_timestamp.text = timestamp
 #---
     #Add pseudocolor plot and set attributes
     AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
@@ -204,9 +256,17 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
     PseudocolorAtts.minFlag = 1
     PseudocolorAtts.maxFlag = 1
     PseudocolorAtts.colorTableName = "caleblack"
-    PseudocolorAtts.min = MIN
-    PseudocolorAtts.max = MAX
+    if(SKEW):
+        PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
+        PseudocolorAtts.skewFactor = 1e-05
+        PseudocolorAtts.min = 0.001
+        PseudocolorAtts.max = 0.1
+    else:
+        PseudocolorAtts.scaling = PseudocolorAtts.Linear
+        PseudocolorAtts.min = MIN
+        PseudocolorAtts.max = MAX
     SetPlotOptions(PseudocolorAtts)
+
     #Scale Z by 1000
     AddOperator("Transform",1)
     TransformAtts = TransformAttributes()
@@ -264,9 +324,15 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
     #For y-axis, we want depth, but VisIt relabels it
     AnnotationAtts.axes2D.yAxis.title.visible = 0
     AnnotationAtts.axes2D.yAxis.title.units = "meters"
-##TODO: make this a option/flag
-    AnnotationAtts.legendInfoFlag = 0
-    AnnotationAtts.timeInfoFlag = 0
+
+    if(remove_annotation):
+       AnnotationAtts.legendInfoFlag = 0
+       AnnotationAtts.timeInfoFlag = 0
+       AnnotationAtts.axes2D.visible = 0
+       AnnotationAtts.axes2D.xAxis.title.visible = 0
+       AnnotationAtts.axes2D.yAxis.title.visible = 0
+       AnnotationAtts.axes2D.xAxis.label.visible = 0
+       AnnotationAtts.axes2D.yAxis.label.visible = 0
 #---
     SetAnnotationAttributes(AnnotationAtts)
     #Overlay mesh, shows sigma layers
@@ -328,9 +394,10 @@ for x in range(1,NUM_MI_FILES+1):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"
-    COMPARE_database = base_COMPARE_database + str(mi_ID).zfill(4) + ".nc"
+    if(do_compare):
+        COMPARE_database = base_COMPARE_database + str(mi_ID).zfill(4) + ".nc"
 #TODO check if it works on Windows
-    conn_string = (base_conn_string  + str(mi_ID).zfill(4) 
+        conn_string = (base_conn_string  + str(mi_ID).zfill(4) 
                    + ".nc[0]id:TP>, <SigmaLayer_Mesh>)")
     #The IMGS_NAME is set below
     #Now it is set to overwrite existing files
@@ -339,24 +406,26 @@ for x in range(1,NUM_MI_FILES+1):
     #Open Databases - the second argument is optional with a default of zero 
     #Where zero = initial time
     OpenDatabase(EPA_database,0)
-    OpenDatabase(COMPARE_database,0)
+    if(do_compare):
+        OpenDatabase(COMPARE_database,0)
+        #CreateDatabaseCorrelation("name",(db1,db2),X) 
+        # Here, X=2 is a time correlation
+        CreateDatabaseCorrelation("Correlation01",(EPA_database,COMPARE_database),2)
 
-    #CreateDatabaseCorrelation("name",(db1,db2),X) 
-    # Here, X=2 is a time correlation
-    CreateDatabaseCorrelation("Correlation01",(EPA_database,COMPARE_database),2)
+        #Use conn_cmfe function to put EPA's TP variable onto Mark's grid 
+        # and call it "TP_EPA"
+        DefineScalarExpression("TP_EPA",conn_string)
 
-    #Use conn_cmfe function to put EPA's TP variable onto Mark's grid 
-    # and call it "TP_EPA"
-    DefineScalarExpression("TP_EPA",conn_string)
-
-    #Define the variables for comparing.  For Mark's model, TP consists of NDPZ.
-    if (do_MDR):
-        DefineScalarExpression("TP_COMPARE", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
+        #Define the variables for comparing.  For Mark's model, TP consists of NDPZ.
+        if (do_MDR):
+           DefineScalarExpression("TP_COMPARE", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
+        else:
+           DefineScalarExpression("TP_COMPARE", "TP")
+        #Define difference and percent change
+        DefineScalarExpression("TP_DIFF", "TP_COMPARE - TP_EPA")
+        DefineScalarExpression("TP_PERCENT_CHANGE", "(TP_EPA - TP_COMPARE)/abs(TP_COMPARE)*100")
     else:
-        DefineScalarExpression("TP_COMPARE", "TP")
-    #Define difference and percent change
-    DefineScalarExpression("TP_DIFF", "TP_COMPARE - TP_EPA")
-    DefineScalarExpression("TP_PERCENT_CHANGE", "(TP_EPA - TP_COMPARE)/abs(TP_COMPARE)*100")
+        DefineScalarExpression("TP_EPA", "TP")
 
     SaveWindowAtts = SaveWindowAttributes()
     SaveWindowAtts.outputToCurrentDirectory = 0
@@ -388,40 +457,40 @@ for x in range(1,NUM_MI_FILES+1):
 
         if(do_3Dplot): 
             #def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-            LAYER = layers[0]
-            create_pseudocolor_3Dplot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", 
-                    MIN_TP,MAX_TP,FILE_TS,LAYER)
-            DeleteAllPlots()
-            if(do_compare):
-                create_pseudocolor_3Dplot(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,LAYER)
-                DeleteAllPlots() 
-                create_pseudocolor_3Dplot(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,LAYER)
+            for LAYER in layers:
+                create_pseudocolor_3Dplot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", 
+                    MIN_TP,MAX_TP,FILE_TS,LAYER,True)
                 DeleteAllPlots()
-                create_pseudocolor_3Dplot(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS,LAYER)
-                DeleteAllPlots()
+                if(do_compare):
+                    create_pseudocolor_3Dplot(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,LAYER,False)
+                    DeleteAllPlots() 
+                    create_pseudocolor_3Dplot(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,LAYER,False)
+                    DeleteAllPlots()
+                    create_pseudocolor_3Dplot(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS,LAYER,False)
+                    DeleteAllPlots()
 
         if(do_2Dslice):
             #def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-            create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS)
+            create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS,True)
             DeleteAllPlots()
             if(do_compare):
-                create_pseudocolor_2Dslice(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS)
+                create_pseudocolor_2Dslice(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,False)
                 DeleteAllPlots()
-                create_pseudocolor_2Dslice(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS)
+                create_pseudocolor_2Dslice(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,False)
                 DeleteAllPlots()
-                create_pseudocolor_2Dslice(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS)
+                create_pseudocolor_2Dslice(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS,False)
                 DeleteAllPlots()
 
         if(do_2Dtransect):
             #def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-            create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+            create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,True)
             DeleteAllPlots()
             if(do_compare):
-                create_pseudocolor_2Dtransect(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+                create_pseudocolor_2Dtransect(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,False)
                 DeleteAllPlots()
-                create_pseudocolor_2Dtransect(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+                create_pseudocolor_2Dtransect(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,False)
                 DeleteAllPlots()
-                create_pseudocolor_2Dtransect(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF, FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y)
+                create_pseudocolor_2Dtransect(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF, FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,False)
                 DeleteAllPlots()
 
 
