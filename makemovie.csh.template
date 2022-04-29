@@ -1,0 +1,2 @@
+#TP_EPA_LAYER=20_Movie.78
+ffmpeg -r 5 -f image2 -s 1920x1080 -start_number 0 -i TP_EPA_LAYER=20_Movie.%04d.png -vframes 79 -vcodec libx264 -crf 25  -pix_fmt yuv420p TP_LAYER20.mp4
