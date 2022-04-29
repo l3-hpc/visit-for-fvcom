@@ -10,7 +10,7 @@ import sys
 # Choose a string - no spaces! - to identify the run.  
 # It will be added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
-RUN_NAME = "TPoutput0"
+RUN_NAME = "Movie"
 
 # How many mi files are available?
 # Change this to look at the path and calculate
@@ -36,9 +36,9 @@ do_MDR = False
 ## 3D pseudocolor plot
 do_3Dplot = True  
 ## 2D pseudocolor slice
-do_2Dslice = True 
+do_2Dslice = False 
 ## 2D transect
-do_2Dtransect = True 
+do_2Dtransect = False
 
 # Remove annotation?
 remove_annotation = True 

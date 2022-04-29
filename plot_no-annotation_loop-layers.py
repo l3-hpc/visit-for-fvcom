@@ -152,7 +152,7 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
     TurnMaterialsOn(layer_string)
     DrawPlots()
     #Save the image
-    SaveWindowAtts.fileName = PLOT_VAR + "_LAYER=" + str(LAYER+1) + FILE_TS
+    SaveWindowAtts.fileName = PLOT_VAR + "_LAYER=" + str(LAYER) + FILE_TS
     SetSaveWindowAttributes(SaveWindowAtts)
     SaveWindow()
     TurnMaterialsOn()
