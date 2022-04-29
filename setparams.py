@@ -10,7 +10,7 @@ import sys
 # Choose a string - no spaces! - to identify the run.  
 # It will be added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
-RUN_NAME = "TPvsGEM"
+RUN_NAME = "TPoutput0"
 
 # How many mi files are available?
 # Change this to look at the path and calculate
@@ -36,16 +36,16 @@ do_MDR = False
 ## 3D pseudocolor plot
 do_3Dplot = True  
 ## 2D pseudocolor slice
-do_2Dslice = False 
+do_2Dslice = True 
 ## 2D transect
-do_2Dtransect = False 
+do_2Dtransect = True 
 
 # Remove annotation?
-remove_annotation = False 
+remove_annotation = True 
 
 ## Which Layers: Goes from 1 to 19
 #TODO: put in error checking
-which_layers = [1]
+which_layers = [1,8,19]
 
 ## --- End True/False statements
 
