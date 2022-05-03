@@ -51,9 +51,8 @@ for pname in plotnames:
             original_file = line.strip()
             linked_file = LINKS_DIR + data[0] + "." + str(index).zfill(4) + ".png"
             linking_string = "ln -s " + IMGS_DIR + original_file + " " + linked_file
-            #linking_string = "ln ../" + original_file + " " + linked_file
             os.system(linking_string)
-            print(linking_string)
+            #print(linking_string)
             index+=1
         index = 0
         ffmpeg_string = "ffmpeg -r 5 -f image2 -s 1920x1080 -start_number 0 -i " + LINKS_DIR + pname + ".%04d.png -vframes 79 -vcodec libx264 -crf 25  -pix_fmt yuv420p " + IMGS_DIR + pname + ".mp4"
