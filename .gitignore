@@ -7,6 +7,9 @@ setpaths.py.mdr
 #james' current settings
 setparams_james.py
 
+# LAYER files
+TP_EPA_LAYER=*
+
 run_make_all.csh
 setpaths.py
 makemovie.csh

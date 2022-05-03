@@ -45,7 +45,7 @@ remove_annotation = True
 
 ## Which Layers: Goes from 1 to 19
 #TODO: put in error checking
-which_layers = [1,8,19]
+which_layers = [2,9,20]
 
 ## --- End True/False statements
 

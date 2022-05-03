@@ -14,7 +14,7 @@ RUN_NAME = setparams.set_RUN_NAME()
 IMGS_DIR = setpaths.set_image_path()
 
 ## Create a dummy directory for sym-links
-LINKS_DIR = IMGS_DIR + "/SYMLINKS/"
+LINKS_DIR = IMGS_DIR + "SYMLINKS/"
 if not os.path.exists(LINKS_DIR):
     os.makedirs(LINKS_DIR)
 
@@ -38,25 +38,24 @@ if(do_2Dtransect):
 for pname in plotnames:
     print(pname)
     command_string = "ls -rt " + IMGS_DIR + " | grep " + pname + " > " + pname +".txt"
-    print(command_string)
+    #print(command_string)
     os.system(command_string)
-    #img1 = matplotlib.image.imread(IMGS_DIR + 'TP_EPA'+ pname + RUN_NAME + img)
-    #img2 = matplotlib.image.imread(IMGS_DIR + 'TP_COMPARE'+ pname + RUN_NAME + img)
-    #img3 = matplotlib.image.imread(IMGS_DIR + 'TP_DIFF'+ pname + RUN_NAME + img)
-    #img4 = matplotlib.image.imread(IMGS_DIR + 'TP_PERCENT_CHANGE'+ pname + RUN_NAME + img)
-
 
 ##This part makes a linked list
-#index = 0
-#with open("layer2files.txt",'r') as data_file:
-#    for line in data_file:
-#        data = line.split('.')
-#        original_file = line.strip()
-#        linked_file = data[0] + "." + str(index).zfill(4) + ".png"
-#        linking_string = "ln -s ../MakeTPMovies/" + original_file + " " + linked_file
-#        #linking_string = "ln ../" + original_file + " " + linked_file
-#        os.system(linking_string)
-#        #print(linking_string)
-#        index+=1
-#
-
+index = 0
+for pname in plotnames:
+    file_name = pname + ".txt"
+    with open(file_name,'r') as data_file:
+        for line in data_file:
+            data = line.split('.')
+            original_file = line.strip()
+            linked_file = LINKS_DIR + data[0] + "." + str(index).zfill(4) + ".png"
+            linking_string = "ln -s " + IMGS_DIR + original_file + " " + linked_file
+            #linking_string = "ln ../" + original_file + " " + linked_file
+            os.system(linking_string)
+            print(linking_string)
+            index+=1
+        index = 0
+        ffmpeg_string = "ffmpeg -r 5 -f image2 -s 1920x1080 -start_number 0 -i " + LINKS_DIR + pname + ".%04d.png -vframes 79 -vcodec libx264 -crf 25  -pix_fmt yuv420p " + IMGS_DIR + pname + ".mp4"
+        print(ffmpeg_string)
+        os.system(ffmpeg_string)
