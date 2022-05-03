@@ -57,6 +57,6 @@ for pname in plotnames:
         numframes = index-1
         index = 0
         print(numframes) 
-        ffmpeg_string = "ffmpeg -r 5 -f image2 -s 1920x1080 -start_number 0 -i " + LINKS_DIR + pname + ".%04d.png -vframes " + str(numframes) + " -vcodec libx264 -crf 25  -pix_fmt yuv420p " + IMGS_DIR + pname + ".mp4"
+        ffmpeg_string = "ffmpeg -r 15 -f image2 -s 1920x1080 -start_number 0 -i " + LINKS_DIR + pname + ".%04d.png -vframes " + str(numframes) + " -vcodec libx264 -crf 25  -pix_fmt yuv420p " + IMGS_DIR + pname + ".mp4"
         print(ffmpeg_string)
         os.system(ffmpeg_string)

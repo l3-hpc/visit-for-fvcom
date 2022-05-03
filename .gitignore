@@ -9,6 +9,7 @@ setparams_james.py
 
 # LAYER files
 TP_EPA_LAYER=*
+TP_*
 
 run_make_all.csh
 setpaths.py

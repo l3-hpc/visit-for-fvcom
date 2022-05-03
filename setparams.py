@@ -32,7 +32,7 @@ do_first_in_file = False
 skip = 6
 
 # Are you comparing two runs? 
-do_compare =  False 
+do_compare =  True 
 
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
@@ -42,16 +42,16 @@ do_MDR = False
 ## 3D pseudocolor plot
 do_3Dplot = True  
 ## 2D pseudocolor slice
-do_2Dslice = False 
+do_2Dslice = True 
 ## 2D transect
-do_2Dtransect = False
+do_2Dtransect = True
 
 # Remove annotation?
 remove_annotation = False 
 
 ## Which Layers: Goes from 1 to 19
 #TODO: put in error checking
-which_layers = [16]
+which_layers = [1,9,19]
 
 ## --- End True/False statements
 
