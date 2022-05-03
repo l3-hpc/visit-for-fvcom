@@ -25,6 +25,12 @@ MI_ID_INIT = 6
 # If not, it will do every single timestep of every file
 do_first_in_file = False 
 
+
+##Do you want to *not* print every timestep?
+# If skip=4, then you will print every 4th timestep
+# Choose '1' to print every timestep
+skip = 6
+
 # Are you comparing two runs? 
 do_compare =  False 
 
@@ -41,11 +47,11 @@ do_2Dslice = False
 do_2Dtransect = False
 
 # Remove annotation?
-remove_annotation = True 
+remove_annotation = False 
 
 ## Which Layers: Goes from 1 to 19
 #TODO: put in error checking
-which_layers = [2,9,20]
+which_layers = [16]
 
 ## --- End True/False statements
 
@@ -118,6 +124,12 @@ def set_MI_ID_INIT():
 # If not, it will do every single timestep of every file
 def set_do_first_in_file():
     return do_first_in_file
+
+##Do you want to *not* print every timestep?
+# If skip=4, then you will print every 4th timestep
+# Choose '1' to print every timestep
+def set_skip():
+    return skip
 
 # Are you comparing two runs? 
 def set_do_compare():
