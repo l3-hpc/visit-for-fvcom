@@ -43,6 +43,8 @@ NUM_MI_FILES = setparams.set_NUM_MI_FILES()
 # Just plot the first timestep of every mi file?
 # If not, it will do every single timestep of every file
 do_first_in_file = setparams.set_do_first_in_file()
+#Don't print every file, just every 'skip' state
+skip_states = setparams.set_skip()
 
 #Which plots to do
 do_3Dplot = setparams.set_do3Dplot()
@@ -444,9 +446,12 @@ for x in range(1,NUM_MI_FILES+1):
     SetSaveWindowAttributes(SaveWindowAtts)
     
     m = GetMetaData(EPA_database)
-    for state in range(TimeSliderGetNStates()):
-        SetTimeSliderState(state)
-        tcur = m.times[state]*86400.  + t_start
+    totalstates = TimeSliderGetNStates()
+    loopstates = int(totalstates/skip_states)
+    istate = 0
+    for state in range(loopstates):
+        SetTimeSliderState(istate)
+        tcur = m.times[istate]*86400.  + t_start
         ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y %H:%M:%S')
         FILE_TS = "_" + RUN_NAME + "." + datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y_%H-%M-%S')
 #      timestamp = "Time: " + ts + " GMT"
@@ -501,6 +506,8 @@ for x in range(1,NUM_MI_FILES+1):
 #      with the first timestep of each mi_000X file
         if(do_first_in_file):
             break
+	else:
+	    istate += skip_states    
     
     DeleteAllPlots()
     #If debugging, uncomment break
