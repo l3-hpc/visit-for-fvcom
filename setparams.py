@@ -10,7 +10,7 @@ import sys
 # Choose a string - no spaces! - to identify the run.  
 # It will be added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
-RUN_NAME = "Movie"
+RUN_NAME = "TPSOvsNPZM2005GrandTransect"
 
 # How many mi files are available?
 # Change this to look at the path and calculate
@@ -18,31 +18,30 @@ NUM_MI_FILES = 13
 
 # For setting up an interactive session, which MI file to look at.
 # This will be ignored in a regular batch run
-MI_ID_INIT = 6
+MI_ID_INIT = 11 
 
 ##These are all 'True or False'
 # Just plot the first timestep of every mi file? 
 # If not, it will do every single timestep of every file
 do_first_in_file = False 
 
-
 ##Do you want to *not* print every timestep?
 # If skip=4, then you will print every 4th timestep
 # Choose '1' to print every timestep
-skip = 6
+skip = 1
 
 # Are you comparing two runs? 
 do_compare =  True 
 
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
-do_MDR = False 
+do_MDR = True 
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
 do_3Dplot = True  
 ## 2D pseudocolor slice
-do_2Dslice = True 
+do_2Dslice = False 
 ## 2D transect
 do_2Dtransect = True
 
@@ -51,17 +50,17 @@ remove_annotation = False
 
 ## Which Layers: Goes from 1 to 19
 #TODO: put in error checking
-which_layers = [1,9,19]
+which_layers = [1,19]
 
 ## --- End True/False statements
 
 
 #--- Pick points for transect
 ## If you won't do a transect, just ignore - it won't try to use the values
-FROM_X = 561061.44
-FROM_Y = 4762227.5
-TO_X = 550078.88
-TO_Y = 4790313.5
+FROM_X = 560998.31
+FROM_Y = 4767358.50
+TO_X = 539195.69
+TO_Y = 4765827.50
 
 #--- Plot parameters
 ##---  If only doing 1 plot:
