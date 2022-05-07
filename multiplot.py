@@ -18,44 +18,31 @@ do_3Dplot = setparams.set_do3Dplot()
 do_2Dslice = setparams.set_do2Dslice()
 do_2Dtransect = setparams.set_do2Dtransect()
 plotnames = []
+#TP_EPA_LAYER=1_T
 if(do_3Dplot):
-    plotnames.append("_")
+    plotnames.append("_LAYER=1_")
 if(do_2Dslice):
     plotnames.append("_slice_")
 if(do_2Dtransect):
     plotnames.append("_transect_")
 
+OUT_DIR = IMGS_DIR + "multi/"
 
+#str(img).zfill(4)
 
-image_suffix = [ 
-".01-01-2010_00-00-00.png",
-".01-31-2010_00-00-00.png",
-".03-02-2010_00-00-00.png",
-".04-01-2010_00-00-00.png",
-".05-01-2010_00-00-00.png",
-".05-31-2010_00-00-00.png",
-".06-30-2010_00-00-00.png",
-".07-30-2010_00-00-00.png",
-".08-29-2010_00-00-00.png",
-".09-28-2010_00-00-00.png",
-".10-28-2010_00-00-00.png",
-".11-27-2010_00-00-00.png",
-".12-27-2010_00-00-00.png"
-]
-
-for img in image_suffix:
+for img in range(2199):
     #print(img)
-    for pname in plotnames:
-        #print(pname)
-        img1 = matplotlib.image.imread(IMGS_DIR + 'TP_EPA'+ pname + RUN_NAME + img)
-        img2 = matplotlib.image.imread(IMGS_DIR + 'TP_COMPARE'+ pname + RUN_NAME + img)
-        img3 = matplotlib.image.imread(IMGS_DIR + 'TP_DIFF'+ pname + RUN_NAME + img)
-        img4 = matplotlib.image.imread(IMGS_DIR + 'TP_PERCENT_CHANGE'+ pname + RUN_NAME + img)
+    #print(pname)
+    img1 = matplotlib.image.imread(IMGS_DIR + 'SYMLINKS/' + 'TP_EPA'+ '_LAYER=1_' + RUN_NAME + "." + str(img).zfill(4) + ".png")
+    img2 = matplotlib.image.imread(IMGS_DIR + 'SYMLINKS/' + 'TP_COMPARE'+ '_LAYER=1_' + RUN_NAME + "." + str(img).zfill(4) + ".png")
+    img3 = matplotlib.image.imread(IMGS_DIR + 'SYMLINKS/' + 'TP_EPA'+ '_transect_' + RUN_NAME +  "." + str(img).zfill(4) + ".png")
+    img4 = matplotlib.image.imread(IMGS_DIR + 'SYMLINKS/' + 'TP_COMPARE'+ '_transect_' + RUN_NAME +  "." + str(img).zfill(4) + ".png")
+    #x = 1
+    row1 = np.concatenate((img1, img2), axis=1)
+    row2 = np.concatenate((img3, img4), axis=1)
+    new_image = np.concatenate((row1, row2))
 
-        row1 = np.concatenate((img1, img2), axis=1)
-        row2 = np.concatenate((img3, img4), axis=1)
-        new_image = np.concatenate((row1, row2))
-
-        matplotlib.image.imsave(IMGS_DIR + 'new' + pname + RUN_NAME + img, new_image)
-
+    matplotlib.image.imsave(OUT_DIR + RUN_NAME + "." + str(img).zfill(4)+".png", new_image)
+    #print(OUT_DIR + 'SYMLINKS/' + 'TP_EPA'+ '_' + RUN_NAME + "." + str(img).zfill(4) + ".png")
+    #print(OUT_DIR + 'SYMLINKS/' + 'TP_EPA'+ '_' + RUN_NAME + str(img).zfill(4))
 
