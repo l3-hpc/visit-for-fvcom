@@ -93,6 +93,13 @@ module load intelpython3
 ```
 A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
+## Symbolic links and movie 
+After loading the module or activating the Conda environment, run the Python script *linkandmovie.py*, which creates a movie of a single plot for each type of plot listed in the *setparams.py*.  This script assumes you will be making movies of whatever was produced in your last run...i.e., it reads *setpaths.py* and *setparams.py*.  Even if your goal is to make a movie with four images in one plot, this script must be run first, as the script that contatenates the images uses the symbolic links created in this script.  To run, do
+```
+python linkandmovie.py
+```   
+
+## Concatenating four images
 After loading the module or activating the Conda environment, run the Python script for concatenating 4 plots onto a single plot.  The script `multiplot.py` currently makes plots for a comparison, with the top two plots the Layer=1 view and the bottom two plots are transects.  In `multi-layer.py`, the top are Layer=1 and the bottom are Layer=19.  Run by typing `python` and then the name of the script, e.g.,   
 ```
 python multiplot.py
@@ -105,6 +112,13 @@ The scripts have the plot names hardcoded.  Right now the looping index is also 
 
 On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos use 'display' to open Image Magick and navigate to the file you want to open(you may need to click on the window that opens to have the menu window pop up). Or navigate to the directory with the images on atmos and open from there.
 
+## Movie of four images
+I didn't put the movie command in the script that concatenates the images, so the call to ffmpeg is just hardcoded in the file *movie-fourplots.py*.  The directory name, file names, number of images...all hardcoded for now.  Sorry 'bout that.
+
+To use, make a copy to another name, modify for your case, and then run:
+```
+python movie-fourplots.py
+```
 
 # Useful commands in the VisIt command shell:
 ```
