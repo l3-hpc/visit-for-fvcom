@@ -176,7 +176,7 @@ python multiplot.py
 ### VisIt links
 - [VisIt - Home](https://visit-dav.github.io/visit-website/index.html)
 - [VisIt GUI Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/gui_manual/index.html)
-- [VisIt Python (CLI) Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/cli_manual/index.html)
+- [VisIt Python Scripting](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/python_scripting/index.html)
 
 ### Other links
 - [GitHub markdown syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
