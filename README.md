@@ -100,7 +100,7 @@ git diff
 ## On HPC
 
 ### Run the VisIt scripts
-The codes that call VisIt are **make_all.py** and **make_slices.py**.  To run interactively, start an interactive session, load the visit module, and type the commands which are listed in the submit scripts but remove the 'nowin' argument:
+The code that calls VisIt is **plot_any.py**.  To run interactively, start an interactive session, load the visit module, and type the commands which are listed in the submit scripts but remove the 'nowin' argument:
 ```
 [On HPC, start interactive session]
 [On HPC, module load the visit module via 'module load visit']
