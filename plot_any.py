@@ -62,7 +62,7 @@ add_mesh = True
 MIN_TP = setparams.set_MIN_TP()
 MAX_TP = setparams.set_MAX_TP()
 #Set a skew colormap?
-SKEW = setparms.set_skew()
+SKEW = setparams.set_skew()
 #Variable name and units for annotating the main dataset
 #Will also be used for the comparison dataset
 TITLE_TP_EPA = setparams.set_TITLE_TP_EPA()
