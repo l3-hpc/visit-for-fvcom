@@ -44,7 +44,7 @@ Set the parameters for various plots in file **setparams.py**.  The commenting i
 The images are named after the type of plot and the time/date stamp and **RUN_NAME**, defined in **setpaths.py**, is appended.  If you rerun the script for a different transect or colormap, etc., the old plots will be overwritten if you do not choose a different **RUN_NAME**.  You may alternatively or additionally change the name of **IMGS_DIR** before a new run. 
 
 # Print plot parameters
-To print the paths and parameters for basic error checking, run ##test_params.py##, which prints the value and type of each function.  When adding variables to the code, please add them here as well.
+To print the paths and parameters for basic error checking, run **test_params.py**, which prints the value and type of each function.  When adding variables to the code, please add them here as well.
 ```
 python test_params.py
 ``` 
@@ -72,29 +72,6 @@ You can check the status of the batch job by
 squeue -u <username> 
 ```
 
-# Updating your git repo to the newest version (pull)
-
-If you are just using and not modifying the code, to get new changes, do:
-```
-git pull
-```
-
-Note, since setpaths.py is in the gitignore, it will not notice if there were changes made.  If setpaths.py.template has changed, you may need to modify your setpaths.py.  Best practice is to do this after doing a new `git pull`.
-```
-diff setpaths.py setpaths.py.template
-```
-
-If you changed or created files in that directory since you last got the code, it will give an error message on trying to `git pull`.  
- - If you added files to the directory, and need those files but don't need them specifically in that directory, you should move them.
- - If they are junk files, you can remove them or do `git stash`, which will remove anything that changed since you last did `git clone` or `git pull`.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the **.gitignore**.
- - If you made changes and what to keep them, then you need to do fetch and merge.  Instructions for Fetch and Merge will be added later. 
-
-To check if the changes you have are actually important, you can check what exactly was changed by doing
-```
-git status
-git diff
-```
-
 # Running the codes interactively from a GUI
 
 ## On HPC
@@ -116,15 +93,15 @@ module load intelpython3
 ```
 A YAML file is provided for folks who want to make a Conda environment themselves.  So far, the Python scripts use libraries that are available with any Python 3 module on atmos.
 
-After loading the module or activating the Conda environment, run the Python script by typing:
+After loading the module or activating the Conda environment, run the Python script for concatenating 4 plots onto a single plot.  The script `multiplot.py` currently makes plots for a comparison, with the top two plots the Layer=1 view and the bottom two plots are transects.  In `multi-layer.py`, the top are Layer=1 and the bottom are Layer=19.  Run by typing `python` and then the name of the script, e.g.,   
 ```
 python multiplot.py
 ```
 Ideally, if you are on an HPC, do the command in a batch script or interactive session.
 
-The script simply take multiple image files and contatenate them into a single image, i.e. 4 PNGs in a 2x2 layout.
+The script simply takes multiple image files and contatenate them into a single image, i.e. 4 PNGs in a 2x2 layout.
 
-The script takes the info from **setpaths.py** and **setparams.py** to create the image names.  As is, they work if you are doing a comparison run and have the output from the first timestep in each of the 13 mi_*.nc files.
+The scripts have the plot names hardcoded.  Right now the looping index is also hardcoded, which is bad.  It is assumed that you already ran the script **linkandmovie** to create Symbolic links of the images named with a regular expression and a formated integer index.
 
 On a Mac from command line, I can look at images with `open`.  On Henry2, with `display`.  On atmos use 'display' to open Image Magick and navigate to the file you want to open(you may need to click on the window that opens to have the menu window pop up). Or navigate to the directory with the images on atmos and open from there.
 
@@ -145,6 +122,31 @@ SetPipelineCachingMode(0) # Disable caching
 ```
 
 Disabling caching is still grinding script to a halt on the Mac while on Linux it is fine.  I suspect a memory leak.
+
+# Updating your git repo to the newest version (pull)
+
+If you are just using and not modifying the code, to get new changes, do:
+```
+git pull
+```
+
+Note, since setpaths.py is in the gitignore, it will not notice if there were changes made.  If setpaths.py.template has changed, you may need to modify your setpaths.py.  Best practice is to do this after doing a new `git pull`.
+```
+diff setpaths.py setpaths.py.template
+```
+
+If you changed or created files in that directory since you last got the code, it will give an error message on trying to `git pull`.
+ - If you added files to the directory, and need those files but don't need them specifically in that directory, you should move them.
+ - If they are junk files, you can remove them or do `git stash`, which will remove anything that changed since you last did `git clone` or `git pull`.  If you expect to aways make those same named files in that directory, add the name of the file (or directory) to the **.gitignore**.
+ - If you made changes and what to keep them, then you need to do fetch and merge.  Instructions for Fetch and Merge will be added later.
+
+To check if the changes you have are actually important, you can check what exactly was changed by doing
+```
+git status
+git diff
+```
+
+
 
 # Create your own Conda environment
 YAML file to create a Conda environment for multiplots.py:
