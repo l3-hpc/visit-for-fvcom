@@ -40,17 +40,17 @@ if(do_3Dplot):
 if(do_2Dslice):
     plotnames.append("TP_EPA_slice_" + RUN_NAME)
     if(do_compare):
-        plotnames.append("TP_COMPARE_slice_"+str(layer) + "_" + RUN_NAME)
-        plotnames.append("TP_DIFF_slice_"+str(layer) + "_" + RUN_NAME)
-        plotnames.append("TP_PERCENT_CHANGE_slice_"+str(layer) + "_" + RUN_NAME)
+        plotnames.append("TP_COMPARE_slice_" + RUN_NAME)
+        plotnames.append("TP_DIFF_slice_" + RUN_NAME)
+        plotnames.append("TP_PERCENT_CHANGE_slice_" + RUN_NAME)
 
 
 if(do_2Dtransect):
     plotnames.append("TP_EPA_transect_" + RUN_NAME)
     if(do_compare):
-        plotnames.append("TP_COMPARE_transect_"+str(layer) + "_" + RUN_NAME)
-        plotnames.append("TP_DIFF_transect_"+str(layer) + "_" + RUN_NAME)
-        plotnames.append("TP_PERCENT_CHANGE_transect_"+str(layer) + "_" + RUN_NAME)
+        plotnames.append("TP_COMPARE_transect_" + RUN_NAME)
+        plotnames.append("TP_DIFF_transect_" + RUN_NAME)
+        plotnames.append("TP_PERCENT_CHANGE_transect_" + RUN_NAME)
 
 
 #Display the list of images in the IMGS_DIR directory in reverse time order and
