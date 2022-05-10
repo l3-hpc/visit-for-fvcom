@@ -18,9 +18,6 @@ def test_param(name_of_param,the_param):
     output_test = name_of_param + " is " + str(the_param) + " and type is " + str(type(the_param))
     return output_test 
 
-layers = setparams.set_which_layers()
-
-
 # Set the run name to label the images
 RUN_NAME = setparams.set_RUN_NAME()
 
@@ -47,7 +44,6 @@ NUM_MI_FILES = setparams.set_NUM_MI_FILES()
 #For interactive...not used in plot_any
 MI_ID_INIT = setparams.set_MI_ID_INIT()
 
-
 # Just plot the first timestep of every mi file?
 # If not, it will do every single timestep of every file
 do_first_in_file = setparams.set_do_first_in_file()
@@ -59,6 +55,9 @@ do_2Dtransect = setparams.set_do2Dtransect()
 
 #Add mesh?
 add_mesh = True
+
+#Print without Annotation
+remove_annotation = setparams.set_remove_annotation()
 
 #set min/max for colormap
 #For both TP_EPA and TP_COMPARE
@@ -84,6 +83,12 @@ UNITS_TP_COMPARE = setparams.set_UNITS_TP_COMPARE()
 UNITS_TP_DIFF = setparams.set_UNITS_TP_DIFF()
 UNITS_TP_PERCENT_CHANGE = setparams.set_UNITS_TP_PERCENT_CHANGE()
 
+#How many layers for pseudocolor
+layers = setparams.set_which_layers()
+
+#Do you want to not print out every timestep?  Skip how many?
+#Put '1' to do every timestep
+skip = setparams.set_skip()
 
 #For transects
 # testing, always do...if (do_2Dtransect):
@@ -92,7 +97,7 @@ FROM_Y = setparams.set_FROM_Y()
 TO_X = setparams.set_TO_X()
 TO_Y = setparams.set_TO_Y()
 
-#print(setparams.test_param("",))
+#print(test_param("",))
 print(test_param("RUN_NAME",RUN_NAME ))
 print(test_param("NUM_MI_FILES",NUM_MI_FILES))
 print(test_param("MI_ID_INIT",MI_ID_INIT))
@@ -121,15 +126,15 @@ print(test_param("UNITS_TP_PERCENT_CHANGE",UNITS_TP_PERCENT_CHANGE))
 print(test_param("base_COMPARE_database",base_COMPARE_database))
 print(test_param("base_conn_string",base_conn_string))
 print(test_param("layers",layers))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
-#print(setparams.test_param("",))
+print(test_param("skip",skip))
+print(test_param("remove_annotation",remove_annotation))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))
+#print(test_param("",))

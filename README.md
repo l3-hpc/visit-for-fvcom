@@ -43,6 +43,11 @@ Set the parameters for various plots in file **setparams.py**.  The commenting i
 
 The images are named after the type of plot and the time/date stamp and **RUN_NAME**, defined in **setpaths.py**, is appended.  If you rerun the script for a different transect or colormap, etc., the old plots will be overwritten if you do not choose a different **RUN_NAME**.  You may alternatively or additionally change the name of **IMGS_DIR** before a new run. 
 
+# Print plot parameters
+To print the paths and parameters for basic error checking, run ##test_params.py##, which prints the value and type of each function.  When adding variables to the code, please add them here as well.
+```
+python test_params.py
+``` 
 
 # Run the scripts in a batch job on HPC  
 Sample submission scripts were created for Henry2 and atmos.  Before modifying, make a local copy.  For example,

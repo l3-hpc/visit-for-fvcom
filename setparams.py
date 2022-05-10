@@ -13,7 +13,7 @@ import sys
 RUN_NAME = "TPSOvsNPZM2005GrandTransect"
 
 # How many mi files are available?
-# Change this to look at the path and calculate
+#TODO: Change this to look at the path and calculate
 NUM_MI_FILES = 13
 
 # For setting up an interactive session, which MI file to look at.
@@ -72,6 +72,9 @@ MAX_TP = 0.01
 #MIN_TP = 0.001
 #MAX_TP = 0.1
 
+#Use skew colormap for regular (non 'diff') plots?
+skew = True
+
 ##--  Titles
 TITLE_TP_EPA = "TP_EPA"
 UNITS_TP_EPA = "(mg/L)"
@@ -82,8 +85,8 @@ UNITS_TP_EPA = "(mg/L)"
 MIN_TP_DIFF = -0.002
 MAX_TP_DIFF = 0.002
 ## Percent change colormap
-MIN_TP_PERCENT_CHANGE = -30
-MAX_TP_PERCENT_CHANGE = 30
+MIN_TP_PERCENT_CHANGE = -20
+MAX_TP_PERCENT_CHANGE = 20
 ##-- Titles
 TITLE_TP_COMPARE = "TP_MARK"
 TITLE_TP_DIFF = "TP_diff"
@@ -164,6 +167,10 @@ def set_MIN_TP():
     return MIN_TP 
 def set_MAX_TP():
     return MAX_TP 
+### Use Skew colormap for TP
+def set_skew():
+    return skew
+
 ### TP difference colormap
 def set_MIN_TP_DIFF():
     return MIN_TP_DIFF
@@ -196,7 +203,6 @@ def set_UNITS_TP_DIFF():
     return UNITS_TP_DIFF
 def set_UNITS_TP_PERCENT_CHANGE():
     return UNITS_TP_PERCENT_CHANGE
-
 
 ## set layers
 def set_which_layers():
