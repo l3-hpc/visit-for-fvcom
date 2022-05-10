@@ -175,7 +175,7 @@ python multiplot.py
 
 ### VisIt links
 - [VisIt - Home](https://visit-dav.github.io/visit-website/index.html)
-- [VisIt GUI Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/gui_manual/index.html)
+- [VisIt User Manual](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/python_scripting/index.html)
 - [VisIt Python Scripting](https://visit-sphinx-github-user-manual.readthedocs.io/en/develop/python_scripting/index.html)
 
 ### Other links
