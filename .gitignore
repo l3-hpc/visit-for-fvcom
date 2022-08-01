@@ -11,6 +11,9 @@ setparams_james.py
 TP_EPA_LAYER=*
 TP_*
 
+#Any conda environments
+env_*
+
 run_make_all.csh
 setpaths.py
 makemovie.csh

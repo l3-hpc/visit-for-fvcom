@@ -10,7 +10,7 @@ import re
 import getfilenames
 
 #ichunk from 0 to 6
-ichunk = 0
+#ichunk = 0
 #ichunk = 1
 #ichunk = 2
 #ichunk = 3
@@ -29,35 +29,40 @@ print(numfiles)
 
 #Do in chunks
 #2555 is divisible by 365
-chunk = 365
-numchunks = int(2555/365)
-print("numchunks",numchunks)
+#chunk = 365
+#numchunks = int(2555/365)
+#print("numchunks",numchunks)
 
-istart=[0]*numchunks
-iend = [0]*numchunks
-numstart = 0
-for i in range(numchunks):
-    istart[i] = numstart
-    #print(i,"numstart",numstart)
-    numend = numstart + chunk
-    iend[i] = numend
-    #print(i,"numend",numend)
-    numstart = numend
-    thischunk = "chunk" + str(i) + "/"
-    #print(thischunk)
+#istart=[0]*numchunks
+#iend = [0]*numchunks
+#numstart = 0
+#for i in range(numchunks):
+#    istart[i] = numstart
+#    #print(i,"numstart",numstart)
+#    numend = numstart + chunk
+#    iend[i] = numend
+#    #print(i,"numend",numend)
+#    numstart = numend
+#    thischunk = "chunk" + str(i) + "/"
+#    #print(thischunk)
 
-print("This is for the",ichunk,"chunk.")
+#print("This is for the",ichunk,"chunk.")
 
-print("istart,iend",istart[ichunk],iend[ichunk])
+#print("istart,iend",istart[ichunk],iend[ichunk])
+istart = 857 
+iend = numfiles
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
 #EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
 #EPA_directory = "/Users/lllowe/Images/new_plots/"
-EPA_directory = "/Users/lllowe/R_apps/LM_data/mis_2010/dates_output/"
-Station_directory = "/Users/lllowe/JamesPaper/stations2010/"
+#EPA_directory = "/Users/lllowe/R_apps/LM_data/mis_2010/dates_output/"
+#Station_directory = "/Users/lllowe/JamesPaper/stations2010/"
+EPA_directory = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/mis_2010/dates_output/"
+Station_directory = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/stations2010/"
 
 #The directory to write images to.  The slash at the end of the directory name is required.
-IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2010/Layer=1/" + thischunk 
+#IMGS_DIR = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/Images-2010/Layer=1/" #+ thischunk[i] 
+IMGS_DIR = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/Images-2010/Layer=20/" #+ thischunk[i] 
 
 #Check that all the directories exist
 if not os.path.exists(EPA_directory):
@@ -69,13 +74,14 @@ if not os.path.exists(IMGS_DIR):
     os.makedirs(IMGS_DIR)
 
 #for file_prefix_epa in sfiles:
-for i in range(istart[ichunk],iend[ichunk]):
+#for i in range(istart[ichunk],iend[ichunk]):
+for i in range(istart,iend):
     EPA_database = EPA_directory + mifiles[i] 
     #IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
     STATIONS_NAME = Station_directory + sfiles[i] 
 
-    for x in range(1,2):
-        
+#    for x in range(1,2):
+    for x in range(19,20):        
         LAYER = x
         url = mifiles[i]
         url = re.sub('\.nc','',url) 
@@ -208,7 +214,7 @@ for i in range(istart[ichunk],iend[ichunk]):
         ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var2 = "Y"
         ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+        #ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var3 = "default"
         ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var4 = "Tp_ug_L"
@@ -231,7 +237,7 @@ for i in range(istart[ichunk],iend[ichunk]):
         
         ##Add river points
         #open file, add plot
-        OpenDatabase("localhost:/Users/lllowe/ORD/MarkR/points.txt", 0)
+        OpenDatabase("/rsstu/users/l/lllowe/ord/JamesPaper07-2022/points.txt", 0)
         AddPlot("Scatter", "Point", 1, 1)
         ScatterAtts = ScatterAttributes()
         ScatterAtts.var1 = "x"
@@ -240,7 +246,7 @@ for i in range(istart[ichunk],iend[ichunk]):
         ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var2 = "y"
         ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+        #ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var3 = "default"
         ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var4 = "Point"
@@ -302,7 +308,7 @@ for i in range(istart[ichunk],iend[ichunk]):
         SaveWindowAtts.progressive = 0
         SaveWindowAtts.binary = 0
         SaveWindowAtts.stereo = 0
-        SaveWindowAtts.compression = SaveWindowAtts.NONE  # NONE, PackBits, Jpeg, Deflate, LZW
+        #SaveWindowAtts.compression = SaveWindowAtts.NONE  # NONE, PackBits, Jpeg, Deflate, LZW
         SaveWindowAtts.forceMerge = 0
         SaveWindowAtts.resConstraint = SaveWindowAtts.NoConstraint  # NoConstraint, EqualWidthHeight, ScreenProportions
         SaveWindowAtts.pixelData = 1
