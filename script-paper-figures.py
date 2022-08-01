@@ -4,39 +4,40 @@
 
 import os
 import sys
-import re
-import numpy as np
-import datetime
-import calendar
 
 #This defines the plot parameters
-import getfilenames
-
-#Which layers
-which_layers = [1,19]
+import getfilenames.py 
 
 # Set the run name to label the images
-mifiles = getfilenames.set_which_mifiles()
-sfiles  = getfilenames.set_which_sfiles()
+mifiles = filenames.set_mifile_name()
+sfiles  = filenames.set_sfile_name()
 
-numfiles = len(sfiles)
-numfiles = numfiles
-print("Processing",numfiles,"files")
 
-#istart and end, you can change it
-istart = 0
-#iend = numfiles 
-iend = 1
+#file_prefix_epa = "date_04012015"
+
+
+files = ["date_04012015",
+           "date_04142015",
+           "date_05112015",
+           "date_06022015",
+           "date_07172015",
+           "date_07212015",
+           "date_08032015",
+           "date_09012015",
+           "date_10052015",
+           "date_11032015",
+           "date_12072015"]
+
+#Layer
+#LAYER = 1
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
 #EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
 #EPA_directory = "/Users/lllowe/Images/new_plots/"
-EPA_directory = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/mis_2010/dates_output/"
-Station_directory = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/stations2010/"
+EPA_directory = "/Users/lllowe/JamesPaper/MeasuredDataLakeMichigan/"
 
 #The directory to write images to.  The slash at the end of the directory name is required.
-#IMGS_DIR = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/Images-2010/Layer=1/" #+ thischunk[i] 
-IMGS_DIR = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/Images-2010/Layer=20/" #+ thischunk[i] 
+IMGS_DIR = "/Users/lllowe/JamesPaper/Images/"
 
 #Check that all the directories exist
 if not os.path.exists(EPA_directory):
@@ -47,32 +48,25 @@ if not os.path.exists(EPA_directory):
 if not os.path.exists(IMGS_DIR):
     os.makedirs(IMGS_DIR)
 
-for i in range(istart,iend):
-    EPA_database = EPA_directory + mifiles[i] 
+for file_prefix_epa in files:
+
+    base_EPA_database = EPA_directory + file_prefix_epa
+    #Which file
+    EPA_database = base_EPA_database + ".nc"
     #IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
-    STATIONS_NAME = Station_directory + sfiles[i] 
-    for x in which_layers:
+    STATIONS_NAME = base_EPA_database + ".txt"
+
+ 
+
+    for x in range(1,20):
+
         LAYER = x
-        url = mifiles[i]
-        url = re.sub('\.nc','',url) 
-        IMGS_NAME = url + "_Layer=" + str(LAYER)
-        #print(LAYER)
-        print(IMGS_NAME) 
-        #sys.exit()
+        IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
+    
         #Open file
         OpenDatabase(EPA_database,0)
-
-        t_start = calendar.timegm(datetime.datetime(1858, 11, 17, 0, 0, 0).timetuple())
-        text2D_timestamp = CreateAnnotationObject("Text2D")
-        text2D_timestamp.position = (0.78,0.9)
-        text2D_timestamp.height = 0.020
-        m = GetMetaData(EPA_database)
-        istate = 0
-        tcur = m.times[istate]*86400.  + t_start
-        ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y %H:%M')
-        timestamp = ts
-        text2D_timestamp.text = timestamp
-
+    
+    
         #Get metadata for database
         m = GetMetaData(EPA_database)
     
@@ -194,7 +188,7 @@ for i in range(istart,iend):
         ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var2 = "Y"
         ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        #ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var3 = "default"
         ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var4 = "Tp_ug_L"
@@ -204,7 +198,7 @@ for i in range(istart,iend):
         ScatterAtts.var4Max = 0.1
         ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
         ScatterAtts.var4SkewFactor = 1e-05
-        ScatterAtts.pointSize = 1100
+        ScatterAtts.pointSize = 700
         ScatterAtts.pointSizePixels = 1
         ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
         ScatterAtts.scaleCube = 0
@@ -217,7 +211,7 @@ for i in range(istart,iend):
         
         ##Add river points
         #open file, add plot
-        OpenDatabase("/rsstu/users/l/lllowe/ord/JamesPaper07-2022/points.txt", 0)
+        OpenDatabase("localhost:/Users/lllowe/ORD/MarkR/points.txt", 0)
         AddPlot("Scatter", "Point", 1, 1)
         ScatterAtts = ScatterAttributes()
         ScatterAtts.var1 = "x"
@@ -226,11 +220,11 @@ for i in range(istart,iend):
         ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var2 = "y"
         ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        #ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var3 = "default"
         ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var4 = "Point"
-        ScatterAtts.pointSize = 700
+        ScatterAtts.pointSize = 500
         ScatterAtts.pointSizePixels = 1
         ScatterAtts.pointType = ScatterAtts.Icosahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
         ScatterAtts.scaleCube = 0
@@ -288,7 +282,7 @@ for i in range(istart,iend):
         SaveWindowAtts.progressive = 0
         SaveWindowAtts.binary = 0
         SaveWindowAtts.stereo = 0
-        #SaveWindowAtts.compression = SaveWindowAtts.NONE  # NONE, PackBits, Jpeg, Deflate, LZW
+        SaveWindowAtts.compression = SaveWindowAtts.NONE  # NONE, PackBits, Jpeg, Deflate, LZW
         SaveWindowAtts.forceMerge = 0
         SaveWindowAtts.resConstraint = SaveWindowAtts.NoConstraint  # NoConstraint, EqualWidthHeight, ScreenProportions
         SaveWindowAtts.pixelData = 1
