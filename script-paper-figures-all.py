@@ -13,7 +13,7 @@ import calendar
 import getfilenames
 
 #Which layers
-which_layers = [1,19]
+which_layers = [1]
 
 # Set the run name to label the images
 mifiles = getfilenames.set_which_mifiles()
@@ -26,7 +26,7 @@ print("Processing",numfiles,"files")
 #istart and end, you can change it
 istart = 0
 #iend = numfiles 
-iend = 1
+iend = 4
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
 #EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
@@ -46,6 +46,8 @@ if not os.path.exists(EPA_directory):
 if not os.path.exists(IMGS_DIR):
     os.makedirs(IMGS_DIR)
 
+#don't make another annotation
+notime = 0
 #for file_prefix_epa in sfiles:
 for i in range(istart,iend):
     EPA_database = EPA_directory + mifiles[i] 
@@ -65,7 +67,9 @@ for i in range(istart,iend):
         OpenDatabase(EPA_database,0)
 
         t_start = calendar.timegm(datetime.datetime(1858, 11, 17, 0, 0, 0).timetuple())
-        text2D_timestamp = CreateAnnotationObject("Text2D")
+        if(notime == 0):
+            text2D_timestamp = CreateAnnotationObject("Text2D")
+            notime = 1
         text2D_timestamp.position = (0.78,0.9)
         text2D_timestamp.height = 0.020
         m = GetMetaData(EPA_database)
@@ -136,9 +140,9 @@ for i in range(istart,iend):
         
         #Resize plot and window
         View2DAtts = View2DAttributes()
-        View2DAtts.windowCoords = (516628, 572910, 4.75191e+06, 4.79606e+06)
-        View2DAtts.viewportCoords = (0, 1, 0, 1)
-        View2DAtts.fullFrameActivationMode = View2DAtts.On  # On, Off, Auto
+        View2DAtts.windowCoords = (512727, 576710, 4.64782e+06, 4.81909e+06)
+        View2DAtts.viewportCoords = (0.2, 0.95, 0.15, 0.95) 
+        View2DAtts.fullFrameActivationMode = View2DAtts.Auto  # On, Off, Auto
         View2DAtts.fullFrameAutoThreshold = 100
         View2DAtts.xScale = View2DAtts.LINEAR  # LINEAR, LOG
         View2DAtts.yScale = View2DAtts.LINEAR  # LINEAR, LOG
@@ -283,8 +287,8 @@ for i in range(istart,iend):
         SaveWindowAtts.family = 0
         SaveWindowAtts.format = SaveWindowAtts.PNG  # BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
         SaveWindowAtts.width = 1024
-        SaveWindowAtts.height = 600
-        #SaveWindowAtts.screenCapture = 1
+        SaveWindowAtts.height = 1024
+        SaveWindowAtts.screenCapture = 0
         SaveWindowAtts.saveTiled = 0
         SaveWindowAtts.quality = 80
         SaveWindowAtts.progressive = 0
