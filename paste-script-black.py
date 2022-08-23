@@ -18,7 +18,7 @@ import calendar
 which_layers = [1]
 
 # Set the run name to label the images
-mifiles = ["date_0718201520.nc"] 
+mifiles = ["date_0720201520.nc"] 
 sfiles  = ["date_07182015.txt"] 
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
@@ -30,6 +30,8 @@ Station_directory = "/Users/lllowe/r-for-fvcom/stations/2015/"
 i = 0
 EPA_database = EPA_directory + mifiles[i] 
 #IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
+STATIONS_NAME = Station_directory + sfiles[i] 
+POT_NAME = Station_directory + "pot_" + sfiles[i]
 CSMI_NAME = Station_directory + "csmi_" + sfiles[i]
 
 
@@ -62,7 +64,7 @@ AnnotationAtts = AnnotationAttributes()
 AnnotationAtts.userInfoFlag = 0
 AnnotationAtts.databaseInfoFlag = 0
 AnnotationAtts.axes3D.triadFlag = 0
-AnnotationAtts.legendInfoFlag = 0
+AnnotationAtts.legendInfoFlag = 1
 AnnotationAtts.axes2D.visible = 0
 AnnotationAtts.axes2D.xAxis.title.visible = 0
 AnnotationAtts.axes2D.yAxis.title.visible = 0
@@ -85,15 +87,42 @@ SetActivePlots(0)
 PseudocolorAtts = PseudocolorAttributes()
 PseudocolorAtts.minFlag = 1
 PseudocolorAtts.maxFlag = 1
+PseudocolorAtts.skewFactor = 0.1
+PseudocolorAtts.min = 0.002
+PseudocolorAtts.max = 0.035
+PseudocolorAtts.colorTableName = "turbo"
+PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
+PseudocolorAtts.legendFlag = 1
+SetPlotOptions(PseudocolorAtts)
+#SetAtts
+DrawPlots()
+
+plotName = GetPlotList().GetPlots(0).plotName
+legend = GetAnnotationObject(plotName)
+legend.managePosition = 0
+legend.position = (0.7,0.65)
+legend.drawTitle=0
+legend.drawMinMax = 0
+legend.numberFormat = "%1.2e"
+
+#Add pseudocolor plot and set attributes
+PLOT_VAR = "TP"
+AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
+SetActivePlots(2)
+#Atts
+PseudocolorAtts = PseudocolorAttributes()
+PseudocolorAtts.minFlag = 1
+PseudocolorAtts.maxFlag = 1
 PseudocolorAtts.colorTableName = "turbo"
 PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
 PseudocolorAtts.skewFactor = 1e-05
 PseudocolorAtts.min = 0.001
 PseudocolorAtts.max = 0.1
-PseudocolorAtts.legendFlag = 1
+PseudocolorAtts.legendFlag = 0
 SetPlotOptions(PseudocolorAtts)
 #SetAtts
 DrawPlots()
+
 
 #Just one layer
 TurnMaterialsOff()
@@ -189,8 +218,8 @@ ScatterAtts.pointSize = 1000
 ScatterAtts.pointSizePixels = 1
 ScatterAtts.pointType = ScatterAtts.Axis  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
 ScatterAtts.scaleCube = 0
-ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-ScatterAtts.singleColor = (0, 0, 0, 255)
+ScatterAtts.colorType = ScatterAtts.ColorBySingleColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
+ScatterAtts.singleColor = (0, 0, 255, 255)
 ScatterAtts.legendFlag = 0
 SetPlotOptions(ScatterAtts)
 DrawPlots() 
@@ -239,35 +268,78 @@ View3DAtts.windowValid = 1
 SetView3D(View3DAtts)
 # End spontaneous state
 
-OpenDatabase(CSMI_NAME, 0)
-AddPlot("Scatter", "TP", 1, 1)
-ScatterAtts = ScatterAttributes()
-ScatterAtts.var1 = "X"
-ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var2 = "Y"
-ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var3 = "Z"
-ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var4 = "TP"
-ScatterAtts.var4MinFlag = 1
-ScatterAtts.var4MaxFlag = 1
-ScatterAtts.var4Min = 0.001
-ScatterAtts.var4Max = 0.1
-ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
-ScatterAtts.var4SkewFactor = 1e-05
-ScatterAtts.pointSize = 800
-ScatterAtts.pointSizePixels = 1
-ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-ScatterAtts.scaleCube = 0
-ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-ScatterAtts.colorTableName = "turbo"
-ScatterAtts.invertColorTable = 0
-ScatterAtts.legendFlag = 0
-SetPlotOptions(ScatterAtts)
-DrawPlots()
+
+
+
+#open file, add plot
+with open(POT_NAME, 'r') as fp:
+    numlines = len(fp.readlines())
+if numlines > 1:
+    OpenDatabase(POT_NAME, 0)
+    AddPlot("Scatter", "TP", 1, 1)
+    ScatterAtts = ScatterAttributes()
+    ScatterAtts.var1 = "X"
+    ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+    ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var2 = "Y"
+    ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+    ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var3 = "Z"
+    ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var4 = "TP"
+    ScatterAtts.var4MinFlag = 1
+    ScatterAtts.var4MaxFlag = 1
+    ScatterAtts.var4Min = 0.002
+    ScatterAtts.var4Max = 0.035
+    ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
+    ScatterAtts.var4SkewFactor = 0.1 
+    ScatterAtts.pointSize = 500
+    ScatterAtts.pointSizePixels = 1
+    ScatterAtts.pointType = ScatterAtts.Box  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+    ScatterAtts.scaleCube = 0
+    ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
+    ScatterAtts.colorTableName = "turbo"
+    ScatterAtts.invertColorTable = 0
+    ScatterAtts.legendFlag = 0
+    SetPlotOptions(ScatterAtts)
+    DrawPlots()
+
+
+#open file, add plot
+with open(CSMI_NAME, 'r') as fp:
+    numlines = len(fp.readlines())
+
+if numlines > 1:
+    OpenDatabase(CSMI_NAME, 0)
+    AddPlot("Scatter", "TP", 1, 1)
+    ScatterAtts = ScatterAttributes()
+    ScatterAtts.var1 = "X"
+    ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+    ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var2 = "Y"
+    ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+    ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var3 = "Z"
+    ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+    ScatterAtts.var4 = "TP"
+    ScatterAtts.var4MinFlag = 1
+    ScatterAtts.var4MaxFlag = 1
+    ScatterAtts.var4Min = 0.001
+    ScatterAtts.var4Max = 0.1
+    ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
+    ScatterAtts.var4SkewFactor = 1e-05
+    ScatterAtts.pointSize = 500
+    ScatterAtts.pointSizePixels = 1
+    ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+    ScatterAtts.scaleCube = 0
+    ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
+    ScatterAtts.colorTableName = "turbo"
+    ScatterAtts.invertColorTable = 0
+    ScatterAtts.legendFlag = 0
+    SetPlotOptions(ScatterAtts)
+    DrawPlots()
     
 
 #AddImage
