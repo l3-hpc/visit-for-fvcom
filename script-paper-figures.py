@@ -4,40 +4,45 @@
 
 import os
 import sys
+import re
+import numpy as np
+import datetime
+import calendar
+
+#sys.path.append("/Users/lisalowe/visit-for-fvcom")
 
 #This defines the plot parameters
-import getfilenames.py 
+import getfilenames
+
+#Which layers
+which_layers = [4]
 
 # Set the run name to label the images
-mifiles = filenames.set_mifile_name()
-sfiles  = filenames.set_sfile_name()
+mifiles = getfilenames.set_which_mifiles()
+sfiles  = getfilenames.set_which_sfiles()
 
+numfiles = len(sfiles)
+numfiles = numfiles
+print("Processing",numfiles,"files")
 
-#file_prefix_epa = "date_04012015"
-
-
-files = ["date_04012015",
-           "date_04142015",
-           "date_05112015",
-           "date_06022015",
-           "date_07172015",
-           "date_07212015",
-           "date_08032015",
-           "date_09012015",
-           "date_10052015",
-           "date_11032015",
-           "date_12072015"]
-
-#Layer
-#LAYER = 1
+#istart and end, you can change it
+istart = 0
+iend = numfiles 
+#iend = 667 
+#iend = 10
+#istart = 0 
+#iend = 10 
+istart = 50
+iend = 60
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
 #EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
 #EPA_directory = "/Users/lllowe/Images/new_plots/"
-EPA_directory = "/Users/lllowe/JamesPaper/MeasuredDataLakeMichigan/"
+EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2015/dates_output/"
+Station_directory = "/Users/lllowe/r-for-fvcom/stations/2015/"
 
 #The directory to write images to.  The slash at the end of the directory name is required.
-IMGS_DIR = "/Users/lllowe/JamesPaper/Images/"
+IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2015/Layer=4/"
 
 #Check that all the directories exist
 if not os.path.exists(EPA_directory):
@@ -48,35 +53,65 @@ if not os.path.exists(EPA_directory):
 if not os.path.exists(IMGS_DIR):
     os.makedirs(IMGS_DIR)
 
-for file_prefix_epa in files:
-
-    base_EPA_database = EPA_directory + file_prefix_epa
-    #Which file
-    EPA_database = base_EPA_database + ".nc"
+#don't make another annotation
+notime = 0
+#for file_prefix_epa in sfiles:
+for i in range(istart,iend):
+    EPA_database = EPA_directory + mifiles[i]
+    print("Model file:",mifiles[i])
     #IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
-    STATIONS_NAME = base_EPA_database + ".txt"
+    STATIONS_NAME = Station_directory + sfiles[i] 
+    POT_NAME = Station_directory + "pot_" + sfiles[i]
+    CSMI_NAME = Station_directory + "csmi_" + sfiles[i]
 
- 
+    print("Station file:",sfiles[i])
 
-    for x in range(1,20):
-
+    for x in which_layers:
+        
         LAYER = x
-        IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
-    
+        url = mifiles[i]
+        url = re.sub('\.nc','',url) 
+        IMGS_NAME = url + "_Layer=" + str(LAYER)
+        #print(LAYER)
+        print(IMGS_NAME) 
+        #sys.exit()
         #Open file
         OpenDatabase(EPA_database,0)
-    
-    
+
+        t_start = calendar.timegm(datetime.datetime(1858, 11, 17, 0, 0, 0).timetuple())
+        if(notime == 0):
+            text2D_timestamp = CreateAnnotationObject("Text2D")
+            notime = 1
+        text2D_timestamp.position = (0.78,0.9)
+        text2D_timestamp.height = 0.020
+        m = GetMetaData(EPA_database)
+        istate = 0
+        tcur = m.times[istate]*86400.  + t_start
+        ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y %H:%M')
+        timestamp = ts
+        text2D_timestamp.text = timestamp
+
         #Get metadata for database
         m = GetMetaData(EPA_database)
-    
-    #Annotations
+   
+        #Annotations on 2D plot
         AnnotationAtts = AnnotationAttributes()
         AnnotationAtts.userInfoFlag = 0
         AnnotationAtts.databaseInfoFlag = 0
         AnnotationAtts.axes3D.triadFlag = 0
-        AnnotationAtts.legendInfoFlag = 1
+        AnnotationAtts.legendInfoFlag = 0
+        AnnotationAtts.axes2D.visible = 0
+        AnnotationAtts.axes2D.xAxis.title.visible = 0
+        AnnotationAtts.axes2D.yAxis.title.visible = 0
+        AnnotationAtts.axes2D.xAxis.label.visible = 0
+        AnnotationAtts.axes2D.yAxis.label.visible = 0
+        AnnotationAtts.backgroundColor = (153, 153, 153, 255)
+        AnnotationAtts.foregroundColor = (0, 0, 0, 255)
+        AnnotationAtts.backgroundMode = AnnotationAtts.Solid  # Solid, Gradient, Image, ImageSphere
+        AnnotationAtts.axes2D.tickAxes = AnnotationAtts.axes2D.Off
+        SetAnnotationAttributes(AnnotationAtts)
         #Finished setting annotation
+ 
         
         #Add pseudocolor plot and set attributes
         PLOT_VAR = "TP"
@@ -86,7 +121,7 @@ for file_prefix_epa in files:
         PseudocolorAtts = PseudocolorAttributes()
         PseudocolorAtts.minFlag = 1
         PseudocolorAtts.maxFlag = 1
-        PseudocolorAtts.colorTableName = "caleblack"
+        PseudocolorAtts.colorTableName = "turbo"
         PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
         PseudocolorAtts.skewFactor = 1e-05
         PseudocolorAtts.min = 0.001
@@ -102,41 +137,40 @@ for file_prefix_epa in files:
         TurnMaterialsOn(layer_string)
         DrawPlots() 
         
-        #Project to 2D
-        AddOperator("Project", 1)
-        DrawPlots()
-        
-        #Annotations on 2D plot
-        AnnotationAtts = AnnotationAttributes()
-        AnnotationAtts.userInfoFlag = 0
-        AnnotationAtts.databaseInfoFlag = 0
-        AnnotationAtts.axes3D.triadFlag = 0
-        AnnotationAtts.legendInfoFlag = 1
-        AnnotationAtts.axes2D.visible = 1
-        AnnotationAtts.axes2D.xAxis.title.visible = 0
-        AnnotationAtts.axes2D.yAxis.title.visible = 0
-        AnnotationAtts.axes2D.xAxis.label.visible = 0
-        AnnotationAtts.axes2D.yAxis.label.visible = 0
-        AnnotationAtts.axes2D.tickAxes = AnnotationAtts.axes2D.Off
-        AnnotationAtts.axes2D.lineWidth = 100 
-        AnnotationAtts.gradientBackgroundStyle = AnnotationAtts.Radial
-        AnnotationAtts.gradientColor1 = (128, 0, 0, 255)
-        AnnotationAtts.gradientColor2 = (153, 153, 153, 255)
-        AnnotationAtts.backgroundMode = AnnotationAtts.Gradient
-        SetAnnotationAttributes(AnnotationAtts)
-        #Finished setting annotation
-        
-        #Resize plot and window
-        View2DAtts = View2DAttributes()
-        View2DAtts.windowCoords = (516628, 572910, 4.75191e+06, 4.79606e+06)
-        View2DAtts.viewportCoords = (0, 1, 0, 1)
-        View2DAtts.fullFrameActivationMode = View2DAtts.On  # On, Off, Auto
-        View2DAtts.fullFrameAutoThreshold = 100
-        View2DAtts.xScale = View2DAtts.LINEAR  # LINEAR, LOG
-        View2DAtts.yScale = View2DAtts.LINEAR  # LINEAR, LOG
-        View2DAtts.windowValid = 1
-        SetView2D(View2DAtts)
-        # End spontaneous state
+#        #Resize plot and window
+#        View2DAtts = View2DAttributes()
+#        View2DAtts.windowCoords = (521942, 566839, 4.75634e+06, 4.79812e+06)
+#        View2DAtts.viewportCoords = (0, 1, 0, 1) 
+#        View2DAtts.fullFrameActivationMode = View2DAtts.On  # On, Off, Auto
+#        View2DAtts.fullFrameAutoThreshold = 100
+#        View2DAtts.xScale = View2DAtts.LINEAR  # LINEAR, LOG
+#        View2DAtts.yScale = View2DAtts.LINEAR  # LINEAR, LOG
+#        View2DAtts.windowValid = 1
+#        SetView2D(View2DAtts)
+#        # End spontaneous state
+
+	# Begin spontaneous state
+        View3DAtts = View3DAttributes()
+        View3DAtts.viewNormal = (0, 0, 1)
+        View3DAtts.focus = (546981, 4.8567e+06, -135.085)
+        View3DAtts.viewUp = (0, 1, 0)
+        View3DAtts.viewAngle = 30
+        View3DAtts.parallelScale = 279685
+        View3DAtts.nearPlane = -559370
+        View3DAtts.farPlane = 559370
+        View3DAtts.imagePan = (-0.00968456, 0.142186)
+        View3DAtts.imageZoom = 11.3436
+        View3DAtts.perspective = 1
+        View3DAtts.eyeAngle = 2
+        View3DAtts.centerOfRotationSet = 0
+        View3DAtts.centerOfRotation = (546981, 4.8567e+06, -135.085)
+        View3DAtts.axis3DScaleFlag = 0
+        View3DAtts.axis3DScales = (1, 1, 1)
+        View3DAtts.shear = (0, 0, 1)
+        View3DAtts.windowValid = 1
+        SetView3D(View3DAtts)
+	# End spontaneous state
+
         
         #Add shoreline
         AddPlot("Subset", "Bathymetry_Mesh", 1, 1)
@@ -178,36 +212,6 @@ for file_prefix_epa in files:
         plainTextOpenOptions['Column for Y coordinate (or -1 for none)'] = 1
         plainTextOpenOptions['Column for Z coordinate (or -1 for none)'] = 2
         SetDefaultFileOpenOptions("PlainText", plainTextOpenOptions)
-        #open file, add plot
-        OpenDatabase(STATIONS_NAME, 0)
-        AddPlot("Scatter", "Tp_ug_L", 1, 1)
-        ScatterAtts = ScatterAttributes()
-        ScatterAtts.var1 = "X"
-        ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var2 = "Y"
-        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var3 = "default"
-        ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var4 = "Tp_ug_L"
-        ScatterAtts.var4MinFlag = 1
-        ScatterAtts.var4MaxFlag = 1
-        ScatterAtts.var4Min = 0.001
-        ScatterAtts.var4Max = 0.1
-        ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
-        ScatterAtts.var4SkewFactor = 1e-05
-        ScatterAtts.pointSize = 700
-        ScatterAtts.pointSizePixels = 1
-        ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-        ScatterAtts.scaleCube = 0
-        ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-        ScatterAtts.colorTableName = "caleblack"
-        ScatterAtts.invertColorTable = 0
-        ScatterAtts.legendFlag = 0
-        SetPlotOptions(ScatterAtts)
-        DrawPlots()
         
         ##Add river points
         #open file, add plot
@@ -220,49 +224,116 @@ for file_prefix_epa in files:
         ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var2 = "y"
         ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var3 = "default"
+        ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+        ScatterAtts.var3 = "z"
+        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
         ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var4 = "Point"
-        ScatterAtts.pointSize = 500
+        ScatterAtts.pointSize = 800
         ScatterAtts.pointSizePixels = 1
-        ScatterAtts.pointType = ScatterAtts.Icosahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+        ScatterAtts.pointType = ScatterAtts.Axis  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
         ScatterAtts.scaleCube = 0
         ScatterAtts.colorType = ScatterAtts.ColorBySingleColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-        ScatterAtts.singleColor = (0, 0, 0, 255)
+        ScatterAtts.singleColor = (0, 0, 255, 255)
         ScatterAtts.legendFlag = 0
         SetPlotOptions(ScatterAtts)
         DrawPlots() 
-        
-        #Mile marker
-        #If in UTM 1mile=1609
-        ActivateDatabase(EPA_database)
-        AddPlot("Contour", "y", 1, 1)
-        SetActivePlots(5)
+
+        #River shapefile
+        OpenDatabase("localhost:/Users/lllowe/JamesPaper/Shapefiles/NHD_Sel_MI_Rivers_UTM16.shp", 0)
         DrawPlots()
-        ContourAtts = ContourAttributes()
-        ContourAtts.colorType = ContourAtts.ColorBySingleColor  # ColorBySingleColor, ColorByMultipleColors, ColorByColorTable
-        ContourAtts.legendFlag = 0
-        ContourAtts.lineWidth = 5
-        ContourAtts.singleColor = (0, 0, 0, 255)
-        ContourAtts.contourValue = (4.76036e+06)
-        ContourAtts.contourMethod = ContourAtts.Value  # Level, Value, Percent
-        ContourAtts.scaling = ContourAtts.Linear  # Linear, Log
-        ContourAtts.wireframe = 0
-        SetPlotOptions(ContourAtts)
-        
-        AddOperator("Box", 0)
-        BoxAtts = BoxAttributes()
-        BoxAtts.amount = BoxAtts.Some  # Some, All
-        BoxAtts.minx = 554423
-        BoxAtts.maxx = 556032
-        BoxAtts.miny = 4.74736e+06
-        BoxAtts.maxy = 4.76736e+06
-        BoxAtts.minz = -1
-        BoxAtts.maxz = 1
-        SetOperatorOptions(BoxAtts, 1, 0)
+        AddPlot("Mesh", "polylineZ", 1, 1)
         DrawPlots()
-        
+        MeshAtts = MeshAttributes()
+        MeshAtts.legendFlag = 1
+        MeshAtts.lineWidth = 5
+        MeshAtts.meshColor = (0, 0, 255, 255)
+        MeshAtts.meshColorSource = MeshAtts.MeshCustom  # Foreground, MeshCustom, MeshRandom
+        MeshAtts.opaqueColorSource = MeshAtts.Background  # Background, OpaqueCustom, OpaqueRandom
+        MeshAtts.opaqueMode = MeshAtts.Auto  # Auto, On, Off
+        MeshAtts.pointSize = 0.05
+        MeshAtts.opaqueColor = (255, 255, 255, 255)
+        MeshAtts.smoothingLevel = MeshAtts.NONE  # NONE, Fast, High
+        MeshAtts.pointSizeVarEnabled = 0
+        MeshAtts.pointSizeVar = "default"
+        MeshAtts.pointType = MeshAtts.Point  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+        MeshAtts.showInternal = 0
+        MeshAtts.pointSizePixels = 2
+        MeshAtts.opacity = 1
+        SetPlotOptions(MeshAtts)
+
+        #open file, add plot
+        #open file, add plot
+        with open(POT_NAME, 'r') as fp:
+            numlines = len(fp.readlines())
+        if numlines > 1:
+            OpenDatabase(POT_NAME, 0)
+            AddPlot("Scatter", "TP", 1, 1)
+            ScatterAtts = ScatterAttributes()
+            ScatterAtts.var1 = "X"
+            ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+            ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var2 = "Y"
+            ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+            ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var3 = "Z"
+            ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var4 = "TP"
+            ScatterAtts.var4MinFlag = 1
+            ScatterAtts.var4MaxFlag = 1
+            ScatterAtts.var4Min = 0.001
+            ScatterAtts.var4Max = 0.1
+            ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
+            ScatterAtts.var4SkewFactor = 1e-05
+            ScatterAtts.pointSize = 900
+            ScatterAtts.pointSizePixels = 1
+            ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+            ScatterAtts.scaleCube = 0
+            ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
+            ScatterAtts.colorTableName = "turbo"
+            ScatterAtts.invertColorTable = 0
+            ScatterAtts.legendFlag = 0
+            SetPlotOptions(ScatterAtts)
+            DrawPlots()
+
+
+        #open file, add plot
+        #open file, add plot
+        with open(CSMI_NAME, 'r') as fp:
+            numlines = len(fp.readlines())
+        if numlines > 1:
+            OpenDatabase(CSMI_NAME, 0)
+            AddPlot("Scatter", "TP", 1, 1)
+            ScatterAtts = ScatterAttributes()
+            ScatterAtts.var1 = "X" 
+            ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+            ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var2 = "Y" 
+            ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+            ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var3 = "Z" 
+            ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+            ScatterAtts.var4 = "TP"
+            ScatterAtts.var4MinFlag = 1 
+            ScatterAtts.var4MaxFlag = 1 
+            ScatterAtts.var4Min = 0.001
+            ScatterAtts.var4Max = 0.1 
+            ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
+            ScatterAtts.var4SkewFactor = 1e-05
+            ScatterAtts.pointSize = 900 
+            ScatterAtts.pointSizePixels = 1 
+            ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+            ScatterAtts.scaleCube = 0 
+            ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
+            ScatterAtts.colorTableName = "turbo"
+            ScatterAtts.invertColorTable = 0 
+            ScatterAtts.legendFlag = 0 
+            SetPlotOptions(ScatterAtts)
+            DrawPlots()
+
+
         #AddImage
         #image = CreateAnnotationObject("Image") 
         #image.image = "/Users/lllowe/ORD/MarkR/Legend.png"
@@ -275,8 +346,8 @@ for file_prefix_epa in files:
         SaveWindowAtts.family = 0
         SaveWindowAtts.format = SaveWindowAtts.PNG  # BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
         SaveWindowAtts.width = 1024
-        SaveWindowAtts.height = 600
-        #SaveWindowAtts.screenCapture = 1
+        SaveWindowAtts.height = 1024
+        SaveWindowAtts.screenCapture = 0
         SaveWindowAtts.saveTiled = 0
         SaveWindowAtts.quality = 80
         SaveWindowAtts.progressive = 0

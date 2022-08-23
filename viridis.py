@@ -9,11 +9,14 @@ import numpy as np
 import datetime
 import calendar
 
+
+#sys.path.append("/Users/lisalowe/visit-for-fvcom")
+
 #This defines the plot parameters
 import getfilenames
 
 #Which layers
-which_layers = [1]
+which_layers = [4]
 
 # Set the run name to label the images
 mifiles = getfilenames.set_which_mifiles()
@@ -25,9 +28,11 @@ print("Processing",numfiles,"files")
 
 #istart and end, you can change it
 istart = 0
-#iend = numfiles 
-#iend = 667 
-iend = 10
+iend = numfiles 
+#iend = 10
+#istart = 0 
+#iend = 10 
+
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
 #EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
@@ -36,7 +41,7 @@ EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2015/dates_output/"
 Station_directory = "/Users/lllowe/JamesPaper/RforLM/stations/2015/"
 
 #The directory to write images to.  The slash at the end of the directory name is required.
-IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2015/Layer=1/"
+IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2015/viridus/Layer=4/"
 
 #Check that all the directories exist
 if not os.path.exists(EPA_directory):
@@ -51,9 +56,11 @@ if not os.path.exists(IMGS_DIR):
 notime = 0
 #for file_prefix_epa in sfiles:
 for i in range(istart,iend):
-    EPA_database = EPA_directory + mifiles[i] 
+    EPA_database = EPA_directory + mifiles[i]
+    print("Model file:",mifiles[i])
     #IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
     STATIONS_NAME = Station_directory + sfiles[i] 
+    print("Station file:",sfiles[i])
 
     for x in which_layers:
         
@@ -94,18 +101,10 @@ for i in range(istart,iend):
         AnnotationAtts.axes2D.yAxis.title.visible = 0
         AnnotationAtts.axes2D.xAxis.label.visible = 0
         AnnotationAtts.axes2D.yAxis.label.visible = 0
+        AnnotationAtts.backgroundColor = (153, 153, 153, 255)
+        AnnotationAtts.foregroundColor = (0, 0, 0, 255)
+        AnnotationAtts.backgroundMode = AnnotationAtts.Solid  # Solid, Gradient, Image, ImageSphere
         AnnotationAtts.axes2D.tickAxes = AnnotationAtts.axes2D.Off
-#        AnnotationAtts.axes2D.lineWidth = 100
-#        AnnotationAtts.gradientBackgroundStyle = AnnotationAtts.Radial
-#        AnnotationAtts.gradientColor1 = (128, 0, 0, 255)
-#        AnnotationAtts.gradientColor2 = (153, 153, 153, 255)
-        AnnotationAtts.backgroundColor = (0, 0, 0, 255)
-        AnnotationAtts.foregroundColor = (255, 255, 255, 255)
-        AnnotationAtts.gradientBackgroundStyle = AnnotationAtts.Radial  # TopToBottom, BottomToTop, LeftToRight, RightToLeft, Radial
-        AnnotationAtts.gradientColor1 = (0, 51, 0, 255)
-        AnnotationAtts.gradientColor2 = (102, 102, 102, 255)
-        AnnotationAtts.backgroundMode = AnnotationAtts.Gradient  # Solid, Gradient, Image, ImageSphere
-        AnnotationAtts.backgroundMode = AnnotationAtts.Gradient
         SetAnnotationAttributes(AnnotationAtts)
         #Finished setting annotation
  
@@ -118,11 +117,11 @@ for i in range(istart,iend):
         PseudocolorAtts = PseudocolorAttributes()
         PseudocolorAtts.minFlag = 1
         PseudocolorAtts.maxFlag = 1
-        PseudocolorAtts.colorTableName = "caleblack"
-        PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
+        PseudocolorAtts.colorTableName = "viridis"
+        PseudocolorAtts.scaling = PseudocolorAtts.Linear  # Linear, Log, Skew
         PseudocolorAtts.skewFactor = 1e-05
         PseudocolorAtts.min = 0.001
-        PseudocolorAtts.max = 0.1
+        PseudocolorAtts.max = 0.03
         PseudocolorAtts.legendFlag = 0
         SetPlotOptions(PseudocolorAtts)
         #SetAtts
@@ -142,7 +141,7 @@ for i in range(istart,iend):
         View2DAtts = View2DAttributes()
         View2DAtts.windowCoords = (521942, 566839, 4.75634e+06, 4.79812e+06)
         View2DAtts.viewportCoords = (0, 1, 0, 1) 
-        View2DAtts.fullFrameActivationMode = View2DAtts.Auto  # On, Off, Auto
+        View2DAtts.fullFrameActivationMode = View2DAtts.On  # On, Off, Auto
         View2DAtts.fullFrameAutoThreshold = 100
         View2DAtts.xScale = View2DAtts.LINEAR  # LINEAR, LOG
         View2DAtts.yScale = View2DAtts.LINEAR  # LINEAR, LOG
@@ -206,65 +205,15 @@ for i in range(istart,iend):
         ScatterAtts.var3 = "default"
         ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var4 = "Point"
-        ScatterAtts.pointSize = 700
+        ScatterAtts.pointSize = 1000
         ScatterAtts.pointSizePixels = 1
-        ScatterAtts.pointType = ScatterAtts.Icosahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+        ScatterAtts.pointType = ScatterAtts.Octahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
         ScatterAtts.scaleCube = 0
         ScatterAtts.colorType = ScatterAtts.ColorBySingleColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-        ScatterAtts.singleColor = (0, 0, 0, 255)
+        ScatterAtts.singleColor = (0, 0, 255, 255)
         ScatterAtts.legendFlag = 0
         SetPlotOptions(ScatterAtts)
         DrawPlots() 
-
-        ##Add Pothoven station points
-        #open file, add plot
-        OpenDatabase("localhost:/Users/lllowe/visit-for-fvcom/pot.txt", 0)
-        AddPlot("Scatter", "Pot", 1, 1)
-        ScatterAtts = ScatterAttributes()
-        ScatterAtts.var1 = "X"
-        ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var2 = "Y"
-        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var3 = "default"
-        ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var4 = "Pot"
-        ScatterAtts.pointSize = 1300
-        ScatterAtts.pointSizePixels = 1
-        ScatterAtts.pointType = ScatterAtts.Tetrahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-        ScatterAtts.scaleCube = 0
-        ScatterAtts.colorType = ScatterAtts.ColorBySingleColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-        ScatterAtts.singleColor = (255, 255, 255, 255)
-        ScatterAtts.legendFlag = 0
-        SetPlotOptions(ScatterAtts)
-        DrawPlots()
-
-        ##Add CSMI station points
-        #open file, add plot
-        OpenDatabase("localhost:/Users/lllowe/visit-for-fvcom/csmi.txt", 0)
-        AddPlot("Scatter", "CSMI", 1, 1)
-        ScatterAtts = ScatterAttributes()
-        ScatterAtts.var1 = "X"
-        ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var2 = "Y"
-        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var3Role = ScatterAtts.NONE  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var3 = "default"
-        ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var4 = "CSMI"
-        ScatterAtts.pointSize = 900
-        ScatterAtts.pointSizePixels = 1
-        ScatterAtts.pointType = ScatterAtts.Box  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-        ScatterAtts.scaleCube = 0
-        ScatterAtts.colorType = ScatterAtts.ColorBySingleColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-        ScatterAtts.singleColor = (255, 255, 255, 255)
-        ScatterAtts.legendFlag = 0
-        SetPlotOptions(ScatterAtts)
-        DrawPlots()
 
         #open file, add plot
         OpenDatabase(STATIONS_NAME, 0)
@@ -283,15 +232,15 @@ for i in range(istart,iend):
         ScatterAtts.var4MinFlag = 1
         ScatterAtts.var4MaxFlag = 1
         ScatterAtts.var4Min = 0.001
-        ScatterAtts.var4Max = 0.1
-        ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
+        ScatterAtts.var4Max = 0.03
+        ScatterAtts.var4Scaling = ScatterAtts.Linear  # Linear, Log, Skew
         ScatterAtts.var4SkewFactor = 1e-05
-        ScatterAtts.pointSize = 1100
+        ScatterAtts.pointSize = 900
         ScatterAtts.pointSizePixels = 1
         ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
         ScatterAtts.scaleCube = 0
         ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-        ScatterAtts.colorTableName = "caleblack"
+        ScatterAtts.colorTableName = "viridis"
         ScatterAtts.invertColorTable = 0
         ScatterAtts.legendFlag = 0
         SetPlotOptions(ScatterAtts)
@@ -302,7 +251,7 @@ for i in range(istart,iend):
         #If in UTM 1mile=1609
         ActivateDatabase(EPA_database)
         AddPlot("Contour", "y", 1, 1)
-        SetActivePlots(7)
+        SetActivePlots(5)
         DrawPlots()
         ContourAtts = ContourAttributes()
         ContourAtts.colorType = ContourAtts.ColorBySingleColor  # ColorBySingleColor, ColorByMultipleColors, ColorByColorTable
