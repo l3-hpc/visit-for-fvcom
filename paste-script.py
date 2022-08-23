@@ -219,6 +219,31 @@ MeshAtts.pointSizePixels = 2
 MeshAtts.opacity = 1
 SetPlotOptions(MeshAtts)
 
+# Begin spontaneous state
+View3DAtts = View3DAttributes()
+View3DAtts.viewNormal = (0, 0, 1)
+View3DAtts.focus = (546981, 4.8567e+06, -135.085)
+View3DAtts.viewUp = (0, 1, 0)
+View3DAtts.viewAngle = 30
+View3DAtts.parallelScale = 279685
+View3DAtts.nearPlane = -559370
+View3DAtts.farPlane = 559370
+View3DAtts.imagePan = (-0.00968456, 0.142186)
+View3DAtts.imageZoom = 11.3436
+View3DAtts.perspective = 1
+View3DAtts.eyeAngle = 2
+View3DAtts.centerOfRotationSet = 0
+View3DAtts.centerOfRotation = (546981, 4.8567e+06, -135.085)
+View3DAtts.axis3DScaleFlag = 0
+View3DAtts.axis3DScales = (1, 1, 1)
+View3DAtts.shear = (0, 0, 1)
+View3DAtts.windowValid = 1
+SetView3D(View3DAtts)
+# End spontaneous state
+
+
+
+
 #open file, add plot
 with open(POT_NAME, 'r') as fp:
     numlines = len(fp.readlines())

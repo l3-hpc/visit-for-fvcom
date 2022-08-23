@@ -32,8 +32,8 @@ iend = numfiles
 #iend = 10
 #istart = 0 
 #iend = 10 
-istart = 50
-iend = 60
+#istart = 50
+#iend = 60
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
 #EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
@@ -148,29 +148,6 @@ for i in range(istart,iend):
 #        View2DAtts.windowValid = 1
 #        SetView2D(View2DAtts)
 #        # End spontaneous state
-
-	# Begin spontaneous state
-        View3DAtts = View3DAttributes()
-        View3DAtts.viewNormal = (0, 0, 1)
-        View3DAtts.focus = (546981, 4.8567e+06, -135.085)
-        View3DAtts.viewUp = (0, 1, 0)
-        View3DAtts.viewAngle = 30
-        View3DAtts.parallelScale = 279685
-        View3DAtts.nearPlane = -559370
-        View3DAtts.farPlane = 559370
-        View3DAtts.imagePan = (-0.00968456, 0.142186)
-        View3DAtts.imageZoom = 11.3436
-        View3DAtts.perspective = 1
-        View3DAtts.eyeAngle = 2
-        View3DAtts.centerOfRotationSet = 0
-        View3DAtts.centerOfRotation = (546981, 4.8567e+06, -135.085)
-        View3DAtts.axis3DScaleFlag = 0
-        View3DAtts.axis3DScales = (1, 1, 1)
-        View3DAtts.shear = (0, 0, 1)
-        View3DAtts.windowValid = 1
-        SetView3D(View3DAtts)
-	# End spontaneous state
-
         
         #Add shoreline
         AddPlot("Subset", "Bathymetry_Mesh", 1, 1)
@@ -229,11 +206,11 @@ for i in range(istart,iend):
         ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
         ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
         ScatterAtts.var4 = "Point"
-        ScatterAtts.pointSize = 800
+        ScatterAtts.pointSize = 1000
         ScatterAtts.pointSizePixels = 1
-        ScatterAtts.pointType = ScatterAtts.Axis  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+        ScatterAtts.pointType = ScatterAtts.Octahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
         ScatterAtts.scaleCube = 0
-        ScatterAtts.colorType = ScatterAtts.ColorBySingleColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
+        ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
         ScatterAtts.singleColor = (0, 0, 255, 255)
         ScatterAtts.legendFlag = 0
         SetPlotOptions(ScatterAtts)
@@ -288,7 +265,7 @@ for i in range(istart,iend):
             ScatterAtts.var4SkewFactor = 1e-05
             ScatterAtts.pointSize = 900
             ScatterAtts.pointSizePixels = 1
-            ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+            ScatterAtts.pointType = ScatterAtts.Icosahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
             ScatterAtts.scaleCube = 0
             ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
             ScatterAtts.colorTableName = "turbo"
@@ -332,6 +309,28 @@ for i in range(istart,iend):
             ScatterAtts.legendFlag = 0 
             SetPlotOptions(ScatterAtts)
             DrawPlots()
+
+        # Begin spontaneous state
+        View3DAtts = View3DAttributes()
+        View3DAtts.viewNormal = (0, 0, 1)
+        View3DAtts.focus = (546981, 4.8567e+06, -135.085)
+        View3DAtts.viewUp = (0, 1, 0)
+        View3DAtts.viewAngle = 30
+        View3DAtts.parallelScale = 279685
+        View3DAtts.nearPlane = -559370
+        View3DAtts.farPlane = 559370
+        View3DAtts.imagePan = (-0.00968456, 0.142186)
+        View3DAtts.imageZoom = 11.3436
+        View3DAtts.perspective = 1
+        View3DAtts.eyeAngle = 2
+        View3DAtts.centerOfRotationSet = 0
+        View3DAtts.centerOfRotation = (546981, 4.8567e+06, -135.085)
+        View3DAtts.axis3DScaleFlag = 0
+        View3DAtts.axis3DScales = (1, 1, 1)
+        View3DAtts.shear = (0, 0, 1)
+        View3DAtts.windowValid = 1
+        SetView3D(View3DAtts)
+        # End spontaneous state
 
 
         #AddImage
