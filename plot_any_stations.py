@@ -124,7 +124,7 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
         PseudocolorAtts.max = MAX
-        PseudocolorAtts.colorTableName = "difference"
+        PseudocolorAtts.colorTableName = "caleblack"
     SetPlotOptions(PseudocolorAtts)
     #Comment out since showing triangles overwhelms the plot
     # if(add_mesh):
@@ -200,16 +200,16 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
     ScatterAtts.var4 = "TP"
     ScatterAtts.var4MinFlag = 1
     ScatterAtts.var4MaxFlag = 1
-    ScatterAtts.var4Min = 1 
-    ScatterAtts.var4Max = 3 
+    ScatterAtts.var4Min = 0.002 
+    ScatterAtts.var4Max = 0.035 
     ScatterAtts.var4Scaling = ScatterAtts.Linear  # Linear, Log, Skew
     ScatterAtts.var4SkewFactor = 0.1
-    ScatterAtts.pointSize = 500
+    ScatterAtts.pointSize = 800
     ScatterAtts.pointSizePixels = 1
     ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
     ScatterAtts.scaleCube = 0
     ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-    ScatterAtts.colorTableName = "xray"
+    ScatterAtts.colorTableName = "turbo"
     ScatterAtts.invertColorTable = 0
     ScatterAtts.legendFlag = 0
     SetPlotOptions(ScatterAtts)
@@ -246,7 +246,12 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
 
     #Turn all the layers back on for next plots to work
     TurnMaterialsOn()
-    #End create_3D... 
+    #End create_3D...
+
+    #Close stations file
+    #SetActivePlots(1)
+    #DeleteActivePlots()
+    #CloseDatabase(CSMI_NAME) 
 
 
 def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,SKEW):
@@ -274,7 +279,7 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,SKEW):
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
         PseudocolorAtts.max = MAX
-        PseudocolorAtts.colorTableName = "difference"
+        PseudocolorAtts.colorTableName = "caleblack"
     SetPlotOptions(PseudocolorAtts)
     #Scale Z by 1000
     AddOperator("Transform",1)
@@ -364,7 +369,7 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
         PseudocolorAtts.max = MAX
-        PseudocolorAtts.colorTableName = "difference"
+        PseudocolorAtts.colorTableName = "caleblack"
     SetPlotOptions(PseudocolorAtts)
 
     #In order to see depth, Scale Z by 1000
@@ -490,7 +495,8 @@ SetPipelineCachingMode(0) # Disable caching
 #DO LOOP 
 #Python end range is not included:  this is loop from 1 to 13
 #TODO...set range...how to do this if outputs don't line up?
-for x in range(1,NUM_MI_FILES+1):
+for x in range(7,NUM_MI_FILES+1):
+#for x in range(1,NUM_MI_FILES+1):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"

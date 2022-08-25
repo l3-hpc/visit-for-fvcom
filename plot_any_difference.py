@@ -124,7 +124,7 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
         PseudocolorAtts.max = MAX
-        PseudocolorAtts.colorTableName = "difference"
+        PseudocolorAtts.colorTableName = "turbo"
     SetPlotOptions(PseudocolorAtts)
     #Comment out since showing triangles overwhelms the plot
     # if(add_mesh):
@@ -173,47 +173,6 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
     DrawPlots()
     #End layer choosing
 
-    ##Add measured data points
-    #set file open defaults
-    plainTextOpenOptions = GetDefaultFileOpenOptions("PlainText")
-    plainTextOpenOptions['First row has variable names'] = 1
-    plainTextOpenOptions['Lines to skip at beginning of file'] = 0
-    plainTextOpenOptions['Column for X coordinate (or -1 for none)'] = 0
-    plainTextOpenOptions['Column for Y coordinate (or -1 for none)'] = 1
-    plainTextOpenOptions['Column for Z coordinate (or -1 for none)'] = 2
-    SetDefaultFileOpenOptions("PlainText", plainTextOpenOptions)
-
-    #open file, add plot
-    #open file, add plot
-    OpenDatabase(CSMI_NAME, 0)
-    AddPlot("Scatter", "TP", 1, 1)
-    ScatterAtts = ScatterAttributes()
-    ScatterAtts.var1 = "X"
-    ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-    ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-    ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-    ScatterAtts.var2 = "Y"
-    ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-    ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-    ScatterAtts.var3 = "Z"
-    ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-    ScatterAtts.var4 = "TP"
-    ScatterAtts.var4MinFlag = 1
-    ScatterAtts.var4MaxFlag = 1
-    ScatterAtts.var4Min = 1 
-    ScatterAtts.var4Max = 3 
-    ScatterAtts.var4Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-    ScatterAtts.var4SkewFactor = 0.1
-    ScatterAtts.pointSize = 500
-    ScatterAtts.pointSizePixels = 1
-    ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-    ScatterAtts.scaleCube = 0
-    ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-    ScatterAtts.colorTableName = "xray"
-    ScatterAtts.invertColorTable = 0
-    ScatterAtts.legendFlag = 0
-    SetPlotOptions(ScatterAtts)
-    DrawPlots()
 
 #Zoom in to GR area
     # Begin spontaneous state
@@ -274,7 +233,7 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,SKEW):
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
         PseudocolorAtts.max = MAX
-        PseudocolorAtts.colorTableName = "difference"
+        PseudocolorAtts.colorTableName = "turbo"
     SetPlotOptions(PseudocolorAtts)
     #Scale Z by 1000
     AddOperator("Transform",1)
@@ -364,7 +323,7 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
         PseudocolorAtts.max = MAX
-        PseudocolorAtts.colorTableName = "difference"
+        PseudocolorAtts.colorTableName = "turbo"
     SetPlotOptions(PseudocolorAtts)
 
     #In order to see depth, Scale Z by 1000
