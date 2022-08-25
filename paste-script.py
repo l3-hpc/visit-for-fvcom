@@ -1,7 +1,6 @@
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
 ##macOS paths on local machine
-
 import os
 import sys
 import re
@@ -10,39 +9,38 @@ import datetime
 import calendar
 
 
-#sys.path.append("/Users/lisalowe/visit-for-fvcom")
-
-#This defines the plot parameters
-
 #Which layers
 which_layers = [1]
 
 # Set the run name to label the images
-mifiles = ["date_0718201520.nc"] 
-sfiles  = ["date_07182015.txt"] 
+mifiles = ["date_0717201512.nc"] 
+sfiles  = ["date_07172015.txt"] 
 
-#The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
-#EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
-#EPA_directory = "/Users/lllowe/Images/new_plots/"
-EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2015/dates_output/"
-Station_directory = "/Users/lllowe/r-for-fvcom/stations/2015/"
+#The directory where the nc and txt files are located.  The slash at the end of the directory name is required.
+EPA_directory = "/Users/lllowe/visit-for-fvcom/"
+Station_directory = "/Users/lllowe/visit-for-fvcom/"
+Shapefile_directory = "Users/lllowe/visit-for-fvcom/"
 
+#This is cut/paste from the original loop using 'i'
 i = 0
 EPA_database = EPA_directory + mifiles[i] 
 #IMGS_NAME = file_prefix_epa + "_Layer=" + str(LAYER)
+STATIONS_NAME = Station_directory + sfiles[i] 
 CSMI_NAME = Station_directory + "csmi_" + sfiles[i]
 
 
 LAYER = 1
 url = mifiles[i]
+#string reformatting thing
 url = re.sub('\.nc','',url) 
 IMGS_NAME = url + "_Layer=" + str(LAYER)
 #print(LAYER)
 print(IMGS_NAME) 
-#sys.exit()
+
 #Open file
 OpenDatabase(EPA_database,0)
 
+#Creates date/time stamp based on .nc file metadata
 t_start = calendar.timegm(datetime.datetime(1858, 11, 17, 0, 0, 0).timetuple())
 text2D_timestamp = CreateAnnotationObject("Text2D")
 text2D_timestamp.position = (0.78,0.9)
@@ -62,17 +60,13 @@ AnnotationAtts = AnnotationAttributes()
 AnnotationAtts.userInfoFlag = 0
 AnnotationAtts.databaseInfoFlag = 0
 AnnotationAtts.axes3D.triadFlag = 0
-AnnotationAtts.legendInfoFlag = 0
-AnnotationAtts.axes2D.visible = 0
-AnnotationAtts.axes2D.xAxis.title.visible = 0
-AnnotationAtts.axes2D.yAxis.title.visible = 0
-AnnotationAtts.axes2D.xAxis.label.visible = 0
-AnnotationAtts.axes2D.yAxis.label.visible = 0
+AnnotationAtts.legendInfoFlag = 1
+AnnotationAtts.axes3D.visible = 0
+#Black background
 AnnotationAtts.backgroundColor = (0, 0, 0, 255)
+#White foreground
 AnnotationAtts.foregroundColor = (255, 255, 255, 255)
 AnnotationAtts.backgroundMode = AnnotationAtts.Solid  # Solid, Gradient, Image, ImageSphere
-AnnotationAtts.axes2D.tickAxes = AnnotationAtts.axes2D.Off
-AnnotationAtts.axes2D.lineWidth = 100
 SetAnnotationAttributes(AnnotationAtts)
 #Finished setting annotation
 
@@ -85,15 +79,26 @@ SetActivePlots(0)
 PseudocolorAtts = PseudocolorAttributes()
 PseudocolorAtts.minFlag = 1
 PseudocolorAtts.maxFlag = 1
+#If you change the colormap, change it in Scatter to be the same
+PseudocolorAtts.skewFactor = 0.1
+PseudocolorAtts.min = 0.002
+PseudocolorAtts.max = 0.035
 PseudocolorAtts.colorTableName = "turbo"
 PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
-PseudocolorAtts.skewFactor = 1e-05
-PseudocolorAtts.min = 0.001
-PseudocolorAtts.max = 0.1
 PseudocolorAtts.legendFlag = 1
 SetPlotOptions(PseudocolorAtts)
 #SetAtts
 DrawPlots()
+
+#Format the legend
+plotName = GetPlotList().GetPlots(0).plotName
+legend = GetAnnotationObject(plotName)
+legend.managePosition = 0
+legend.position = (0.7,0.65)
+legend.drawTitle=0
+legend.drawMinMax = 0
+legend.numberFormat = "%1.3f"
+
 
 #Just one layer
 TurnMaterialsOff()
@@ -125,11 +130,7 @@ SetView3D(View3DAtts)
 # End spontaneous state
 
 
-
-
-
-
-#Add shoreline
+#Add 'shoreline', which is just model border
 AddPlot("Subset", "Bathymetry_Mesh", 1, 1)
 SetActivePlots(1)
 SubsetAtts = SubsetAttributes()
@@ -145,7 +146,7 @@ SubsetAtts.pointSizePixels = 2
 SetPlotOptions(SubsetAtts)
 DrawPlots()
 
-#Add bathymetry
+#Add 'bathymetry', which is model depth contours
 AddPlot("Contour", "h", 1, 1)
 SetActivePlots(2)
 ContourAtts = ContourAttributes()
@@ -170,37 +171,13 @@ plainTextOpenOptions['Column for Y coordinate (or -1 for none)'] = 1
 plainTextOpenOptions['Column for Z coordinate (or -1 for none)'] = 2
 SetDefaultFileOpenOptions("PlainText", plainTextOpenOptions)
 
-##Add river points
-#open file, add plot
-OpenDatabase("localhost:/Users/lllowe/ORD/MarkR/points.txt", 0)
-AddPlot("Scatter", "Point", 1, 1)
-ScatterAtts = ScatterAttributes()
-ScatterAtts.var1 = "x"
-ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var2 = "y"
-ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var3 = "z"
-ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-ScatterAtts.var4 = "Point"
-ScatterAtts.pointSize = 1000
-ScatterAtts.pointSizePixels = 1
-ScatterAtts.pointType = ScatterAtts.Axis  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-ScatterAtts.scaleCube = 0
-ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-ScatterAtts.singleColor = (0, 0, 0, 255)
-ScatterAtts.legendFlag = 0
-SetPlotOptions(ScatterAtts)
-DrawPlots() 
-
-OpenDatabase("localhost:/Users/lllowe/JamesPaper/Shapefiles/NHD_Sel_MI_Rivers_UTM16.shp", 0)
+#River shapefile from Tom H.
+OpenDatabase(Shapefile_directory + "Shapefiles/NHD_Sel_MI_Rivers_UTM16.shp", 0)
 AddPlot("Mesh", "polylineZ", 1, 1)
 DrawPlots()
-
+#Make the lines thicker (lineWidth=5) and blue mesh color
 MeshAtts = MeshAttributes()
-MeshAtts.legendFlag = 1
+MeshAtts.legendFlag = 0
 MeshAtts.lineWidth = 5
 MeshAtts.meshColor = (0, 0, 255, 255)
 MeshAtts.meshColorSource = MeshAtts.MeshCustom  # Foreground, MeshCustom, MeshRandom
@@ -217,6 +194,7 @@ MeshAtts.pointSizePixels = 2
 MeshAtts.opacity = 1
 SetPlotOptions(MeshAtts)
 
+#It resets the view after the shape file thing, so recenter
 # Begin spontaneous state
 View3DAtts = View3DAttributes()
 View3DAtts.viewNormal = (0, 0, 1)
@@ -239,6 +217,7 @@ View3DAtts.windowValid = 1
 SetView3D(View3DAtts)
 # End spontaneous state
 
+#open file, add plot
 OpenDatabase(CSMI_NAME, 0)
 AddPlot("Scatter", "TP", 1, 1)
 ScatterAtts = ScatterAttributes()
@@ -254,12 +233,15 @@ ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate
 ScatterAtts.var4 = "TP"
 ScatterAtts.var4MinFlag = 1
 ScatterAtts.var4MaxFlag = 1
-ScatterAtts.var4Min = 0.001
-ScatterAtts.var4Max = 0.1
+#If you change the colormap, change it in Pseudo to be the same
+ScatterAtts.var4Min = 0.002
+ScatterAtts.var4Max = 0.035
 ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
-ScatterAtts.var4SkewFactor = 1e-05
-ScatterAtts.pointSize = 800
+ScatterAtts.var4SkewFactor = 0.1
+#Change size of marker here
+ScatterAtts.pointSize = 600
 ScatterAtts.pointSizePixels = 1
+#Change type of marker here
 ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
 ScatterAtts.scaleCube = 0
 ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
@@ -268,13 +250,9 @@ ScatterAtts.invertColorTable = 0
 ScatterAtts.legendFlag = 0
 SetPlotOptions(ScatterAtts)
 DrawPlots()
-    
 
-#AddImage
-#image = CreateAnnotationObject("Image") 
-#image.image = "/Users/lllowe/ORD/MarkR/Legend.png"
-#image.position = (0.05, 0.5)
 
+#Save
 SaveWindowAtts = SaveWindowAttributes()
 SaveWindowAtts.outputToCurrentDirectory = 0
 SaveWindowAtts.outputDirectory = IMGS_DIR 
@@ -297,4 +275,3 @@ SaveWindowAtts.opts.types = ()
 SaveWindowAtts.opts.help = ""
 SetSaveWindowAttributes(SaveWindowAtts)
 SaveWindow()
-

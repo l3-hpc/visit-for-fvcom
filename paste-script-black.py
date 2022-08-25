@@ -103,25 +103,7 @@ legend.managePosition = 0
 legend.position = (0.7,0.65)
 legend.drawTitle=0
 legend.drawMinMax = 0
-legend.numberFormat = "%1.2e"
-
-#Add pseudocolor plot and set attributes
-PLOT_VAR = "TP"
-AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
-SetActivePlots(2)
-#Atts
-PseudocolorAtts = PseudocolorAttributes()
-PseudocolorAtts.minFlag = 1
-PseudocolorAtts.maxFlag = 1
-PseudocolorAtts.colorTableName = "turbo"
-PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
-PseudocolorAtts.skewFactor = 1e-05
-PseudocolorAtts.min = 0.001
-PseudocolorAtts.max = 0.1
-PseudocolorAtts.legendFlag = 0
-SetPlotOptions(PseudocolorAtts)
-#SetAtts
-DrawPlots()
+legend.numberFormat = "%1.3f"
 
 
 #Just one layer
@@ -229,7 +211,7 @@ AddPlot("Mesh", "polylineZ", 1, 1)
 DrawPlots()
 
 MeshAtts = MeshAttributes()
-MeshAtts.legendFlag = 1
+MeshAtts.legendFlag = 0
 MeshAtts.lineWidth = 5
 MeshAtts.meshColor = (0, 0, 255, 255)
 MeshAtts.meshColorSource = MeshAtts.MeshCustom  # Foreground, MeshCustom, MeshRandom
