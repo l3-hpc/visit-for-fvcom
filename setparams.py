@@ -6,15 +6,18 @@
 import sys
 
 #-------- User Modified Section ------
+#which variable to plot
+#which_vars = ["DOC","DIA","GRE","ZOO","LOC","ROC","SRP","DOP","LOP","ROP","NH4","NO3","DON","LON","RON","SA","SU","DO2","TR"]
+
 # Name of run
 # Choose a string - no spaces! - to identify the run.  
 # It will be added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
-RUN_NAME = "TPSOvsNPZM2005GrandTransect"
+RUN_NAME = "GRnode"
 
 # How many mi files are available?
 #TODO: Change this to look at the path and calculate
-NUM_MI_FILES = 13
+NUM_MI_FILES = 13 
 
 # For setting up an interactive session, which MI file to look at.
 # This will be ignored in a regular batch run
@@ -23,7 +26,7 @@ MI_ID_INIT = 11
 ##These are all 'True or False'
 # Just plot the first timestep of every mi file? 
 # If not, it will do every single timestep of every file
-do_first_in_file = False 
+do_first_in_file = True 
 
 ##Do you want to *not* print every timestep?
 # If skip=4, then you will print every 4th timestep
@@ -35,22 +38,22 @@ do_compare =  True
 
 # Is the comparison dataset from Mark
 # If so, TP will be defined in terms of NDZP
-do_MDR = True 
+do_MDR = False 
 
 #--- Which plot(s)?
 ## 3D pseudocolor plot
 do_3Dplot = True  
 ## 2D pseudocolor slice
-do_2Dslice = False 
+do_2Dslice = True 
 ## 2D transect
-do_2Dtransect = True
+do_2Dtransect = True 
 
 # Remove annotation?
 remove_annotation = False 
 
 ## Which Layers: Goes from 1 to 19
 #TODO: put in error checking
-which_layers = [1,19]
+which_layers = [1,4]
 
 ## --- End True/False statements
 
@@ -66,18 +69,18 @@ TO_Y = 4765827.50
 ##---  If only doing 1 plot:
 # Set min/max for colormap
 # This will be used in comparison plots as well
-MIN_TP = 0.002
-MAX_TP = 0.01
+#MIN_TP = 0.00007
+#MAX_TP = 0.0001
 #For skew
-#MIN_TP = 0.001
-#MAX_TP = 0.1
+MIN_TP = 0.002
+MAX_TP = 0.035
 
 #Use skew colormap for regular (non 'diff') plots?
 skew = True
 
 ##--  Titles
-TITLE_TP_EPA = "TP_EPA"
-UNITS_TP_EPA = "(mg/L)"
+TITLE_TP_EPA = "TP_BadNode" 
+UNITS_TP_EPA = "(mg/L)" 
 ##--- If doing comparison plots 
 ## If you won't do a comparison, just ignore - it won't try to use the values
 ##-- Set min/max for colormaps
@@ -85,10 +88,10 @@ UNITS_TP_EPA = "(mg/L)"
 MIN_TP_DIFF = -0.002
 MAX_TP_DIFF = 0.002
 ## Percent change colormap
-MIN_TP_PERCENT_CHANGE = -20
-MAX_TP_PERCENT_CHANGE = 20
+MIN_TP_PERCENT_CHANGE = -15
+MAX_TP_PERCENT_CHANGE = 15
 ##-- Titles
-TITLE_TP_COMPARE = "TP_MARK"
+TITLE_TP_COMPARE = "TP_GoodNode"
 TITLE_TP_DIFF = "TP_diff"
 TITLE_TP_PERCENT_CHANGE = "TP_Change"
 ##-- UNITS
@@ -203,6 +206,10 @@ def set_UNITS_TP_DIFF():
     return UNITS_TP_DIFF
 def set_UNITS_TP_PERCENT_CHANGE():
     return UNITS_TP_PERCENT_CHANGE
+
+## set var
+#def set_which_vars():
+#    return which_vars 
 
 ## set layers
 def set_which_layers():

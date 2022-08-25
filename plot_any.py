@@ -110,12 +110,12 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
     PseudocolorAtts = PseudocolorAttributes()
     PseudocolorAtts.minFlag = 1
     PseudocolorAtts.maxFlag = 1
-    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.colorTableName = "turbo"
     if(SKEW):
         PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
-        PseudocolorAtts.skewFactor = 1e-05
-        PseudocolorAtts.min = 0.001      
-        PseudocolorAtts.max = 0.1
+        PseudocolorAtts.skewFactor = 0.1 
+        PseudocolorAtts.min = 0.002      
+        PseudocolorAtts.max = 0.035
     else:
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
@@ -189,12 +189,12 @@ def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,SKEW):
     PseudocolorAtts = PseudocolorAttributes()
     PseudocolorAtts.minFlag = 1
     PseudocolorAtts.maxFlag = 1
-    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.colorTableName = "turbo"
     if(SKEW):
         PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
-        PseudocolorAtts.skewFactor = 1e-05
-        PseudocolorAtts.min = 0.001
-        PseudocolorAtts.max = 0.1
+        PseudocolorAtts.skewFactor = 0.1 
+        PseudocolorAtts.min = 0.002
+        PseudocolorAtts.max = 0.035
     else:
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN
@@ -276,14 +276,14 @@ def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,
     PseudocolorAtts = PseudocolorAttributes()
     PseudocolorAtts.minFlag = 1
     PseudocolorAtts.maxFlag = 1
-    PseudocolorAtts.colorTableName = "caleblack"
+    PseudocolorAtts.colorTableName = "turbo"
     #SKEW colormap allows a wider range to be shown
     #TODO: set min/max/factor for skew in setparams 
     if(SKEW):
         PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
-        PseudocolorAtts.skewFactor = 1e-05
-        PseudocolorAtts.min = 0.001
-        PseudocolorAtts.max = 0.1
+        PseudocolorAtts.skewFactor = 0.1 
+        PseudocolorAtts.min = 0.002
+        PseudocolorAtts.max = 0.035
     else:
         PseudocolorAtts.scaling = PseudocolorAtts.Linear
         PseudocolorAtts.min = MIN

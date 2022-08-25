@@ -15,7 +15,7 @@ import calendar
 import getfilenames
 
 #Which layers
-which_layers = [4]
+which_layers = [1]
 
 # Set the run name to label the images
 mifiles = getfilenames.set_which_mifiles()
@@ -42,7 +42,7 @@ EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2015/dates_output/"
 Station_directory = "/Users/lllowe/r-for-fvcom/stations/2015/"
 
 #The directory to write images to.  The slash at the end of the directory name is required.
-IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2015/Layer=4/"
+IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2015/Layer=1/"
 
 #Check that all the directories exist
 if not os.path.exists(EPA_directory):
@@ -99,20 +99,21 @@ for i in range(istart,iend):
         AnnotationAtts.userInfoFlag = 0
         AnnotationAtts.databaseInfoFlag = 0
         AnnotationAtts.axes3D.triadFlag = 0
-        AnnotationAtts.legendInfoFlag = 0
+        AnnotationAtts.legendInfoFlag = 1
         AnnotationAtts.axes2D.visible = 0
         AnnotationAtts.axes2D.xAxis.title.visible = 0
         AnnotationAtts.axes2D.yAxis.title.visible = 0
         AnnotationAtts.axes2D.xAxis.label.visible = 0
         AnnotationAtts.axes2D.yAxis.label.visible = 0
-        AnnotationAtts.backgroundColor = (153, 153, 153, 255)
-        AnnotationAtts.foregroundColor = (0, 0, 0, 255)
+        AnnotationAtts.backgroundColor = (0, 0, 0, 255)
+        AnnotationAtts.foregroundColor = (255, 255, 255, 255)
         AnnotationAtts.backgroundMode = AnnotationAtts.Solid  # Solid, Gradient, Image, ImageSphere
         AnnotationAtts.axes2D.tickAxes = AnnotationAtts.axes2D.Off
         SetAnnotationAttributes(AnnotationAtts)
         #Finished setting annotation
  
-        
+#Legend     0.73 0.63   
+
         #Add pseudocolor plot and set attributes
         PLOT_VAR = "TP"
         AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
@@ -123,13 +124,21 @@ for i in range(istart,iend):
         PseudocolorAtts.maxFlag = 1
         PseudocolorAtts.colorTableName = "turbo"
         PseudocolorAtts.scaling = PseudocolorAtts.Skew  # Linear, Log, Skew
-        PseudocolorAtts.skewFactor = 1e-05
-        PseudocolorAtts.min = 0.001
-        PseudocolorAtts.max = 0.1
-        PseudocolorAtts.legendFlag = 0
+        PseudocolorAtts.skewFactor = 0.1 
+        PseudocolorAtts.min = 0.002
+        PseudocolorAtts.max = 0.035
+        PseudocolorAtts.legendFlag = 1
         SetPlotOptions(PseudocolorAtts)
         #SetAtts
         DrawPlots()
+
+        plotName = GetPlotList().GetPlots(0).plotName
+        legend = GetAnnotationObject(plotName)
+        legend.managePosition = 0
+        legend.position = (0.7,0.65)
+        legend.drawTitle=0
+        legend.drawMinMax = 0
+
         
         #Just one layer
         TurnMaterialsOff()
@@ -192,29 +201,29 @@ for i in range(istart,iend):
         
         ##Add river points
         #open file, add plot
-        OpenDatabase("localhost:/Users/lllowe/ORD/MarkR/points.txt", 0)
-        AddPlot("Scatter", "Point", 1, 1)
-        ScatterAtts = ScatterAttributes()
-        ScatterAtts.var1 = "x"
-        ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var2 = "y"
-        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var3 = "z"
-        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-        ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-        ScatterAtts.var4 = "Point"
-        ScatterAtts.pointSize = 1000
-        ScatterAtts.pointSizePixels = 1
-        ScatterAtts.pointType = ScatterAtts.Octahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-        ScatterAtts.scaleCube = 0
-        ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-        ScatterAtts.singleColor = (0, 0, 255, 255)
-        ScatterAtts.legendFlag = 0
-        SetPlotOptions(ScatterAtts)
-        DrawPlots() 
+#        OpenDatabase("localhost:/Users/lllowe/ORD/MarkR/points.txt", 0)
+#        AddPlot("Scatter", "Point", 1, 1)
+#        ScatterAtts = ScatterAttributes()
+#        ScatterAtts.var1 = "x"
+#        ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+#        ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+#        ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+#        ScatterAtts.var2 = "y"
+#        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+#        ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+##        ScatterAtts.var3 = "z"
+#        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
+#        ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
+#        ScatterAtts.var4 = "Point"
+#        ScatterAtts.pointSize = 1000
+#        ScatterAtts.pointSizePixels = 1
+#        ScatterAtts.pointType = ScatterAtts.Octahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
+#        ScatterAtts.scaleCube = 0
+#        ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
+#        ScatterAtts.singleColor = (0, 0, 255, 255)
+#        ScatterAtts.legendFlag = 0
+#        SetPlotOptions(ScatterAtts)
+#        DrawPlots() 
 
         #River shapefile
         OpenDatabase("localhost:/Users/lllowe/JamesPaper/Shapefiles/NHD_Sel_MI_Rivers_UTM16.shp", 0)
@@ -222,7 +231,7 @@ for i in range(istart,iend):
         AddPlot("Mesh", "polylineZ", 1, 1)
         DrawPlots()
         MeshAtts = MeshAttributes()
-        MeshAtts.legendFlag = 1
+        MeshAtts.legendFlag = 0
         MeshAtts.lineWidth = 5
         MeshAtts.meshColor = (0, 0, 255, 255)
         MeshAtts.meshColorSource = MeshAtts.MeshCustom  # Foreground, MeshCustom, MeshRandom
@@ -259,10 +268,10 @@ for i in range(istart,iend):
             ScatterAtts.var4 = "TP"
             ScatterAtts.var4MinFlag = 1
             ScatterAtts.var4MaxFlag = 1
-            ScatterAtts.var4Min = 0.001
-            ScatterAtts.var4Max = 0.1
+            ScatterAtts.var4Min = 0.002
+            ScatterAtts.var4Max = 0.035
             ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
-            ScatterAtts.var4SkewFactor = 1e-05
+            ScatterAtts.var4SkewFactor = 0.1 
             ScatterAtts.pointSize = 900
             ScatterAtts.pointSizePixels = 1
             ScatterAtts.pointType = ScatterAtts.Icosahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
@@ -295,10 +304,10 @@ for i in range(istart,iend):
             ScatterAtts.var4 = "TP"
             ScatterAtts.var4MinFlag = 1 
             ScatterAtts.var4MaxFlag = 1 
-            ScatterAtts.var4Min = 0.001
-            ScatterAtts.var4Max = 0.1 
+            ScatterAtts.var4Min = 0.002
+            ScatterAtts.var4Max = 0.035 
             ScatterAtts.var4Scaling = ScatterAtts.Skew  # Linear, Log, Skew
-            ScatterAtts.var4SkewFactor = 1e-05
+            ScatterAtts.var4SkewFactor = 0.1
             ScatterAtts.pointSize = 900 
             ScatterAtts.pointSizePixels = 1 
             ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
