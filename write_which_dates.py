@@ -501,54 +501,9 @@ for x in range(7,NUM_MI_FILES+1):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"
-    if(do_compare):
-        COMPARE_database = base_COMPARE_database + str(mi_ID).zfill(4) + ".nc"
-#TODO check if it works on Windows
-        conn_string = (base_conn_string  + str(mi_ID).zfill(4) 
-                   + ".nc[0]id:TP>, <SigmaLayer_Mesh>)")
-    #The IMGS_NAME is set below
-    #Now it is set to overwrite existing files
 
-    #Open Databases - the second argument is optional with a default of zero 
     #Where zero = initial time
     OpenDatabase(EPA_database,0)
-    if(do_compare):
-        OpenDatabase(COMPARE_database,0)
-        #CreateDatabaseCorrelation("name",(db1,db2),X) 
-        # Here, X=2 is a time correlation
-        CreateDatabaseCorrelation("Correlation01",(EPA_database,COMPARE_database),2)
-
-        #Use conn_cmfe function to put EPA's TP variable onto Mark's grid 
-        # and call it "TP_EPA"
-        DefineScalarExpression("TP_EPA",conn_string)
-
-        #Define the variables for comparing.  For Mark's model, TP consists of NDPZ.
-        if (do_MDR):
-           DefineScalarExpression("TP_COMPARE", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
-        else:
-           DefineScalarExpression("TP_COMPARE", "TP")
-        #Define difference and percent change
-        DefineScalarExpression("TP_DIFF", "TP_COMPARE - TP_EPA")
-        DefineScalarExpression("TP_PERCENT_CHANGE", "(TP_EPA - TP_COMPARE)/abs(TP_COMPARE)*100")
-    else:
-        #Script expects 'TP_EPA', even when not comparing it still needs to be defined
-        DefineScalarExpression("TP_EPA", "TP")
-
-    SaveWindowAtts = SaveWindowAttributes()
-    SaveWindowAtts.outputToCurrentDirectory = 0
-    SaveWindowAtts.outputDirectory = IMGS_DIR 
-    #Sets the name below
-    ###SaveWindowAtts.fileName = IMGS_NAME
-    #Setting family to zero means it will overwrite existing files 
-    SaveWindowAtts.family = 0
-    #Set aspect ratio
-    #SaveWindowAtts.resConstraint = 1 #NoConstraint
-    #SaveWindowAtts.width = 700
-    #SaveWindowAtts.height = 600
-    ##Options are: BMP, CURVE, JPEG, OBJ, PNG, POSTSCRIPT, 
-    ##  POVRAY, PPM, RGB, STL, TIFF, ULTRA, VTK, PLY, EXR
-    SaveWindowAtts.format = SaveWindowAtts.PNG
-    SetSaveWindowAttributes(SaveWindowAtts)
     
     m = GetMetaData(EPA_database)
     totalstates = TimeSliderGetNStates()
@@ -558,62 +513,22 @@ for x in range(7,NUM_MI_FILES+1):
         SetTimeSliderState(istate)
         tcur = m.times[istate]*86400.  + t_start
         ts = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y %H:%M:%S')
+        ts_day = datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y')
         FILE_TS = "_" + RUN_NAME + "." + datetime.datetime.utcfromtimestamp(tcur).strftime('%m-%d-%Y_%H-%M-%S')
-#      timestamp = "Time: " + ts + " GMT"
+#        timestamp = "Time: " + ts + " GMT"
         timestamp = ts + " "
         slider.text =  timestamp
         slider.visible=0
-
-
-        if(do_3Dplot): 
-            #def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-            for LAYER in layers:
-                create_pseudocolor_3Dplot(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", 
-                    MIN_TP,MAX_TP,FILE_TS,LAYER,SKEW)
-                DeleteAllPlots()
-                if(do_compare):
-                    create_pseudocolor_3Dplot(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,LAYER,SKEW)
-                    DeleteAllPlots() 
-                    create_pseudocolor_3Dplot(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,LAYER,False)
-                    DeleteAllPlots()
-                    create_pseudocolor_3Dplot(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS,LAYER,False)
-                    DeleteAllPlots()
-
-        if(do_2Dslice):
-            #def create_pseudocolor_2Dslice(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-            create_pseudocolor_2Dslice(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA",MIN_TP,MAX_TP,FILE_TS,SKEW)
-            DeleteAllPlots()
-            if(do_compare):
-                create_pseudocolor_2Dslice(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,SKEW)
-                DeleteAllPlots()
-                create_pseudocolor_2Dslice(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,False)
-                DeleteAllPlots()
-                create_pseudocolor_2Dslice(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF,FILE_TS,False)
-                DeleteAllPlots()
-
-        if(do_2Dtransect):
-            #def create_pseudocolor_2Dtransect(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS):
-            create_pseudocolor_2Dtransect(TITLE_TP_EPA,UNITS_TP_EPA,"TP_EPA", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,SKEW)
-            DeleteAllPlots()
-            if(do_compare):
-                create_pseudocolor_2Dtransect(TITLE_TP_COMPARE,UNITS_TP_COMPARE,"TP_COMPARE", MIN_TP,MAX_TP,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,SKEW)
-                DeleteAllPlots()
-                create_pseudocolor_2Dtransect(TITLE_TP_PERCENT_CHANGE,UNITS_TP_PERCENT_CHANGE,"TP_PERCENT_CHANGE", MIN_TP_PERCENT_CHANGE,MAX_TP_PERCENT_CHANGE,FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,False)
-                DeleteAllPlots()
-                create_pseudocolor_2Dtransect(TITLE_TP_DIFF,UNITS_TP_DIFF,"TP_DIFF",MIN_TP_DIFF,MAX_TP_DIFF, FILE_TS,FROM_X,FROM_Y,TO_X,TO_Y,False)
-                DeleteAllPlots()
-
-
-#Comment this out when debugging if you want VisIt to leave the Window open
-#      DeleteAllPlots()
-
-#     Using this break command results in only creating a plot
-#      with the first timestep of each mi_000X file
-        if(do_first_in_file):
-            break
+        #print(timestamp)
+        #print(ts_day)
+        if(ts_day == '07-17-2015'):
+            print(ts)
+            print(timestamp)
+            print(FILE_TS)
         else:
-            istate += skip_states    
-    
+            istate += skip_states
+
+
     DeleteAllPlots()
     #If debugging, uncomment break
     #break

@@ -31,7 +31,7 @@ do_first_in_file = False
 ##Do you want to *not* print every timestep?
 # If skip=4, then you will print every 4th timestep
 # Choose '1' to print every timestep
-skip = 12
+skip = 1
 
 # Are you comparing two runs? 
 do_compare = True 
