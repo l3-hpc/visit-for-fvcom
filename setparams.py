@@ -17,7 +17,7 @@ RUN_NAME = "Run12"
 
 # How many mi files are available?
 #TODO: Change this to look at the path and calculate
-NUM_MI_FILES = 1 
+NUM_MI_FILES = 13 
 
 # For setting up an interactive session, which MI file to look at.
 # This will be ignored in a regular batch run

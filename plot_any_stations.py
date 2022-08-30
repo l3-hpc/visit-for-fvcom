@@ -39,8 +39,8 @@ IMGS_DIR = setpaths.set_image_path()
 NUM_MI_FILES = setparams.set_NUM_MI_FILES()
 
 ##Stations file
-CSMI_NAME = "/Users/lllowe/visit-for-fvcom/csmi_date_07172015.txt" 
-
+#CSMI_NAME = "/Users/lllowe/visit-for-fvcom/csmi_date_07172015.txt" 
+CSMI_NAME = "/rsstu/users/l/lllowe/ord/JamesPaper07-2022/visit-for-fvcom/csmi_date_07172015.txt"
 
 # Just plot the first timestep of every mi file?
 # If not, it will do every single timestep of every file
@@ -153,7 +153,7 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
        AnnotationAtts.axes3D.visible = 0
     #Black background
     AnnotationAtts.backgroundColor = (0, 0, 0, 255)
-    AnnotationAtts.foregroundColor = (255, 255, 255, 255)
+    AnnotationAtts.foregroundColor = (0, 0, 0, 255)
     AnnotationAtts.backgroundMode = AnnotationAtts.Solid  # Solid, Gradient, Image, ImageSphere
     #Officially set attributes
     SetAnnotationAttributes(AnnotationAtts)
@@ -200,16 +200,16 @@ def create_pseudocolor_3Dplot(TITLE,UNITS,PLOT_VAR,MIN,MAX,FILE_TS,LAYER,SKEW):
     ScatterAtts.var4 = "TP"
     ScatterAtts.var4MinFlag = 1
     ScatterAtts.var4MaxFlag = 1
-    ScatterAtts.var4Min = 0.002 
-    ScatterAtts.var4Max = 0.035 
+    ScatterAtts.var4Min = 0.0001 
+    ScatterAtts.var4Max = 3 
     ScatterAtts.var4Scaling = ScatterAtts.Linear  # Linear, Log, Skew
     ScatterAtts.var4SkewFactor = 0.1
-    ScatterAtts.pointSize = 800
+    ScatterAtts.pointSize = 500
     ScatterAtts.pointSizePixels = 1
     ScatterAtts.pointType = ScatterAtts.Sphere  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
     ScatterAtts.scaleCube = 0
     ScatterAtts.colorType = ScatterAtts.ColorByColorTable  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-    ScatterAtts.colorTableName = "turbo"
+    ScatterAtts.colorTableName = "xray"
     ScatterAtts.invertColorTable = 0
     ScatterAtts.legendFlag = 0
     SetPlotOptions(ScatterAtts)
@@ -488,6 +488,8 @@ text2D_timestamp = CreateAnnotationObject("Text2D")
 text2D_timestamp.position = (0.45, 0.95)
 text2D_timestamp.height = 0.015
 text2D_timestamp.text = "UNDEFINED"
+text2D_timestamp.useForegroundForTextColor = 0
+text2D_timestamp.textColor = (255, 255, 255, 255)
 
 ##Disable Pipeline Caching to decrease memory consumption
 SetPipelineCachingMode(0) # Disable caching
@@ -495,9 +497,9 @@ SetPipelineCachingMode(0) # Disable caching
 #DO LOOP 
 #Python end range is not included:  this is loop from 1 to 13
 #TODO...set range...how to do this if outputs don't line up?
-NUM_MI_FILES = 7
-for x in range(7,NUM_MI_FILES+1):
-#for x in range(1,NUM_MI_FILES+1):
+#NUM_MI_FILES = 7
+#for x in range(7,NUM_MI_FILES+1):
+for x in range(1,NUM_MI_FILES+1):
     mi_ID = x
     ##Lisa macOS paths, works to save 4 png files
     EPA_database = base_EPA_database + str(mi_ID).zfill(4) + ".nc"

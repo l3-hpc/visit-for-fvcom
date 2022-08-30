@@ -333,8 +333,6 @@ for i in range(istart,iend):
         # End spontaneous state
 
 
-        #AddImage
-        #image = CreateAnnotationObject("Image") 
         #image.image = "/Users/lllowe/ORD/MarkR/Legend.png"
         #image.position = (0.05, 0.5)
         

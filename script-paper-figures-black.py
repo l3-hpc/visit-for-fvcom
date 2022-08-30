@@ -8,11 +8,24 @@ import re
 import numpy as np
 import datetime
 import calendar
-
-#sys.path.append("/Users/lisalowe/visit-for-fvcom")
-
 #This defines the plot parameters
 import getfilenames
+
+
+#sys.path.append("/Users/lisalowe/visit-for-fvcom")
+#The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
+#ASSUMES mi_XXXX.nc
+EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2015/dates_output/"
+Station_directory = "/Users/lllowe/r-for-fvcom/stations/2015/"
+#The directory to write images to.  The slash at the end of the directory name is required.
+IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2015/Layer=1/"
+
+#Prevent multiple timestamps
+#notime = 0
+#NO TIMESTAMP TEXT
+notime = 1
+#NO COLORMAP LEGEND
+cmap_legend = 0
 
 #Which layers
 which_layers = [1]
@@ -25,7 +38,7 @@ numfiles = len(sfiles)
 numfiles = numfiles
 print("Processing",numfiles,"files")
 
-#istart and end, you can change it
+#istart and end, you can change it for testing
 istart = 0
 iend = numfiles 
 #iend = 667 
@@ -35,14 +48,6 @@ iend = numfiles
 #istart = 50
 #iend = 60
 
-#The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
-#EPA_directory = "/Users/lllowe/MacbookProArchiveMay2022/ORD/CURRENT_TEST/output.0/"
-#EPA_directory = "/Users/lllowe/Images/new_plots/"
-EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2015/dates_output/"
-Station_directory = "/Users/lllowe/r-for-fvcom/stations/2015/"
-
-#The directory to write images to.  The slash at the end of the directory name is required.
-IMGS_DIR = "/Users/lllowe/JamesPaper/Images-2015/Layer=1/"
 
 #Check that all the directories exist
 if not os.path.exists(EPA_directory):
@@ -53,9 +58,7 @@ if not os.path.exists(EPA_directory):
 if not os.path.exists(IMGS_DIR):
     os.makedirs(IMGS_DIR)
 
-#don't make another annotation
-notime = 0
-#for file_prefix_epa in sfiles:
+#for file_prefix_epa in mfiles:
 for i in range(istart,iend):
     EPA_database = EPA_directory + mifiles[i]
     print("Model file:",mifiles[i])
@@ -100,6 +103,8 @@ for i in range(istart,iend):
         AnnotationAtts.databaseInfoFlag = 0
         AnnotationAtts.axes3D.triadFlag = 0
         AnnotationAtts.legendInfoFlag = 1
+        if(cmap_legend != 0):
+            AnnotationAtts.legendInfoFlag = 0
         AnnotationAtts.axes2D.visible = 0
         AnnotationAtts.axes2D.xAxis.title.visible = 0
         AnnotationAtts.axes2D.yAxis.title.visible = 0
@@ -112,8 +117,6 @@ for i in range(istart,iend):
         SetAnnotationAttributes(AnnotationAtts)
         #Finished setting annotation
  
-#Legend     0.73 0.63   
-
         #Add pseudocolor plot and set attributes
         PLOT_VAR = "TP"
         AddPlot("Pseudocolor", PLOT_VAR, 1, 1)
@@ -127,36 +130,28 @@ for i in range(istart,iend):
         PseudocolorAtts.skewFactor = 0.1 
         PseudocolorAtts.min = 0.002
         PseudocolorAtts.max = 0.035
+        AnnotationAtts.legendInfoFlag = 1
+        if(cmap_legend != 0):
+            AnnotationAtts.legendInfoFlag = 0
         PseudocolorAtts.legendFlag = 1
+        if(cmap_legend != 0):
+            AnnotationAtts.legendFlag = 0
         SetPlotOptions(PseudocolorAtts)
         #SetAtts
         DrawPlots()
 
-        plotName = GetPlotList().GetPlots(0).plotName
-        legend = GetAnnotationObject(plotName)
-        legend.managePosition = 0
-        legend.position = (0.7,0.65)
-        legend.drawTitle=0
-        legend.drawMinMax = 0
+#        plotName = GetPlotList().GetPlots(0).plotName
+#        legend = GetAnnotationObject(plotName)
+#        legend.managePosition = 0
+#        legend.position = (0.7,0.65)
+#        legend.drawTitle=0
+#        legend.drawMinMax = 0
 
-        
         #Just one layer
         TurnMaterialsOff()
         layer_string = "Layer " + str(LAYER)
         TurnMaterialsOn(layer_string)
         DrawPlots() 
-        
-#        #Resize plot and window
-#        View2DAtts = View2DAttributes()
-#        View2DAtts.windowCoords = (521942, 566839, 4.75634e+06, 4.79812e+06)
-#        View2DAtts.viewportCoords = (0, 1, 0, 1) 
-#        View2DAtts.fullFrameActivationMode = View2DAtts.On  # On, Off, Auto
-#        View2DAtts.fullFrameAutoThreshold = 100
-#        View2DAtts.xScale = View2DAtts.LINEAR  # LINEAR, LOG
-#        View2DAtts.yScale = View2DAtts.LINEAR  # LINEAR, LOG
-#        View2DAtts.windowValid = 1
-#        SetView2D(View2DAtts)
-#        # End spontaneous state
         
         #Add shoreline
         AddPlot("Subset", "Bathymetry_Mesh", 1, 1)
@@ -198,32 +193,6 @@ for i in range(istart,iend):
         plainTextOpenOptions['Column for Y coordinate (or -1 for none)'] = 1
         plainTextOpenOptions['Column for Z coordinate (or -1 for none)'] = 2
         SetDefaultFileOpenOptions("PlainText", plainTextOpenOptions)
-        
-        ##Add river points
-        #open file, add plot
-#        OpenDatabase("localhost:/Users/lllowe/ORD/MarkR/points.txt", 0)
-#        AddPlot("Scatter", "Point", 1, 1)
-#        ScatterAtts = ScatterAttributes()
-#        ScatterAtts.var1 = "x"
-#        ScatterAtts.var1Role = ScatterAtts.Coordinate0  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-#        ScatterAtts.var1Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-#        ScatterAtts.var2Role = ScatterAtts.Coordinate1  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-#        ScatterAtts.var2 = "y"
-#        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-#        ScatterAtts.var3Role = ScatterAtts.Coordinate2  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-##        ScatterAtts.var3 = "z"
-#        ScatterAtts.var2Scaling = ScatterAtts.Linear  # Linear, Log, Skew
-#        ScatterAtts.var4Role = ScatterAtts.Color  # Coordinate0, Coordinate1, Coordinate2, Color, NONE
-#        ScatterAtts.var4 = "Point"
-#        ScatterAtts.pointSize = 1000
-#        ScatterAtts.pointSizePixels = 1
-#        ScatterAtts.pointType = ScatterAtts.Octahedron  # Box, Axis, Icosahedron, Octahedron, Tetrahedron, SphereGeometry, Point, Sphere
-#        ScatterAtts.scaleCube = 0
-#        ScatterAtts.colorType = ScatterAtts.ColorByForegroundColor  # ColorByForegroundColor, ColorBySingleColor, ColorByColorTable
-#        ScatterAtts.singleColor = (0, 0, 255, 255)
-#        ScatterAtts.legendFlag = 0
-#        SetPlotOptions(ScatterAtts)
-#        DrawPlots() 
 
         #River shapefile
         OpenDatabase("localhost:/Users/lllowe/JamesPaper/Shapefiles/NHD_Sel_MI_Rivers_UTM16.shp", 0)
@@ -341,11 +310,6 @@ for i in range(istart,iend):
         SetView3D(View3DAtts)
         # End spontaneous state
 
-
-        #AddImage
-        #image = CreateAnnotationObject("Image") 
-        #image.image = "/Users/lllowe/ORD/MarkR/Legend.png"
-        #image.position = (0.05, 0.5)
         
         SaveWindowAtts = SaveWindowAttributes()
         SaveWindowAtts.outputToCurrentDirectory = 0
