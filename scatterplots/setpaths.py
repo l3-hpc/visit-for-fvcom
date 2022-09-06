@@ -4,18 +4,20 @@ import os
 import sys
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
-EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2010/"
+data_directory = "/Users/lllowe/R_apps/LM_data/mark_2010/"
 #The directory to write images to.  The slash at the end of the directory name is required.
-IMGS_DIR = "/Users/lllowe/Transparent/Images-2010/Layer=1/"
-#Which year is this data from, 2010 or 2015?
+IMGS_DIR = "/Users/lllowe/Transparent/Mark/Images-2010/Layer=1/"
+#Which year is this data from, 2010 or 2015? Other years should return an error
 WHICH_YEAR = "2010"
+
 # Choose a string -no spaces!- to identify the run, added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
 RUN_NAME = "Run12"
+#Is the dataset from Mark? If so, TP will be defined in terms of NDZP
+do_MDR = True
+
 ## Which Layers: Goes from 1 to 19
 which_layers = [1]
-#Is this an EPA run or a NOAA (Mark's) run
-WHICH_DATA = "EPA"
 
 #Which mi file to start 
 MI_START = 4
@@ -27,7 +29,7 @@ NUM_MI_FILES = 13
 # If not, it will do every single timestep of every file
 do_first_in_file = False
 ##Do you want to *not* print every timestep?
-# If skip=4, then you will print every 4th timestep
+# If skip=24, then you will print every 24th timestep
 # Choose '1' to print every timestep
 skip = 24
 
@@ -98,16 +100,15 @@ else:
 
 #This is probably 'mi_', but can be anything where the FVCOM output is for example
 ## [file_prefix_epa][4 integers padded by zeros].nc
-file_prefix_epa = "mi_"
-file_prefix_mark = "mi_"
+file_prefix = "mi_"
 
 #----- Do not modify unless developing code --------
 #These are based on previous definitions, do not modify
-base_EPA_database = EPA_directory + file_prefix_epa
+base_EPA_database = data_directory + file_prefix
 
 #Check that all the directories exist
-if not os.path.exists(EPA_directory):
-    sys.exit("The directory " + EPA_directory + " does not exist.  Check definition of EPA_directory in setpaths.py. Exiting.")
+if not os.path.exists(data_directory):
+    sys.exit("The directory " + data_directory + " does not exist.  Check definition of EPA_directory in setpaths.py. Exiting.")
 
 #Create a directory for images if one doesn't exist.
 #Note, existing files will be overwritten
@@ -161,6 +162,11 @@ def set_measured_dates():
 ## set layers
 def set_which_layers():
     return which_layers
+
+# Is the comparison dataset from Mark
+# If so, TP will be defined in terms of NDZP
+def set_do_MDR():
+    return do_MDR
 
 #To edit with Vim, use this
 #:set tabstop=8 expandtab shiftwidth=4 softtabstop=4
