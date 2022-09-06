@@ -4,23 +4,21 @@ import os
 import sys
 
 #The directory where the mi_XXXX.nc files are located.  The slash at the end of the directory name is required.
-EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2015/"
+EPA_directory = "/Users/lllowe/R_apps/LM_data/epa_2010/"
 #The directory to write images to.  The slash at the end of the directory name is required.
-IMGS_DIR = "/Users/lllowe/Transparent/Images-2015/Layer=1/"
-#Is this an EPA run or a NOAA (Mark's) run
-WHICH_DATA = "EPA"
+IMGS_DIR = "/Users/lllowe/Transparent/Images-2010/Layer=1/"
 #Which year is this data from, 2010 or 2015?
-WHICH_YEAR = "2015"
-# Name of run
-# Choose a string - no spaces! - to identify the run.  
-# It will be added to the name of the images.
+WHICH_YEAR = "2010"
+# Choose a string -no spaces!- to identify the run, added to the name of the images.
 # You can leave it empty by using two double quotes with no space.
 RUN_NAME = "Run12"
 ## Which Layers: Goes from 1 to 19
 which_layers = [1]
+#Is this an EPA run or a NOAA (Mark's) run
+WHICH_DATA = "EPA"
 
 #Which mi file to start 
-MI_START = 6
+MI_START = 4
 # How many mi files are available?
 #This is the end of the range, not mi files in loop
 #i.e. loop from MI_START to NUM_MI_FILES
