@@ -31,7 +31,7 @@ do_first_in_file = False
 ##Do you want to *not* print every timestep?
 # If skip=24, then you will print every 24th timestep
 # Choose '1' to print every timestep
-skip = 24
+skip = 1
 
 #--  Shouldn't need to modify past here ----------
 #Sets the stations according to year
