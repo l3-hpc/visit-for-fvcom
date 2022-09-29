@@ -10,6 +10,8 @@ setparams_james.py
 # LAYER files
 TP_EPA_LAYER=*
 TP_*
+#R data files
+*.Rdata
 
 #Any conda environments
 env_*

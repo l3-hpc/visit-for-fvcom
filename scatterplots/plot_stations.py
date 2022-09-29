@@ -8,8 +8,6 @@ import sys
 #To calculate normal vector for defining transect
 import numpy as np
 
-#sys.path.append("/Users/lisalowe/visit-for-fvcom/scatterplots")
-
 #This is user defined setpaths.py in the current working directory
 import setpaths
 
@@ -23,6 +21,9 @@ base_EPA_database = setpaths.set_EPA_path()
 IMGS_DIR = setpaths.set_image_path()
 #Directory with measured data
 STATIONS_DIR = setpaths.set_stations_path()
+
+#Will you compare against Mark's data, with NDZP?
+do_MDR = setpaths.set_do_MDR()
 
 #How many mi files are available?
 #TODO Change this to look at the path and calculate
@@ -383,7 +384,11 @@ for x in range(MI_START,NUM_MI_FILES+1):
     #Where zero = initial time
     OpenDatabase(EPA_database,0)
     #Script expects 'TP_EPA', even when not comparing it still needs to be defined
-    DefineScalarExpression("TP_EPA", "TP")
+    #Define TP_EPA.  For Mark's model, TP consists of NDPZ.
+    if (do_MDR):
+        DefineScalarExpression("TP_EPA", "PO4 + 0.016*(Detritus+Phytoplankton+Zooplankton)")
+    else:
+        DefineScalarExpression("TP_EPA", "TP")
 
     SaveWindowAtts = SaveWindowAttributes()
     SaveWindowAtts.width = 2048
