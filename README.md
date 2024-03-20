@@ -15,9 +15,6 @@ The paths to the input files and output directories are defined in the file **se
 
 The file **setpaths.py** will be different for each user, and for each user will be different from PC to HPC.  To avoid having git track changes to all of our filepaths, a template **setpaths.py.template** is included in this git repo.  
 
-## Current setpaths.py for some systems 
-For the current setpaths.py with path definitions for atmos, Henry2, and others, see **Current sample setpaths.py** on [How to use VisIt](https://sites.google.com/ncsu.edu/lllowe/ord/visit/visit-faq).
-
 ## Modify your own setpaths.py
 Copy the template and modify **setpaths.py**. The file **setpaths.py** is listed in the **.gitignore** and it will not be tracked or overwritten with new pulls.
 ```
